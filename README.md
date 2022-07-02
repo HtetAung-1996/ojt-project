@@ -1,4 +1,4 @@
-# OJT-Project-1
+git@github.com:HtetAung-1996/ojt-project.git# OJT-Project-1
 
 BS Camp OJT Project
 
@@ -7,7 +7,7 @@ BS Camp OJT Project
 **
 - 以下のURLからプロジェクトをcloneする
 ```
-git@github.com:HtetAung-1996/OJT-Project-1.git
+git@github.com:HtetAung-1996/ojt-project.git
 ```
 
 - ダウンロードしたプロジェクトをローカルでインポートする
