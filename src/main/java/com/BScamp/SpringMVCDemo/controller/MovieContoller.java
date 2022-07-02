@@ -32,21 +32,22 @@ public class MovieContoller {
 	@GetMapping("/movies")
 	public ModelAndView getMovies() {
 		ModelAndView mv = new ModelAndView();
-		List<Movie> movies = movieService.getMovies();		
+		List<Movie> movies = movieService.getMovies();
 		mv.addObject("movies", movies);
 		mv.addObject("types", movieService.getType());
 		mv.setViewName("movies");
 		return mv;
 	}
+
 	@GetMapping("/search_category")
-	public ModelAndView getMoviesbyCategories(@RequestParam("type")String type, HttpServletResponse response) {
-		
+	public ModelAndView getMoviesbyCategories(@RequestParam("type") String type, HttpServletResponse response) {
+
 		ModelAndView mv = new ModelAndView();
 		List<Movie> movies;
-		if(type.equals("All")) {
-			movies=movieService.getMovies();
+		if (type.equals("All")) {
+			movies = movieService.getMovies();
 		}
-		 movies= movieService.getCategories(type);		
+		movies = movieService.getCategories(type);
 		mv.addObject("movies", movies);
 		mv.addObject("types", movieService.getType());
 		mv.setViewName("movies");
@@ -54,7 +55,7 @@ public class MovieContoller {
 	}
 
 	@GetMapping("movie/{movie_id}")
-	public ModelAndView getMovie(@PathVariable("movie_id") String movie_id) {		
+	public ModelAndView getMovie(@PathVariable("movie_id") String movie_id) {
 		ModelAndView mv = new ModelAndView();
 		Movie movie = movieService.getMovie(Integer.parseInt(movie_id));
 		mv.addObject("movie", movie);
@@ -72,7 +73,7 @@ public class MovieContoller {
 
 	@PostMapping("/movie/save_data")
 	public ModelAndView saveMovie(@ModelAttribute("new_movie") Movie new_movie, HttpSession session) {
-		ModelAndView mv = new ModelAndView();	
+		ModelAndView mv = new ModelAndView();
 		session.setAttribute("new_movie", new_movie);
 		mv.setViewName("movie_poster");
 		return mv;
@@ -80,12 +81,12 @@ public class MovieContoller {
 
 	@PostMapping("movie/save_poster")
 	public ModelAndView savePoster(@RequestParam("poster_path") MultipartFile file, HttpSession session) {
-		String fileName = StringUtils.cleanPath(file.getOriginalFilename());		
+		String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 		ModelAndView mv = new ModelAndView();
 		Movie movie = (Movie) session.getAttribute("new_movie");
 		movie.setPoster_path(fileName);
 		movieService.saveImg(file, session);
-		session.setAttribute("new_movie", movie);		
+		session.setAttribute("new_movie", movie);
 		mv.addObject("movie", movie);
 		mv.setViewName("movie_video");
 		return mv;
@@ -93,27 +94,28 @@ public class MovieContoller {
 
 	@PostMapping("movie/save_trailer")
 	public ModelAndView saveTrailer(@RequestParam("trailer") MultipartFile file, HttpSession session) {
-		String fileName = StringUtils.cleanPath(file.getOriginalFilename());		
+		String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 		ModelAndView mv = new ModelAndView();
 		Movie movie = (Movie) session.getAttribute("new_movie");
 		movie.setTrailer(fileName);
 		session.setAttribute("movie", movie);
-		movieService.saveImg(file, session);		
+		movieService.saveImg(file, session);
 		mv.setViewName("moviedetails");
 		return mv;
 	}
 
 	@GetMapping("/movie/save_moviedetails")
 	public void saveMovieDetails(HttpSession session, HttpServletResponse response) throws IOException {
-		Movie save_movie=movieService.saveMovie((Movie) session.getAttribute("movie"));
-		session.invalidate();		
+		Movie save_movie = movieService.saveMovie((Movie) session.getAttribute("movie"));
+		session.invalidate();
 		//return "redirect: /movie/"+save_movie.getMovie_id();
 		//response.sendRedirect("/demo/movie/"+save_movie.getMovie_id());
 		response.sendRedirect("/demo/movies");
 	}
 
 	@PutMapping("/movie/update/{id}")
-	public ModelAndView updateMovie(@PathVariable("id") int id, @ModelAttribute("new_movie") Movie new_movie) {
+	public ModelAndView updateMovie(@PathVariable("id") int id, 
+		@ModelAttribute("new_movie") Movie new_movie) {
 		ModelAndView mv = new ModelAndView();
 		Movie movie = movieService.updateMovie(id, new_movie);
 		mv.addObject("movie", movie);
