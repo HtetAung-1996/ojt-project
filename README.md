@@ -1,6 +1,4 @@
-git@github.com:HtetAung-1996/ojt-project.git# OJT-Project-1
-
-BS Camp OJT Project
+## BS Camp OJT Project
 
 
 ### ローカルでの実行方法
