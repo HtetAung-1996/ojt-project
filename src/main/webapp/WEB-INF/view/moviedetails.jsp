@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@include file="common/Header.html"%>
+<%@include file="common/Header.jsp"%>
 <link href="${request.getContextPath()}/WEB-INF/view/common/style.css"
 	rel="stylesheet" type="text/css">
 

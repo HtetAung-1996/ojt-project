@@ -11,11 +11,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import com.BScamp.SpringMVCDemo.entity.Movie;
 
 @EnableJpaRepositories
-public interface MovieRepository extends JpaRepository<Movie, Integer> {
-
+public interface MovieRepository extends JpaRepository<Movie, Integer>{	
+	
 	@Query(value = "select type from movie", nativeQuery = true)
 	public Set<String> getType();
-
 	public List<Movie> findByType(String type);
 
 }
