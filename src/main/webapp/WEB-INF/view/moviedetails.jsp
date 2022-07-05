@@ -1,15 +1,16 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+
 <%@include file="common/Header.jsp"%>
+
 <link href="${request.getContextPath()}/WEB-INF/view/common/style.css"
 	rel="stylesheet" type="text/css">
 
 <br>
 <center>
 	<h3>${movie.original_title}</h3>
-	<br>
-	<br>
+	<br> <br>
 	<div>
 		<embed
 			src="${request.getContextPath()}/images/<c:out value='${movie.trailer}'/>"
@@ -22,11 +23,13 @@
 		src="${request.getContextPath()}/images/<c:out value='${movie.poster_path}'/>"
 		alt="not available" width="100px" height="100px"> <br> <span>$
 		<c:out value="${movie.budget} " />
-	</span><span> <c:if test="${movie.adult} =true"> | 18+</c:if></span><br> <a
-		href="<c:out value='${movie.homepage}'/>" class="btn btn-primary">reference link </a> |
+	</span><span> <c:if test="${movie.adult} =true"> | 18+</c:if></span><br>
+	<a href="<c:out value='${movie.homepage}'/>" class="btn btn-primary">reference
+		link </a> |
 	<c:if test="${sessionScope.movie != null}">
 		<a href="save_moviedetails" class="btn btn-primary">Save </a>
 	</c:if>
 </center>
-<%@include file="common/Footer.html"%>
+
+<%@include file="common/Footer.jsp"%>
 

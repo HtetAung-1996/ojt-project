@@ -8,12 +8,9 @@ import org.springframework.stereotype.Service;
 import com.BScamp.SpringMVCDemo.entity.MovieUser;
 import com.BScamp.SpringMVCDemo.repository.UserRepository;
 
-
-
-
 @Service
-public class MovieUserServiceImpl implements UserService{
-	
+public class MovieUserServiceImpl implements UserService {
+
 	@Autowired
 	UserRepository userRepository;
 
@@ -37,8 +34,8 @@ public class MovieUserServiceImpl implements UserService{
 
 	@Override
 	public MovieUser updateMovieUser(int id, MovieUser movieUser) {
-		MovieUser user=getMovieUser(id);
-		if(user !=null) {
+		MovieUser user = getMovieUser(id);
+		if (user != null) {
 			user.setAccess_count(movieUser.getAccess_count());
 			user.setGmail(movieUser.getGmail());
 			user.setLast_join_date(movieUser.getLast_join_date());
@@ -52,8 +49,8 @@ public class MovieUserServiceImpl implements UserService{
 
 	@Override
 	public boolean deleteMovieUser(int id) {
-		MovieUser user=getMovieUser(id);
-		if(user !=null) {
+		MovieUser user = getMovieUser(id);
+		if (user != null) {
 			userRepository.deleteById(id);
 			return true;
 		}
