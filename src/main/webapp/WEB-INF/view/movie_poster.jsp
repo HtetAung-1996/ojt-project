@@ -7,7 +7,7 @@
 
 Upload Poster:
 <br />
-<form:form method="post" action="/demo/movie/save_poster"
+<form:form method="post" action="/movie/save_poster"
 	enctype="multipart/form-data">
 	<input type="file" name="poster_path" />
 	<button type="submit" class="btn btn-primary">Next</button>

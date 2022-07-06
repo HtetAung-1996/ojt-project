@@ -7,7 +7,7 @@
 <h3>Welcome to movie World</h3>
 
 <form:form method="post" modelAttribute="new_movie"
-	action="/demo/movie/save_data">
+	action="/movie/save_data">
 	<div class="form-group">
 		<label for="original_title">Title</label>
 		<form:input path="original_title" type="text" class="form-control"

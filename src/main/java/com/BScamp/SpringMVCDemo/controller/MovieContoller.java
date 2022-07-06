@@ -110,7 +110,8 @@ public class MovieContoller {
 		session.invalidate();
 		// return "redirect: /movie/"+save_movie.getMovie_id();
 		// response.sendRedirect("/demo/movie/"+save_movie.getMovie_id());
-		response.sendRedirect("/demo/movies");
+		//response.sendRedirect("/demo/movies");
+		response.sendRedirect("/movies");
 	}
 
 	@PutMapping("/movie/update/{id}")

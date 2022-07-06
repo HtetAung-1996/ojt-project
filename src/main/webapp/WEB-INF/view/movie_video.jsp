@@ -7,7 +7,7 @@
 
 Upload Trailer:
 <br />
-<form:form method="post" action="/demo/movie/save_trailer"
+<form:form method="post" action="/movie/save_trailer"
 	enctype="multipart/form-data">
 	<input type="file" name="trailer" />
 	<button type="submit" class="btn btn-primary">Next</button>

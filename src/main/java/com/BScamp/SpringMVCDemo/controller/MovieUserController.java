@@ -38,7 +38,7 @@ public class MovieUserController {
 			throws IOException {
 		MovieUser saved = userService.saveMovieUser(movieUser);
 		System.out.println("saved " + saved);
-		response.sendRedirect("/demo/movies");
+		response.sendRedirect("/movies");
 	}
 
 	@GetMapping("/login")
