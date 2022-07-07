@@ -47,10 +47,6 @@ public class MovieUserController {
 		return mv;
 	}
 
-	{
-
-	}
-
 	@PostMapping("/loginCheck")
 	public ModelAndView loginCheck(@RequestParam("gmail") String gmail, @RequestParam("password") String password,
 			HttpSession session) {
