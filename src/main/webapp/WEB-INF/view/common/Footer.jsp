@@ -5,11 +5,11 @@
 
 </div>
 
-<footer class="text-center text-lg-start bg-light text-muted">
+<div class="text-center navbar-fixed-bottom fixed-bottom">
   <!-- Copyright -->
   <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">© 2020 Copyright</div>
   <!-- Copyright -->
-</footer>
+</div>
 
 </body>
 

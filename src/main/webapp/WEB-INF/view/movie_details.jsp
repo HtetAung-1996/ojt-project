@@ -8,27 +8,42 @@
 	rel="stylesheet" type="text/css">
 
 <br>
+
 <center>
-	<h3>${movie.original_title}</h3>
-	<br> <br>
+
+	<h3>${movie.title}</h3>
+	<br />
+	
+	<img
+		src="${request.getContextPath()}/images/<c:out value='${movie.poster_path}'/>"
+		alt="not available" width="50%"> 
+	<br /> 
+
 	<div>
 		<embed
 			src="${request.getContextPath()}/images/<c:out value='${movie.trailer}'/>"
-			showcontrols="true" width="55%" height="70%"></embed>
+			showcontrols="true" width="70%"></embed>
 	</div>
+
 	<c:out value="${movie.type}" />
-	<br>
+	<br />
+
 	<c:out value="${movie.overview}" />
-	<br> <br> <img
-		src="${request.getContextPath()}/images/<c:out value='${movie.poster_path}'/>"
-		alt="not available" width="100px" height="100px"> <br> <span>$
-		<c:out value="${movie.budget} " />
-	</span><span> <c:if test="${movie.adult} =true"> | 18+</c:if></span><br>
-	<a href="<c:out value='${movie.homepage}'/>" class="btn btn-primary">reference
-		link </a> |
+	<br /> 
+	
+	<span>$<c:out value="${movie.budget} " /></span> 
+	<br /> 
+	
+	<span><c:if test="${movie.adult} =true"> | 18+</c:if></span>
+	<br /> 
+
+	<a href="<c:out value='${movie.homepage}'/>" class="btn btn-primary">reference link </a>
+	<br /> 
+	
 	<c:if test="${sessionScope.movie != null}">
-		<a href="save_moviedetails" class="btn btn-primary">Save </a>
+		<a href="save_movie_details" class="btn btn-primary">Save </a>
 	</c:if>
+
 </center>
 
 <%@include file="common/Footer.jsp"%>

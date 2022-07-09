@@ -1,4 +1,4 @@
-package com.BScamp.SpringMVCDemo.repository;
+package com.BScamp.MovieTheater.repository;
 
 import java.util.List;
 import java.util.Set;
@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-import com.BScamp.SpringMVCDemo.entity.Movie;
+import com.BScamp.MovieTheater.entity.Movie;
 
 @EnableJpaRepositories
 public interface MovieRepository extends JpaRepository<Movie, Integer> {

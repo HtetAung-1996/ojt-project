@@ -3,14 +3,18 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@include file="common/Header.jsp"%>
 
-<h3>Welcome to movie World</h3>
-
-Upload Trailer:
+<h3>Upload Trailer</h3>
 <br />
+
 <form:form method="post" action="/movie/save_trailer"
 	enctype="multipart/form-data">
+
 	<input type="file" name="trailer" />
+	<br />
+	<br />
+
 	<button type="submit" class="btn btn-primary">Next</button>
+
 </form:form>
 
 <%@include file="common/Footer.jsp"%>

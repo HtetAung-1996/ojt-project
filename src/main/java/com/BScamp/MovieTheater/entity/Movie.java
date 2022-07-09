@@ -1,10 +1,14 @@
-package com.BScamp.SpringMVCDemo.entity;
+package com.BScamp.MovieTheater.entity;
+
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import org.hibernate.annotations.ColumnDefault;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,26 +24,41 @@ public class Movie {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int movie_id;
-	@Column(nullable = false)
-	private String adult;
+	private int id;
+
 	@Column(length = 50, nullable = false, unique = true)
-	private String original_title;
+	private String title;
+
 	private String poster_path;
+
 	private String budget;
+
 	private String homepage;
+
 	@Column(length = 500)
 	private String trailer;
+
 	@Column(length = 1000)
 	private String overview;
+
 	private String type;
 
-	public int getMovie_id() {
-		return movie_id;
+	@Column(nullable = false)
+	@ColumnDefault("false")
+	private String adult;
+
+	private LocalDate createdAt;
+
+	private LocalDate updatedAt;
+
+	private LocalDate deletedAt;
+
+	public int getId() {
+		return id;
 	}
 
-	public void setMovie_id(int movie_id) {
-		this.movie_id = movie_id;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getAdult() {
@@ -50,12 +69,12 @@ public class Movie {
 		this.adult = adult;
 	}
 
-	public String getOriginal_title() {
-		return original_title;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setOriginal_title(String original_title) {
-		this.original_title = original_title;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public String getPoster_path() {
@@ -106,11 +125,36 @@ public class Movie {
 		this.type = type;
 	}
 
+	public LocalDate getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(LocalDate createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public LocalDate getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(LocalDate updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+	public LocalDate getDeletedAt() {
+		return deletedAt;
+	}
+
+	public void setDeletedAt(LocalDate deletedAt) {
+		this.deletedAt = deletedAt;
+	}
+
 	@Override
 	public String toString() {
-		return "Movie [movie_id=" + movie_id + ", adult=" + adult + ", original_title=" + original_title
-				+ ", poster_path=" + poster_path + ", budget=" + budget + ", homepage=" + homepage + ", trailer="
-				+ trailer + ", overview=" + overview + ", type=" + type + "]";
+		return "Movie [id=" + id + ", adult=" + adult + ", title=" + title + ", poster_path=" + poster_path
+				+ ", budget=" + budget + ", homepage=" + homepage + ", trailer=" + trailer + ", overview=" + overview
+				+ ", type=" + type + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", deletedAt="
+				+ deletedAt + "]";
 	}
 
 }

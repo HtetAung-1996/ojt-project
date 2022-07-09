@@ -21,22 +21,21 @@
 	crossorigin="anonymous">
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
 
 	<nav class="navbar navbar-expand-sm navbar-dark bg-primary">
 		<div class="container-fluid">
 			<a href="#" class="navbar-brand">Spring Boot</a>
 			<ul class="navbar-nav">
 				<c:if test="${sessionScope.login_user != null}">
-					<h5>${sessionScope.login_user.name}</h5>
+					<li class="nav-item"><a class="nav-link active">${sessionScope.login_user.name}</a></li>
 				</c:if>
-				<li class="nav-item"><a href="/movies" class="nav-link active">MOVIES</a></li>
-				<li class="nav-item"><a href="/about" class="nav-link">ABOUT</a>
-				</li>
-				<li class="nav-item"><a href="/theatre/login" class="nav-link">LOGIN</a>
+				<li class="nav-item"><a href="/" class="nav-link active">MOVIES</a></li>
+				<!--<li class="nav-item"><a href="/about" class="nav-link">ABOUT</a></li>  -->
+				<li class="nav-item"><a href="/user/login" class="nav-link">LOGIN</a>
 				</li>
 			</ul>
 		</div>
 	</nav>
 
-	<div class='container'>
+	<div class="container mt-3">
