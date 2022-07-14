@@ -3,16 +3,16 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@page pageEncoding="UTF-8"%>
 
-<%@include file="common/Header.jsp"%>
+<%@include file="common/header.jsp"%>
 
-<h3>Welcome to movie World</h3>
+<h3>Welcome To Movie Theater</h3>
 
 Search by Types
 <form:form method="get" action="search_category">
 	<select name="type">
 		<option value="All">All</option>
 		<c:forEach var="type" items="${types}">
-			<option value="${type }">${type }</option>
+			<option value="${type}">${type}</option>
 		</c:forEach>
 	</select>
 	<button type="submit">Search</button>
@@ -51,5 +51,5 @@ Search by Types
 	</c:forEach>
 </div>
 
-<%@include file="common/Footer.jsp"%>
+<%@include file="common/footer.jsp"%>
 

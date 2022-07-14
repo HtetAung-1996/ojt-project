@@ -5,12 +5,12 @@
 
 </div>
 
-<div class="text-center navbar-fixed-bottom fixed-bottom">
-  <!-- Copyright -->
-  <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">© 2020 Copyright</div>
-  <!-- Copyright -->
-</div>
-
 </body>
+
+<footer class="mt-auto">
+  <!-- Copyright -->
+  <div class="text-center w-100 p-4" style="background-color: rgba(0, 0, 0, 0.05);">© 2020 Copyright</div>
+  <!-- Copyright -->
+</footer>
 
 </html>

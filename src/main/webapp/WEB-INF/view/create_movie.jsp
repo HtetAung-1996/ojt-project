@@ -1,8 +1,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ page pageEncoding="UTF-8"%>
 
-<%@include file="common/Header.jsp"%>
+<%@include file="common/header.jsp"%>
 
 <h3>Create New Movie</h3>
 <br/>
@@ -13,7 +14,7 @@
 	<div class="form-group">
 		<label for="title">Title</label>
 		<form:input path="title" type="text" class="form-control"
-			id="original_title" placeholder="Enter Movie Title" />
+			id="title" placeholder="Enter Movie Title" />
 	</div>
 	<br/>
 
@@ -57,5 +58,5 @@
 
 </form:form>
 
-<%@include file="common/Footer.jsp"%>
+<%@include file="common/footer.jsp"%>
 

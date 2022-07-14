@@ -1,25 +1,28 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@page pageEncoding="UTF-8"%>
+<%@ page pageEncoding="UTF-8"%>
 
-<%@include file="common/Header.jsp"%>
+<%@include file="common/header.jsp"%>
 
 <form:form action="/user/loginCheck" method="post">
 
 	<c:if test="${sessionScope.login_error != null}">
-		<h5>${sessionScope.login_error}</h5>
+		<h5 class="text-danger">${sessionScope.login_error}</h5>
+		<br>
 	</c:if>
 	
 	<div class="form-group">
+		<label class="mb-2">Gmail</label>
 		<input name="gmail" type="text" class="form-control"
-			placeholder="Gmail" />
+			placeholder="test@gmail.com" />
 	</div>
 	<br>
 
 	<div class="form-group">
+		<label class="mb-2">Password</label>
 		<input name="password" type="password" class="form-control"
-			placeholder=" password" />
+			placeholder="****" />
 	</div>
 	<br>
 
@@ -27,4 +30,4 @@
 
 </form:form>
 
-<%@include file="common/Footer.jsp"%>
+<%@include file="common/footer.jsp"%>

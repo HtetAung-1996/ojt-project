@@ -27,16 +27,23 @@ public class UserController {
 	@GetMapping("/register")
 	public ModelAndView register() {
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("user_register");
+		mv.setViewName("register");
 		mv.addObject("user", new User());
 		return mv;
 	}
 
 	@PostMapping("/save")
-	public void saveUserInfo(@ModelAttribute("user") User user, HttpServletResponse response) throws IOException {
-		User saved = userService.createUser(user);
-		System.out.println("saved " + saved);
-		response.sendRedirect("/");
+	public void saveUserInfo(@ModelAttribute("user") User user, HttpServletResponse response, HttpSession session)
+			throws IOException {
+		session.removeAttribute("error");
+		if (user.getName() == "") {
+			session.setAttribute("error", "Error!");
+			response.sendRedirect("/user/register");
+		} else {
+			User saved = userService.createUser(user);
+			System.out.println("saved " + saved);
+			response.sendRedirect("/");
+		}
 	}
 
 	@GetMapping("/login")
@@ -50,6 +57,7 @@ public class UserController {
 	public ModelAndView loginCheck(@RequestParam("gmail") String gmail, @RequestParam("password") String password,
 			HttpSession session) {
 		ModelAndView mv = new ModelAndView();
+		session.removeAttribute("login_error");
 		User user = userService.checkLoginUser(gmail, password);
 		if (user == null) {
 			session.setAttribute("login_error", "Invalid Gmail and password");
@@ -59,6 +67,13 @@ public class UserController {
 			mv.setViewName("movies");
 		}
 		return mv;
+	}
+
+	@GetMapping("/logout")
+	public void logout(HttpSession session, HttpServletResponse response) throws IOException {
+		session.removeAttribute("login_user");
+		System.out.println("Log Out");
+		response.sendRedirect("/");
 	}
 
 }

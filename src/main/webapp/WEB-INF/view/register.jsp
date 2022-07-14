@@ -3,26 +3,34 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@page pageEncoding="UTF-8"%>
 
-<%@include file="common/Header.jsp"%>
+<%@include file="common/header.jsp"%>
 
 <form:form action="/user/save" method="post"
 	modelAttribute="user">
+	
+	<c:if test="${sessionScope.error != null}">
+		<h5 class="text-danger">${sessionScope.error}</h5>
+		<br>
+	</c:if>
 
 	<div class="form-group">
+		<label class="mb-2">Name</label>
 		<form:input path="name" type="text" class="form-control"
-			placeholder="User Name" />
+			placeholder="Mg Mg" />
 	</div>
 	<br>
 	
 	<div class="form-group">
+		<label class="mb-2">Password</label>
 		<form:input path="password" type="text" class="form-control"
-			placeholder=" password" />
+			placeholder="****" />
 	</div>
 	<br>
 	
 	<div class="form-group">
+		<label class="mb-2">Gmail</label>
 		<form:input path="gmail" type="textarea" class="form-control"
-			placeholder="Gmail" />
+			placeholder="test@gmail.com" />
 	</div>
 	<br>
 	
@@ -30,4 +38,4 @@
 
 </form:form>
 
-<%@include file="common/Footer.jsp"%>
+<%@include file="common/footer.jsp"%>

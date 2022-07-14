@@ -1,7 +1,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@include file="common/Header.jsp"%>
+<%@ page pageEncoding="UTF-8"%>
+
+<%@include file="common/header.jsp"%>
 
 <h3>Upload Trailer</h3>
 <br />
@@ -17,5 +19,5 @@
 
 </form:form>
 
-<%@include file="common/Footer.jsp"%>
+<%@include file="common/footer.jsp"%>
 

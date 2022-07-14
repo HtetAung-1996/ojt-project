@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
-<%@include file="common/Header.jsp"%>
+<%@include file="common/header.jsp"%>
 
 <link href="${request.getContextPath()}/WEB-INF/view/common/style.css"
 	rel="stylesheet" type="text/css">
@@ -46,5 +46,5 @@
 
 </center>
 
-<%@include file="common/Footer.jsp"%>
+<%@include file="common/footer.jsp"%>
 
