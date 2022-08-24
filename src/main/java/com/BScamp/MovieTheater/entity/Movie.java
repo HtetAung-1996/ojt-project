@@ -29,9 +29,12 @@ public class Movie {
 	@Column(length = 50, nullable = false, unique = true)
 	private String title;
 
-	private String poster_path;
+	private String posterPath;
 
 	private String budget;
+
+	@Column(length = 200)
+	private String homePage;
 
 	@Column(length = 500)
 	private String trailer;
@@ -45,11 +48,11 @@ public class Movie {
 	@ColumnDefault("false")
 	private String adult;
 
+	@Column(nullable = false)
+	@ColumnDefault("NOW()")
 	private LocalDate createdAt;
 
 	private LocalDate updatedAt;
-
-	private LocalDate deletedAt;
 
 	public int getId() {
 		return id;
@@ -57,14 +60,6 @@ public class Movie {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public String getAdult() {
-		return adult;
-	}
-
-	public void setAdult(String adult) {
-		this.adult = adult;
 	}
 
 	public String getTitle() {
@@ -75,12 +70,12 @@ public class Movie {
 		this.title = title;
 	}
 
-	public String getPoster_path() {
-		return poster_path;
+	public String getPosterPath() {
+		return posterPath;
 	}
 
-	public void setPoster_path(String poster_path) {
-		this.poster_path = poster_path;
+	public void setPosterPath(String posterPath) {
+		this.posterPath = posterPath;
 	}
 
 	public String getBudget() {
@@ -89,6 +84,14 @@ public class Movie {
 
 	public void setBudget(String budget) {
 		this.budget = budget;
+	}
+
+	public String getHomePage() {
+		return homePage;
+	}
+
+	public void setHomePage(String homePage) {
+		this.homePage = homePage;
 	}
 
 	public String getTrailer() {
@@ -115,6 +118,14 @@ public class Movie {
 		this.type = type;
 	}
 
+	public String getAdult() {
+		return adult;
+	}
+
+	public void setAdult(String adult) {
+		this.adult = adult;
+	}
+
 	public LocalDate getCreatedAt() {
 		return createdAt;
 	}
@@ -131,20 +142,11 @@ public class Movie {
 		this.updatedAt = updatedAt;
 	}
 
-	public LocalDate getDeletedAt() {
-		return deletedAt;
-	}
-
-	public void setDeletedAt(LocalDate deletedAt) {
-		this.deletedAt = deletedAt;
-	}
-
 	@Override
 	public String toString() {
-		return "Movie [id=" + id + ", adult=" + adult + ", title=" + title + ", poster_path=" + poster_path
-				+ ", budget=" + budget + ", trailer=" + trailer + ", overview=" + overview
-				+ ", type=" + type + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", deletedAt="
-				+ deletedAt + "]";
+		return "Movie [id=" + id + ", title=" + title + ", posterPath=" + posterPath + ", budget=" + budget
+				+ ", homePage=" + homePage + ", trailer=" + trailer + ", overview=" + overview + ", type=" + type
+				+ ", adult=" + adult + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + "]";
 	}
 
 }

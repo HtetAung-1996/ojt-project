@@ -4,9 +4,13 @@ import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 public class User {
@@ -24,7 +28,9 @@ public class User {
 	@Column(unique = true)
 	private String gmail;
 
-	private String role;
+	@Column(columnDefinition = "ENUM('admin', 'user')")
+	@Enumerated(EnumType.STRING)
+	private UserRole role;
 
 	private LocalDate startJoinDate;
 
@@ -32,11 +38,11 @@ public class User {
 
 	private int accessCount;
 
+	@Column(nullable = false)
+	@ColumnDefault("NOW()")
 	private LocalDate createdAt;
 
 	private LocalDate updatedAt;
-
-	private LocalDate deletedAt;
 
 	public int getId() {
 		return id;
@@ -62,11 +68,19 @@ public class User {
 		this.password = password;
 	}
 
-	public String getRole() {
+	public String getGmail() {
+		return gmail;
+	}
+
+	public void setGmail(String gmail) {
+		this.gmail = gmail;
+	}
+
+	public UserRole getRole() {
 		return role;
 	}
 
-	public void setRole(String role) {
+	public void setRole(UserRole role) {
 		this.role = role;
 	}
 
@@ -84,14 +98,6 @@ public class User {
 
 	public void setLastJoinDate(LocalDate lastJoinDate) {
 		this.lastJoinDate = lastJoinDate;
-	}
-
-	public String getGmail() {
-		return gmail;
-	}
-
-	public void setGmail(String gmail) {
-		this.gmail = gmail;
 	}
 
 	public int getAccessCount() {
@@ -118,19 +124,11 @@ public class User {
 		this.updatedAt = updatedAt;
 	}
 
-	public LocalDate getDeletedAt() {
-		return deletedAt;
-	}
-
-	public void setDeletedAt(LocalDate deletedAt) {
-		this.deletedAt = deletedAt;
-	}
-
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", name=" + name + ", password=" + password + ", role=" + role + ", startJoinDate="
-				+ startJoinDate + ", lastJoinDate=" + lastJoinDate + ", gmail=" + gmail + ", accessCount=" + accessCount
-				+ ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", deletedAt=" + deletedAt + "]";
+		return "User [id=" + id + ", name=" + name + ", password=" + password + ", gmail=" + gmail + ", role=" + role
+				+ ", startJoinDate=" + startJoinDate + ", lastJoinDate=" + lastJoinDate + ", accessCount=" + accessCount
+				+ ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + "]";
 	}
 
 }

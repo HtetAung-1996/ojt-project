@@ -31,8 +31,6 @@ public class Record {
 
 	private LocalDate updatedAt;
 
-	private LocalDate deletedAt;
-
 	public int getId() {
 		return id;
 	}
@@ -73,18 +71,10 @@ public class Record {
 		this.updatedAt = updatedAt;
 	}
 
-	public LocalDate getDeletedAt() {
-		return deletedAt;
-	}
-
-	public void setDeletedAt(LocalDate deletedAt) {
-		this.deletedAt = deletedAt;
-	}
-
 	@Override
 	public String toString() {
 		return "Record [id=" + id + ", user_id=" + user_id + ", movie_id=" + movie_id + ", createdAt=" + createdAt
-				+ ", updatedAt=" + updatedAt + ", deletedAt=" + deletedAt + "]";
+				+ ", updatedAt=" + updatedAt + "]";
 	}
 
 }

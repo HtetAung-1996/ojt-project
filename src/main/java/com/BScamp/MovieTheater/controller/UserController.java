@@ -9,22 +9,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.BScamp.MovieTheater.entity.User;
+import com.BScamp.MovieTheater.entity.UserRole;
 import com.BScamp.MovieTheater.service.UserService;
 
 @RestController
-@RequestMapping("/user")
 public class UserController {
 
 	@Autowired
 	UserService userService;
 
-	@GetMapping("/register")
+	@GetMapping("/user/register")
 	public ModelAndView register() {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("register");
@@ -35,7 +34,7 @@ public class UserController {
 		return mv;
 	}
 
-	@PostMapping("/save")
+	@PostMapping("/user/save")
 	public void saveUserInfo(@ModelAttribute("user") User user, HttpServletResponse response, HttpSession session)
 			throws IOException {
 		session.removeAttribute("error");
@@ -45,11 +44,11 @@ public class UserController {
 		} else {
 			User saved = userService.createUser(user);
 			System.out.println("saved " + saved);
-			response.sendRedirect("/");
+			response.sendRedirect("/user/login");
 		}
 	}
 
-	@GetMapping("/login")
+	@GetMapping("/user/login")
 	public ModelAndView login() {
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("activeHome", "");
@@ -59,22 +58,26 @@ public class UserController {
 		return mv;
 	}
 
-	@PostMapping("/loginCheck")
+	@PostMapping("/user/loginCheck")
 	public void loginCheck(@RequestParam("gmail") String gmail, @RequestParam("password") String password,
 			HttpSession session, HttpServletResponse response) throws IOException {
-//		ModelAndView mv = new ModelAndView();
 		session.removeAttribute("login_error");
 		User user = userService.checkLoginUser(gmail, password);
 		if (user == null) {
 			session.setAttribute("login_error", "Invalid Gmail and password");
 			response.sendRedirect("/user/login");
 		} else {
-			session.setAttribute("login_user", user);
-			response.sendRedirect("/");
+			if (user.getRole() == UserRole.admin) {
+				session.setAttribute("login_user", user);
+				response.sendRedirect("/admin/");
+			} else {
+				session.setAttribute("login_user", user);
+				response.sendRedirect("/");
+			}
 		}
 	}
 
-	@GetMapping("/logout")
+	@GetMapping("/user/logout")
 	public void logout(HttpSession session, HttpServletResponse response) throws IOException {
 		session.removeAttribute("login_user");
 		System.out.println("Log Out");

@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -24,40 +25,45 @@ import com.BScamp.MovieTheater.repository.MovieRepository;
 public class MovieServiceImpl implements MovieService {
 
 	@Autowired
-	MovieRepository movieRepository;
+	MovieRepository movieRepo;
 
 	@Override
 	public Movie saveMovie(Movie movie) {
-		return movieRepository.save(movie);
+		movie.setCreatedAt(LocalDate.now());
+		return movieRepo.save(movie);
 	}
 
 	@Override
 	public Movie getMovie(int id) {
-		return movieRepository.findById(id).orElse(null);
+		return movieRepo.findById(id).orElse(null);
 	}
 
 	@Override
 	public List<Movie> getMovies() {
-		return movieRepository.findAll();
+		return movieRepo.findAll();
 	}
 
 	@Override
 	public Movie updateMovie(int id, Movie mo) {
 		Movie movie = getMovie(id);
 		if (movie != null) {
-			movie.setAdult(mo.getAdult());
-			movie.setBudget(mo.getBudget());
+			movie.setTitle(mo.getTitle());
+			movie.setPosterPath(mo.getPosterPath());
+			movie.setBudget(mo.getHomePage());
+			movie.setHomePage(mo.getHomePage());
+			movie.setTrailer(mo.getTrailer());
 			movie.setOverview(mo.getOverview());
-			movie.setTitle(null);
-			movie.setPoster_path(mo.getPoster_path());
-			movieRepository.save(movie);
+			movie.setType(mo.getType());
+			movie.setAdult(mo.getAdult());
+			movie.setUpdatedAt(LocalDate.now());
+			movieRepo.save(movie);
 		}
 		return movie;
 	}
 
 	@Override
 	public boolean deleteMovie(int id) {
-		movieRepository.deleteById(id);
+		movieRepo.deleteById(id);
 		return true;
 	}
 
@@ -71,9 +77,7 @@ public class MovieServiceImpl implements MovieService {
 		if (!Files.exists(uploadPath)) {
 			try {
 				Files.createDirectories(uploadPath);
-
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -94,12 +98,12 @@ public class MovieServiceImpl implements MovieService {
 
 	@Override
 	public Set<String> getType() {
-		return movieRepository.getType();
+		return movieRepo.getType();
 	}
 
 	@Override
 	public List<Movie> getCategories(String type) {
-		return movieRepository.findByType(type);
+		return movieRepo.findByType(type);
 	}
 
 }

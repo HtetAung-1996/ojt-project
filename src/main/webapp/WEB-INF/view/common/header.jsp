@@ -36,10 +36,10 @@
 					<c:when test="${sessionScope.login_user != null}">
 						<li class="nav-item"><a href="/user/logout" class="nav-link">LOGOUT</a></li>
 					</c:when>
-					<c:otherwise>
+					<c:when test="${sessionScope.login_user == null}">
 						<li class="nav-item"><a href="/user/register" class="nav-link ${activeRegister}">REGISTER</a></li>
 						<li class="nav-item"><a href="/user/login" class="nav-link ${activeLogin}">LOGIN</a></li>
-					</c:otherwise>
+					</c:when>
 				</c:choose>
 			</ul>
 		</div>
