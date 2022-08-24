@@ -19,13 +19,6 @@
 	<br/>
 
 	<div class="form-group">
-		<label for="homepage">HomePage</label>
-		<form:input path="homepage" type="text" class="form-control"
-			id="homepage" placeholder="Enter homepage" />
-	</div>
-	<br/>
-
-	<div class="form-group">
 		<label for="overview">Overview</label>
 		<form:input path="overview" type="textarea" class="form-control"
 			id="overview" placeholder="Enter overview" />

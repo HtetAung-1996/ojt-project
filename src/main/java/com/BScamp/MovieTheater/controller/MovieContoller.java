@@ -1,7 +1,9 @@
 package com.BScamp.MovieTheater.controller;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -33,32 +35,50 @@ public class MovieContoller {
 		ModelAndView mv = new ModelAndView();
 		List<Movie> movies = movieService.getMovies();
 		mv.addObject("movies", movies);
-		mv.addObject("types", movieService.getType());
+		Set<String> catList = new HashSet<String>();
+		catList.add("All");
+		catList.addAll(movieService.getType());
+		mv.addObject("types",catList);
+		mv.addObject("activeHome", "active");
+		mv.addObject("activeLogin", "");
+		mv.addObject("activeRegister", "");
 		mv.setViewName("movies");
 		return mv;
 	}
 
-	@GetMapping("/search_category")
-	public ModelAndView getMoviesbyCategories(@RequestParam("type") String type, HttpServletResponse response) {
+//	@GetMapping("/search_category")
+//	public ModelAndView getMoviesbyCategories(@RequestParam("type") String type, HttpServletResponse response) {
+//		ModelAndView mv = new ModelAndView();
+//		List<Movie> movies;
+//		if (type.equals("All")) {
+//			movies = movieService.getMovies();
+//		} else {
+//			movies = movieService.getCategories(type);
+//		}
+//		mv.addObject("movies", movies);
+//		mv.addObject("types", movieService.getType());
+//		mv.setViewName("movies");
+//		return mv;
+//	}
 
+	@GetMapping("/category/{category}")
+	public ModelAndView getMoviesbyCategory(@PathVariable("category") String category, HttpServletResponse response) {
 		ModelAndView mv = new ModelAndView();
 		List<Movie> movies;
-		if (type.equals("All")) {
+		if (category.equals("All")) {
 			movies = movieService.getMovies();
+		} else {
+			movies = movieService.getCategories(category);
 		}
-		movies = movieService.getCategories(type);
 		mv.addObject("movies", movies);
-		mv.addObject("types", movieService.getType());
+		Set<String> catList = new HashSet<String>();
+		catList.add("All");
+		catList.addAll(movieService.getType());
+		mv.addObject("types",catList);
+		mv.addObject("activeHome", "active");
+		mv.addObject("activeLogin", "");
+		mv.addObject("activeRegister", "");
 		mv.setViewName("movies");
-		return mv;
-	}
-
-	@GetMapping("movie/{movie_id}")
-	public ModelAndView getMovie(@PathVariable("movie_id") String movie_id) {
-		ModelAndView mv = new ModelAndView();
-		Movie movie = movieService.getMovie(Integer.parseInt(movie_id));
-		mv.addObject("movie", movie);
-		mv.setViewName("moviedetails");
 		return mv;
 	}
 
@@ -86,7 +106,7 @@ public class MovieContoller {
 		movie.setPoster_path(fileName);
 		movieService.saveImg(file, session);
 		session.setAttribute("new_movie", movie);
-		mv.addObject("movie",movie);
+		mv.addObject("movie", movie);
 		mv.setViewName("create_movie_video");
 		return mv;
 	}
@@ -105,13 +125,19 @@ public class MovieContoller {
 
 	@GetMapping("/movie/save_movie_details")
 	public void saveMovieDetails(HttpSession session, HttpServletResponse response) throws IOException {
-		Movie save_movie = movieService.saveMovie((Movie) session.getAttribute("movie"));
+		movieService.saveMovie((Movie) session.getAttribute("movie"));
 		session.invalidate();
-		System.out.println(save_movie);
-		// return "redirect: /movie/"+save_movie.getMovie_id();
-		// response.sendRedirect("/demo/movie/"+save_movie.getMovie_id());
-		//response.sendRedirect("/demo/movies");
 		response.sendRedirect("/");
+	}
+	
+
+	@GetMapping("movie/details/{movie_id}")
+	public ModelAndView getMovie(@PathVariable("movie_id") String movie_id) {
+		ModelAndView mv = new ModelAndView();
+		Movie movie = movieService.getMovie(Integer.parseInt(movie_id));
+		mv.addObject("movie", movie);
+		mv.setViewName("movie_details");
+		return mv;
 	}
 
 	@PutMapping("/movie/update/{id}")

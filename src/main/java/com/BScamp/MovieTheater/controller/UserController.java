@@ -29,6 +29,9 @@ public class UserController {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("register");
 		mv.addObject("user", new User());
+		mv.addObject("activeHome", "");
+		mv.addObject("activeLogin", "");
+		mv.addObject("activeRegister", "active");
 		return mv;
 	}
 
@@ -49,24 +52,26 @@ public class UserController {
 	@GetMapping("/login")
 	public ModelAndView login() {
 		ModelAndView mv = new ModelAndView();
+		mv.addObject("activeHome", "");
+		mv.addObject("activeLogin", "active");
+		mv.addObject("activeRegister", "");
 		mv.setViewName("login");
 		return mv;
 	}
 
 	@PostMapping("/loginCheck")
-	public ModelAndView loginCheck(@RequestParam("gmail") String gmail, @RequestParam("password") String password,
-			HttpSession session) {
-		ModelAndView mv = new ModelAndView();
+	public void loginCheck(@RequestParam("gmail") String gmail, @RequestParam("password") String password,
+			HttpSession session, HttpServletResponse response) throws IOException {
+//		ModelAndView mv = new ModelAndView();
 		session.removeAttribute("login_error");
 		User user = userService.checkLoginUser(gmail, password);
 		if (user == null) {
 			session.setAttribute("login_error", "Invalid Gmail and password");
-			mv.setViewName("login");
+			response.sendRedirect("/user/login");
 		} else {
 			session.setAttribute("login_user", user);
-			mv.setViewName("movies");
+			response.sendRedirect("/");
 		}
-		return mv;
 	}
 
 	@GetMapping("/logout")

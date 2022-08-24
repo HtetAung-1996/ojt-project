@@ -46,13 +46,11 @@ public class MovieServiceImpl implements MovieService {
 		Movie movie = getMovie(id);
 		if (movie != null) {
 			movie.setAdult(mo.getAdult());
-			movie.setHomepage(mo.getHomepage());
 			movie.setBudget(mo.getBudget());
 			movie.setOverview(mo.getOverview());
 			movie.setTitle(null);
 			movie.setPoster_path(mo.getPoster_path());
 			movieRepository.save(movie);
-
 		}
 		return movie;
 	}

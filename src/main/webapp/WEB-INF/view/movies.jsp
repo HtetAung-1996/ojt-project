@@ -7,48 +7,55 @@
 
 <h3>Welcome To Movie Theater</h3>
 
-Search by Types
-<form:form method="get" action="search_category">
-	<select name="type">
-		<option value="All">All</option>
-		<c:forEach var="type" items="${types}">
-			<option value="${type}">${type}</option>
-		</c:forEach>
-	</select>
-	<button type="submit">Search</button>
-</form:form>
-<br />
+<div class="row mt-4">
 
-<div class="row">
-	<c:forEach var="movie" items="${movies}">
+	<div class="col-2">
+	
+		<div class="card">
+			<c:forEach var="type" items="${types}">
+				<a href="/category/${type}">${type}</a>
+			</c:forEach>
+		</div>
+	
+	</div>
 
-		<div class="col">
+	<div class="col-10">
 
-			<div class="card" style="width: 18rem;">
+		<div class="row">
 
-				<img src="${request.getContextPath()}/images/${movie.poster_path}"
-					class="card-img-top" alt="not available" width="200px"
-					height="300px">
+			<c:forEach var="movie" items="${movies}">
 
-				<div class="card-body">
-					<h5 class="card-title">${movie.title}</h5>
-					<p class="card-text">${movie.overview}</p>
-					<p class="card-text">
-						$ <span> ${movie.budget} </span>
-					</p>
-					<p class="card-text">
-						<c:if test="${movie.adult=true}">18+</c:if>
-					</p>
-					<p>${movie.type}</p>
-					<a href="${movie.homepage} " class="btn btn-primary">reference
-						link</a> <a href="/movie/details/${movie.id}" class="btn btn-primary">Details</a>
+				<div class="col">
+
+					<div class="card" style="width: 18rem;">
+
+						<img src="${request.getContextPath()}/images/${movie.poster_path}"
+							class="card-img-top" style="object-fit: cover;"
+							alt="not available" height="300px">
+
+						<div class="card-body">
+							<h5 class="card-title">${movie.title}</h5>
+							<h6 class="card-subtitle text-muted">${movie.type}</h6>
+							<p class="card-text">
+								${movie.overview} <br /> $ <span> ${movie.budget} </span> <br />
+								<c:if test="${movie.adult=true}">18+</c:if>
+								<br />
+							</p>
+							<a href="${movie.homepage}" class="btn btn-primary">
+								Reference Link </a> <a href="/movie/details/${movie.id}"
+								class="btn btn-primary">Details</a>
+						</div>
+
+					</div>
+
 				</div>
 
-			</div>
+			</c:forEach>
 
 		</div>
 
-	</c:forEach>
+	</div>
+
 </div>
 
 <%@include file="common/footer.jsp"%>

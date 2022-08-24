@@ -26,17 +26,19 @@
 		<div class="container-fluid px-5">
 			<a href="/" class="navbar-brand">Movie Theater</a>
 			<ul class="navbar-nav">
+				<%--  
 				<c:if test="${sessionScope.login_user != null}">
-					<li class="nav-item"><a class="nav-link active">${sessionScope.login_user.name}</a></li>
+					<li class="nav-item"><a class="nav-link">${sessionScope.login_user.name}</a></li>
 				</c:if>
-				<li class="nav-item"><a href="/" class="nav-link active">MOVIES</a></li>
+				--%>
+				<li class="nav-item"><a href="/" class="nav-link ${activeHome}">MOVIES</a></li>
 				<c:choose>
 					<c:when test="${sessionScope.login_user != null}">
 						<li class="nav-item"><a href="/user/logout" class="nav-link">LOGOUT</a></li>
 					</c:when>
 					<c:otherwise>
-						<li class="nav-item"><a href="/user/register" class="nav-link">REGISTER</a></li>
-						<li class="nav-item"><a href="/user/login" class="nav-link">LOGIN</a></li>
+						<li class="nav-item"><a href="/user/register" class="nav-link ${activeRegister}">REGISTER</a></li>
+						<li class="nav-item"><a href="/user/login" class="nav-link ${activeLogin}">LOGIN</a></li>
 					</c:otherwise>
 				</c:choose>
 			</ul>

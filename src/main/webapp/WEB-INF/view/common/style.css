@@ -1,3 +1,15 @@
 body {
-	overflow:auto;
+	overflow: scroll;
+}
+
+.video-container {
+	width: 100%;
+	margin: auto;
+}
+
+.video-container iframe {
+	width: 100%;
+	height: calc(100vw/ 2);
+	margin: 0 auto;
+	display: block;
 }

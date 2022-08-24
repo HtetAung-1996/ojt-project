@@ -33,8 +33,6 @@ public class Movie {
 
 	private String budget;
 
-	private String homepage;
-
 	@Column(length = 500)
 	private String trailer;
 
@@ -93,14 +91,6 @@ public class Movie {
 		this.budget = budget;
 	}
 
-	public String getHomepage() {
-		return homepage;
-	}
-
-	public void setHomepage(String homepage) {
-		this.homepage = homepage;
-	}
-
 	public String getTrailer() {
 		return trailer;
 	}
@@ -152,7 +142,7 @@ public class Movie {
 	@Override
 	public String toString() {
 		return "Movie [id=" + id + ", adult=" + adult + ", title=" + title + ", poster_path=" + poster_path
-				+ ", budget=" + budget + ", homepage=" + homepage + ", trailer=" + trailer + ", overview=" + overview
+				+ ", budget=" + budget + ", trailer=" + trailer + ", overview=" + overview
 				+ ", type=" + type + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", deletedAt="
 				+ deletedAt + "]";
 	}
