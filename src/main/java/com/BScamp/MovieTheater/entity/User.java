@@ -1,6 +1,7 @@
 package com.BScamp.MovieTheater.entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -39,10 +40,10 @@ public class User {
 	private int accessCount;
 
 	@Column(nullable = false)
-	@ColumnDefault("NOW()")
-	private LocalDate createdAt;
+	@ColumnDefault("CURRENT_TIMESTAMP")
+	private LocalDateTime createdAt;
 
-	private LocalDate updatedAt;
+	private LocalDateTime updatedAt;
 
 	public int getId() {
 		return id;
@@ -108,19 +109,19 @@ public class User {
 		this.accessCount = accessCount;
 	}
 
-	public LocalDate getCreatedAt() {
+	public LocalDateTime getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setCreatedAt(LocalDate createdAt) {
+	public void setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = createdAt;
 	}
 
-	public LocalDate getUpdatedAt() {
+	public LocalDateTime getUpdatedAt() {
 		return updatedAt;
 	}
 
-	public void setUpdatedAt(LocalDate updatedAt) {
+	public void setUpdatedAt(LocalDateTime updatedAt) {
 		this.updatedAt = updatedAt;
 	}
 

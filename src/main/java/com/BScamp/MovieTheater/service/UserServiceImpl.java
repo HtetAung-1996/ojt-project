@@ -1,6 +1,6 @@
 package com.BScamp.MovieTheater.service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User createUser(User user) {
-		user.setCreatedAt(LocalDate.now());
+		user.setCreatedAt(LocalDateTime.now());
 		return userRepository.save(user);
 	}
 
@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
 			toUpdateUser.setStartJoinDate(user.getStartJoinDate());
 			toUpdateUser.setLastJoinDate(user.getLastJoinDate());
 			toUpdateUser.setAccessCount(user.getAccessCount());
-			toUpdateUser.setUpdatedAt(LocalDate.now());
+			toUpdateUser.setUpdatedAt(LocalDateTime.now());
 			userRepository.save(toUpdateUser);
 		}
 		return user;

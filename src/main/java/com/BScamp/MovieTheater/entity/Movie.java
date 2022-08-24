@@ -1,6 +1,6 @@
-package com.BScamp.MovieTheater.entity;
+ package com.BScamp.MovieTheater.entity;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -44,15 +44,15 @@ public class Movie {
 
 	private String type;
 
-	@Column(nullable = false)
+	@Column(nullable = false, columnDefinition = "boolean")
 	@ColumnDefault("false")
-	private String adult;
+	private Boolean adult;
 
 	@Column(nullable = false)
-	@ColumnDefault("NOW()")
-	private LocalDate createdAt;
+	@ColumnDefault("CURRENT_TIMESTAMP")
+	private LocalDateTime createdAt;
 
-	private LocalDate updatedAt;
+	private LocalDateTime updatedAt;
 
 	public int getId() {
 		return id;
@@ -118,27 +118,27 @@ public class Movie {
 		this.type = type;
 	}
 
-	public String getAdult() {
+	public Boolean getAdult() {
 		return adult;
 	}
 
-	public void setAdult(String adult) {
+	public void setAdult(Boolean adult) {
 		this.adult = adult;
 	}
 
-	public LocalDate getCreatedAt() {
+	public LocalDateTime getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setCreatedAt(LocalDate createdAt) {
+	public void setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = createdAt;
 	}
 
-	public LocalDate getUpdatedAt() {
+	public LocalDateTime getUpdatedAt() {
 		return updatedAt;
 	}
 
-	public void setUpdatedAt(LocalDate updatedAt) {
+	public void setUpdatedAt(LocalDateTime updatedAt) {
 		this.updatedAt = updatedAt;
 	}
 

@@ -6,7 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -29,7 +29,7 @@ public class MovieServiceImpl implements MovieService {
 
 	@Override
 	public Movie saveMovie(Movie movie) {
-		movie.setCreatedAt(LocalDate.now());
+		movie.setCreatedAt(LocalDateTime.now());
 		return movieRepo.save(movie);
 	}
 
@@ -55,7 +55,7 @@ public class MovieServiceImpl implements MovieService {
 			movie.setOverview(mo.getOverview());
 			movie.setType(mo.getType());
 			movie.setAdult(mo.getAdult());
-			movie.setUpdatedAt(LocalDate.now());
+			movie.setUpdatedAt(LocalDateTime.now());
 			movieRepo.save(movie);
 		}
 		return movie;

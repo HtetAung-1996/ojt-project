@@ -1,11 +1,16 @@
 package com.BScamp.MovieTheater.entity;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+import org.hibernate.annotations.ColumnDefault;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,13 +28,19 @@ public class Record {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 
-	private int user_id;
+	@ManyToOne
+	@JoinColumn(name = "user_id", referencedColumnName = "id")
+	private User user;
 
-	private int movie_id;
+	@ManyToOne
+	@JoinColumn(name = "movie_id", referencedColumnName = "id")
+	private Movie movie;
 
-	private LocalDate createdAt;
+	@Column(nullable = false)
+	@ColumnDefault("CURRENT_TIMESTAMP")
+	private LocalDateTime createdAt;
 
-	private LocalDate updatedAt;
+	private LocalDateTime updatedAt;
 
 	public int getId() {
 		return id;
@@ -39,42 +50,42 @@ public class Record {
 		this.id = id;
 	}
 
-	public int getUser_id() {
-		return user_id;
+	public User getUser() {
+		return user;
 	}
 
-	public void setUser_id(int user_id) {
-		this.user_id = user_id;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
-	public int getMovie_id() {
-		return movie_id;
+	public Movie getMovie() {
+		return movie;
 	}
 
-	public void setMovie_id(int movie_id) {
-		this.movie_id = movie_id;
+	public void setMovie(Movie movie) {
+		this.movie = movie;
 	}
 
-	public LocalDate getCreatedAt() {
+	public LocalDateTime getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setCreatedAt(LocalDate createdAt) {
+	public void setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = createdAt;
 	}
 
-	public LocalDate getUpdatedAt() {
+	public LocalDateTime getUpdatedAt() {
 		return updatedAt;
 	}
 
-	public void setUpdatedAt(LocalDate updatedAt) {
+	public void setUpdatedAt(LocalDateTime updatedAt) {
 		this.updatedAt = updatedAt;
 	}
 
 	@Override
 	public String toString() {
-		return "Record [id=" + id + ", user_id=" + user_id + ", movie_id=" + movie_id + ", createdAt=" + createdAt
-				+ ", updatedAt=" + updatedAt + "]";
+		return "Record [id=" + id + ", user=" + user + ", movie=" + movie + ", createdAt=" + createdAt + ", updatedAt="
+				+ updatedAt + "]";
 	}
 
 }

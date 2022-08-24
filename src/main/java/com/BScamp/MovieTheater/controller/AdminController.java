@@ -1,16 +1,23 @@
 package com.BScamp.MovieTheater.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.BScamp.MovieTheater.entity.Movie;
 import com.BScamp.MovieTheater.entity.User;
 import com.BScamp.MovieTheater.entity.UserRole;
 import com.BScamp.MovieTheater.service.MovieService;
@@ -49,6 +56,31 @@ public class AdminController {
 		mv.setViewName("admin");
 		return mv;
 
+	}
+
+	@GetMapping("/movie")
+	public List<Movie> list() {
+		return movieService.getMovies();
+	}
+
+	@PostMapping(value = "/movie")
+	public Movie create(@ModelAttribute Movie movie) {
+		return movieService.saveMovie(movie);
+	}
+
+	@GetMapping("/movie/{id}")
+	public Movie get(@PathVariable int id) {
+		return movieService.getMovie(id);
+	}
+
+	@PutMapping(value = "/movie/{id}")
+	public Movie update(@PathVariable int id, @ModelAttribute Movie movie) {
+		return movieService.updateMovie(movie.getId(), movie);
+	}
+
+	@DeleteMapping(value = "/movie/{id}")
+	public boolean delete(@PathVariable int id) {
+		return movieService.deleteMovie(id);
 	}
 
 	// @GetMapping("/movie/create")

@@ -1,6 +1,6 @@
 package com.BScamp.MovieTheater.service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ public class RecordServiceImpl implements RecordService {
 
 	@Override
 	public Record saveRecord(Record record) {
-		record.setCreatedAt(LocalDate.now());
+		record.setCreatedAt(LocalDateTime.now());
 		return recordRepo.save(record);
 	}
 
@@ -35,9 +35,9 @@ public class RecordServiceImpl implements RecordService {
 	public Record updateRecord(int id, Record rec) {
 		Record record = getRecord(id);
 		if (record != null) {
-			record.setUser_id(rec.getUser_id());
-			record.setMovie_id(rec.getMovie_id());
-			record.setUpdatedAt(LocalDate.now());
+			record.setUser(rec.getUser());
+			record.setMovie(rec.getMovie());
+			record.setUpdatedAt(LocalDateTime.now());
 			recordRepo.save(record);
 		}
 		return record;
