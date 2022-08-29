@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.BScamp.MovieTheater.entity.Movie;
+import com.BScamp.MovieTheater.entity.Record;
 import com.BScamp.MovieTheater.entity.User;
 import com.BScamp.MovieTheater.entity.UserRole;
 import com.BScamp.MovieTheater.service.MovieService;
@@ -59,30 +60,45 @@ public class AdminController {
 	}
 
 	@GetMapping("/movie")
-	public List<Movie> list() {
+	public List<Movie> listMovie() {
 		return movieService.getMovies();
 	}
 
 	@PostMapping(value = "/movie")
-	public Movie create(@ModelAttribute Movie movie) {
+	public Movie createMovie(@ModelAttribute Movie movie) {
 		return movieService.saveMovie(movie);
 	}
 
 	@GetMapping("/movie/{id}")
-	public Movie get(@PathVariable int id) {
+	public Movie getMovie(@PathVariable int id) {
 		return movieService.getMovie(id);
 	}
 
 	@PutMapping(value = "/movie/{id}")
-	public Movie update(@PathVariable int id, @ModelAttribute Movie movie) {
+	public Movie updateMovie(@PathVariable int id, @ModelAttribute Movie movie) {
 		return movieService.updateMovie(movie.getId(), movie);
 	}
 
 	@DeleteMapping(value = "/movie/{id}")
-	public boolean delete(@PathVariable int id) {
+	public boolean deleteMovie(@PathVariable int id) {
 		return movieService.deleteMovie(id);
 	}
+	
+	@GetMapping("/record")
+	public List<Record> listRecord() {
+		return recordService.getRecords();
+	}
+	
+	@GetMapping("/user")
+	public List<User> listUser() {
+		return userService.getAllUsers();
+	}
 
+	@GetMapping("/user/{id}")
+	public User getUser(@PathVariable int id) {
+		return userService.getUser(id);
+	}
+	
 	// @GetMapping("/movie/create")
 	// public ModelAndView createMovie() {
 	// ModelAndView mv = new ModelAndView();
