@@ -29,7 +29,7 @@
 
 					<div class="card" style="width: 18rem;">
 
-						<img src="${request.getContextPath()}/images/${movie.poster_path}"
+						<img src="${request.getContextPath()}/images/${movie.posterPath}"
 							class="card-img-top" style="object-fit: cover;"
 							alt="not available" height="300px">
 
@@ -41,9 +41,8 @@
 								<c:if test="${movie.adult=true}">18+</c:if>
 								<br />
 							</p>
-							<a href="${movie.homepage}" class="btn btn-primary">
-								Reference Link </a> <a href="/movie/details/${movie.id}"
-								class="btn btn-primary">Details</a>
+							<a href="" class="btn btn-primary">Reference Link </a> 
+							<a href="/movie/details/${movie.id}" class="btn btn-primary">Details</a>
 						</div>
 
 					</div>

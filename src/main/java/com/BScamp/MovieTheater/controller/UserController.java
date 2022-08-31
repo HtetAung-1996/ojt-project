@@ -48,16 +48,6 @@ public class UserController {
 		}
 	}
 
-	@GetMapping("/user/login")
-	public ModelAndView login() {
-		ModelAndView mv = new ModelAndView();
-		mv.addObject("activeHome", "");
-		mv.addObject("activeLogin", "active");
-		mv.addObject("activeRegister", "");
-		mv.setViewName("login");
-		return mv;
-	}
-
 	@PostMapping("/user/loginCheck")
 	public void loginCheck(@RequestParam("gmail") String gmail, @RequestParam("password") String password,
 			HttpSession session, HttpServletResponse response) throws IOException {
@@ -75,13 +65,6 @@ public class UserController {
 				response.sendRedirect("/");
 			}
 		}
-	}
-
-	@GetMapping("/user/logout")
-	public void logout(HttpSession session, HttpServletResponse response) throws IOException {
-		session.removeAttribute("login_user");
-		System.out.println("Log Out");
-		response.sendRedirect("/");
 	}
 
 }

@@ -1,25 +1,26 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@page pageEncoding="UTF-8"%>
+<%@ page pageEncoding="UTF-8"%>
 
 <%@include file="common/admin_header.jsp"%>
 
-<h3>Movie Theater Admin Screen</h3>
+<h3>Upload Poster</h3>
+<br />
 
-<div class="row mt-4">
+<form:form 
+	method="post"
+	action="/admin/movie/create/save_poster"
+	enctype="multipart/form-data"
+>
 
-	<div class="col-2">
-		<div class="card">
-			<a href="/admin/movie/create">Create Movie</a>
-		</div>
-	</div>
+	<input type="file" name="poster" />
+	<br/>
+	<br/>
 
-	<div class="col-10">
+	<button type="submit" class="btn btn-primary">Next</button>
 
-	</div>
-
-</div>
+</form:form>
 
 <%@include file="common/footer.jsp"%>
 

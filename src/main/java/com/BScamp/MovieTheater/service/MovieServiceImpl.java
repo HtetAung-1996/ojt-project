@@ -1,7 +1,6 @@
 package com.BScamp.MovieTheater.service;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -68,10 +67,10 @@ public class MovieServiceImpl implements MovieService {
 	}
 
 	@Override
-	public void saveImg(MultipartFile file, HttpSession session) {
-		
+	public void saveFile(MultipartFile file, HttpSession session) {
+
 		String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-		
+
 		ServletContext context = session.getServletContext();
 		Path uploadPath = Paths.get(context.getRealPath("/") + "images");
 		if (!Files.exists(uploadPath)) {
@@ -81,19 +80,13 @@ public class MovieServiceImpl implements MovieService {
 				e.printStackTrace();
 			}
 		}
-		System.out.println(uploadPath.getParent());
-		System.out.println(uploadPath.toString());
 
 		try {
-			InputStream inputStream = file.getInputStream();
-			Path filePath = uploadPath.resolve(fileName);
-			Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-			System.out.println("save " + filePath);
+			Files.copy(file.getInputStream(), uploadPath.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException e) {
-			System.out.println("file can not save");
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	@Override

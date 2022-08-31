@@ -34,11 +34,11 @@
 				<li class="nav-item"><a href="/" class="nav-link ${activeHome}">MOVIES</a></li>
 				<c:choose>
 					<c:when test="${sessionScope.login_user != null}">
-						<li class="nav-item"><a href="/user/logout" class="nav-link">LOGOUT</a></li>
+						<li class="nav-item"><a href="/logout" class="nav-link">LOGOUT</a></li>
 					</c:when>
 					<c:when test="${sessionScope.login_user == null}">
 						<li class="nav-item"><a href="/user/register" class="nav-link ${activeRegister}">REGISTER</a></li>
-						<li class="nav-item"><a href="/user/login" class="nav-link ${activeLogin}">LOGIN</a></li>
+						<li class="nav-item"><a href="/login" class="nav-link ${activeLogin}">LOGIN</a></li>
 					</c:when>
 				</c:choose>
 			</ul>

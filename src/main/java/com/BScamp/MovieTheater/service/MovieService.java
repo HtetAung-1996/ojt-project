@@ -21,7 +21,7 @@ public interface MovieService {
 
 	public boolean deleteMovie(int id);
 
-	public void saveImg(MultipartFile file, HttpSession session);
+	public void saveFile(MultipartFile file, HttpSession session);
 
 	public Set<String> getType();
 
