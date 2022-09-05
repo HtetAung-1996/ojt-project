@@ -73,7 +73,7 @@ public class MovieContoller {
 		return mv;
 	}
 
-	@GetMapping("movie/details/{movie_id}")
+	@GetMapping("/movie/details/{movie_id}")
 	public ModelAndView getMovie(@PathVariable("movie_id") String movie_id) {
 		ModelAndView mv = new ModelAndView();
 		Movie movie = movieService.getMovie(Integer.parseInt(movie_id));

@@ -31,7 +31,7 @@ public class Movie {
 
 	private String posterPath;
 
-	private String budget;
+	private int budget;
 
 	@Column(length = 200)
 	private String homePage;
@@ -78,11 +78,11 @@ public class Movie {
 		this.posterPath = posterPath;
 	}
 
-	public String getBudget() {
+	public int getBudget() {
 		return budget;
 	}
 
-	public void setBudget(String budget) {
+	public void setBudget(int budget) {
 		this.budget = budget;
 	}
 

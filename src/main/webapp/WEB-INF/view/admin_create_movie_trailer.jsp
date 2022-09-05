@@ -8,19 +8,29 @@
 <h3>Upload Trailer</h3>
 <br />
 
-<form:form 
-	method="post"
-	action="/admin/movie/create/save_trailer"
-	enctype="multipart/form-data"
->
+<div class="row">
 
-	<input type="file" name="trailer" />
-	<br/>
-	<br/>
+	<%@include file="common/admin_side.jsp"%>
 
-	<button type="submit" class="btn btn-primary">Next</button>
+	<div class="col-10">
+	
+		<form:form 
+			method="post"
+			action="/admin/movie/create/save_trailer"
+			enctype="multipart/form-data"
+		>
+		
+			<input type="file" name="trailer" />
+			<br/>
+			<br/>
+		
+			<button type="submit" class="btn btn-primary">Next</button>
+		
+		</form:form>
 
-</form:form>
+	</div>
+	
+</div>
 
 <%@include file="common/footer.jsp"%>
 

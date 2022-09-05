@@ -43,17 +43,21 @@ public class AdminController {
 	public ModelAndView homePage(HttpSession session, HttpServletResponse response) throws IOException {
 
 		if (session.getAttribute("login_user") == null) {
-			response.sendRedirect("/admin/user/login");
+			response.sendRedirect("/admin/login");
 			return null;
 		}
 
 		User user = (User) session.getAttribute("login_user");
 		if (user.getRole() != UserRole.admin) {
-			response.sendRedirect("/admin/user/login");
+			response.sendRedirect("/admin/login");
 			return null;
 		}
 
+		List<Movie> movies = movieService.getMovies();
+
 		ModelAndView mv = new ModelAndView();
+		mv.addObject("movies", movies);
+		mv.addObject("toUpdateMovie", new Movie());
 		mv.addObject("activeHome", "active");
 		mv.addObject("activeLogin", "");
 		mv.addObject("activeRegister", "");
@@ -62,46 +66,6 @@ public class AdminController {
 
 	}
 
-	@GetMapping("/movie")
-	public List<Movie> listMovie() {
-		return movieService.getMovies();
-	}
-
-	@PostMapping(value = "/movie")
-	public Movie createMovie(@ModelAttribute Movie movie) {
-		return movieService.saveMovie(movie);
-	}
-
-	@GetMapping("/movie/{id}")
-	public Movie getMovie(@PathVariable int id) {
-		return movieService.getMovie(id);
-	}
-
-	@PutMapping(value = "/movie/{id}")
-	public Movie updateMovie(@PathVariable int id, @ModelAttribute Movie movie) {
-		return movieService.updateMovie(movie.getId(), movie);
-	}
-
-	@DeleteMapping(value = "/movie/{id}")
-	public boolean deleteMovie(@PathVariable int id) {
-		return movieService.deleteMovie(id);
-	}
-
-	@GetMapping("/record")
-	public List<Record> listRecord() {
-		return recordService.getRecords();
-	}
-
-	@GetMapping("/user")
-	public List<User> listUser() {
-		return userService.getAllUsers();
-	}
-
-	@GetMapping("/user/{id}")
-	public User getUser(@PathVariable int id) {
-		return userService.getUser(id);
-	}
-	
 	// ------------------- Movie
 
 	@GetMapping("/movie/create")
@@ -149,26 +113,75 @@ public class AdminController {
 		response.sendRedirect("/admin/");
 	}
 
-	// @PutMapping("/movie/update/{id}")
-	// public ModelAndView updateMovie(@PathVariable("id") int id,
-	// @ModelAttribute("new_movie") Movie new_movie) {
-	// ModelAndView mv = new ModelAndView();
-	// Movie movie = movieService.updateMovie(id, new_movie);
-	// mv.addObject("movie", movie);
-	// mv.setViewName("movie");
-	// return mv;
-	// }
-	//
-	// @DeleteMapping("/movies/delete/{id}")
-	// public ModelAndView deleteMovie(@PathVariable("id") int id) {
-	// ModelAndView mv = new ModelAndView();
-	// if (movieService.deleteMovie(id)) {
-	// mv.addObject("delete_msg", "deleted successfully");
-	// } else {
-	// mv.addObject("delete_msg", "can not delete!!!!");
-	// }
-	// mv.setViewName("movie");
-	// return mv;
-	// }
+	@GetMapping("/movie/update/update_movie/{id}")
+	public ModelAndView updateMoviePage(@PathVariable("id") int id) {
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("toUpdateMovie", movieService.getMovie(id));
+		mv.setViewName("admin_update_movie");
+		return mv;
+	}
+
+	@PostMapping("/movie/update/{id}")
+	public void updateMovie(@PathVariable("id") int id, @ModelAttribute("toUpdateMovie") Movie toUpdateMovie,
+			HttpServletResponse response) throws IOException {
+		Movie movie = movieService.getMovie(id);
+		movie.setTitle(toUpdateMovie.getTitle());
+		movie.setOverview(toUpdateMovie.getOverview());
+		movie.setBudget(toUpdateMovie.getBudget());
+		movie.setType(toUpdateMovie.getType());
+		movie.setAdult(toUpdateMovie.getAdult());
+		movieService.updateMovie(id, movie);
+		response.sendRedirect("/admin/");
+	}
+
+	@PostMapping("/movie/delete/{id}")
+	public void deleteMovie(@PathVariable("id") int id, HttpServletResponse response) throws IOException {
+		if (movieService.deleteMovie(id)) {
+			response.sendRedirect("/admin/");
+		} else {
+		}
+	}
+
+	// ------------------- API Only
+
+	@GetMapping("/movie")
+	public List<Movie> listMovie() {
+		return movieService.getMovies();
+	}
+
+	@PostMapping(value = "/movie")
+	public Movie createMovie(@ModelAttribute Movie movie) {
+		return movieService.saveMovie(movie);
+	}
+
+	@GetMapping("/movie/{id}")
+	public Movie getMovie(@PathVariable int id) {
+		return movieService.getMovie(id);
+	}
+
+	@PutMapping(value = "/movie/{id}")
+	public Movie updateMovie2(@PathVariable int id, @ModelAttribute Movie movie) {
+		return movieService.updateMovie(movie.getId(), movie);
+	}
+
+	@DeleteMapping(value = "/movie/{id}")
+	public boolean deleteMovie2(@PathVariable int id) {
+		return movieService.deleteMovie(id);
+	}
+
+	@GetMapping("/record")
+	public List<Record> listRecord() {
+		return recordService.getRecords();
+	}
+
+	@GetMapping("/user")
+	public List<User> listUser() {
+		return userService.getAllUsers();
+	}
+
+	@GetMapping("/user/{id}")
+	public User getUser(@PathVariable int id) {
+		return userService.getUser(id);
+	}
 
 }

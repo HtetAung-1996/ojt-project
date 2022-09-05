@@ -48,7 +48,7 @@ public class MovieServiceImpl implements MovieService {
 		if (movie != null) {
 			movie.setTitle(mo.getTitle());
 			movie.setPosterPath(mo.getPosterPath());
-			movie.setBudget(mo.getHomePage());
+			movie.setBudget(mo.getBudget());
 			movie.setHomePage(mo.getHomePage());
 			movie.setTrailer(mo.getTrailer());
 			movie.setOverview(mo.getOverview());
