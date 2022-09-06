@@ -7,8 +7,8 @@
 
 <form:form action="/user/loginCheck" method="post">
 
-	<c:if test="${sessionScope.login_error != null}">
-		<h5 class="text-danger">${sessionScope.login_error}</h5>
+	<c:if test="${sessionScope.loginError != null}">
+		<h5 class="text-danger">${sessionScope.loginError}</h5>
 		<br>
 	</c:if>
 	

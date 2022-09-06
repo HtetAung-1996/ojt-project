@@ -1,4 +1,4 @@
- package com.BScamp.MovieTheater.entity;
+package com.BScamp.MovieTheater.entity;
 
 import java.time.LocalDateTime;
 
@@ -20,7 +20,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Movie {
+public class Movie implements java.io.Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

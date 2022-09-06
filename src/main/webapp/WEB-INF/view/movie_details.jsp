@@ -12,8 +12,11 @@
 <div class="row">
 
 	<div class="col-4">
-		<img src="${request.getContextPath()}/images/<c:out value='${movie.poster_path}'/>"
-			alt="not available" width="100%">
+		<img 
+			src="${request.getContextPath()}/images/<c:out value='${movie.posterPath}'/>"
+			alt="not available" 
+			width="100%"
+		>
 	</div>
 	
 	<div class="col-6">
@@ -28,10 +31,6 @@
 		
 		<span><c:if test="${movie.adult} =true"> | 18+</c:if></span>
 		<br />
-		
-		<c:if test="${sessionScope.movie != null}">
-			<a href="save_movie_details" class="btn btn-primary">Save </a>
-		</c:if>
 	</div>
 
 </div>

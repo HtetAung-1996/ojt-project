@@ -8,8 +8,8 @@
 <form:form action="/user/save" method="post"
 	modelAttribute="user">
 	
-	<c:if test="${sessionScope.error != null}">
-		<h5 class="text-danger">${sessionScope.error}</h5>
+	<c:if test="${sessionScope.loginError != null}">
+		<h5 class="text-danger">${sessionScope.loginError}</h5>
 		<br>
 	</c:if>
 

@@ -23,7 +23,7 @@ public class MovieContoller {
 
 	@GetMapping("/")
 	public ModelAndView getMovies() {
-		ModelAndView mv = new ModelAndView();
+		ModelAndView mv = new ModelAndView("movies");
 		List<Movie> movies = movieService.getMovies();
 		mv.addObject("movies", movies);
 		Set<String> catList = new HashSet<String>();
@@ -33,28 +33,12 @@ public class MovieContoller {
 		mv.addObject("activeHome", "active");
 		mv.addObject("activeLogin", "");
 		mv.addObject("activeRegister", "");
-		mv.setViewName("movies");
 		return mv;
 	}
 
-//	@GetMapping("/search_category")
-//	public ModelAndView getMoviesbyCategories(@RequestParam("type") String type, HttpServletResponse response) {
-//		ModelAndView mv = new ModelAndView();
-//		List<Movie> movies;
-//		if (type.equals("All")) {
-//			movies = movieService.getMovies();
-//		} else {
-//			movies = movieService.getCategories(type);
-//		}
-//		mv.addObject("movies", movies);
-//		mv.addObject("types", movieService.getType());
-//		mv.setViewName("movies");
-//		return mv;
-//	}
-
 	@GetMapping("/category/{category}")
 	public ModelAndView getMoviesbyCategory(@PathVariable("category") String category, HttpServletResponse response) {
-		ModelAndView mv = new ModelAndView();
+		ModelAndView mv = new ModelAndView("movies");
 		List<Movie> movies;
 		if (category.equals("All")) {
 			movies = movieService.getMovies();
@@ -69,17 +53,13 @@ public class MovieContoller {
 		mv.addObject("activeHome", "active");
 		mv.addObject("activeLogin", "");
 		mv.addObject("activeRegister", "");
-		mv.setViewName("movies");
 		return mv;
 	}
 
 	@GetMapping("/movie/details/{movie_id}")
 	public ModelAndView getMovie(@PathVariable("movie_id") String movie_id) {
-		ModelAndView mv = new ModelAndView();
 		Movie movie = movieService.getMovie(Integer.parseInt(movie_id));
-		mv.addObject("movie", movie);
-		mv.setViewName("movie_details");
-		return mv;
+		return new ModelAndView("movie_details", "movie", movie);
 	}
 
 }

@@ -14,7 +14,9 @@ import javax.persistence.Id;
 import org.hibernate.annotations.ColumnDefault;
 
 @Entity
-public class User {
+public class User implements java.io.Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

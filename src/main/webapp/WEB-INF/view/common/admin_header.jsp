@@ -30,11 +30,11 @@
 			<a href="/admin/" class="navbar-brand">Movie Theater</a>
 			<ul class="navbar-nav">
 				<c:choose>
-					<c:when test="${sessionScope.login_user != null}">
-						<li class="nav-item"><a href="/logout" class="nav-link">LOGOUT</a></li>
+					<c:when test="${sessionScope.loginUser != null}">
+						<li class="nav-item"><a href="/user/logout" class="nav-link">LOGOUT</a></li>
 					</c:when>
-					<c:when test="${sessionScope.login_user == null}">
-						<li class="nav-item"><a href="/admin/login" class="nav-link active">LOGIN</a></li>
+					<c:when test="${sessionScope.loginUser == null}">
+						<li class="nav-item"><a href="/user/login" class="nav-link active">LOGIN</a></li>
 					</c:when>
 				</c:choose>
 			</ul>
