@@ -37,6 +37,7 @@ public class AdminController {
 
 	@GetMapping("/")
 	public ModelAndView homePage(HttpSession session, HttpServletResponse response) throws IOException {
+		
 		User user = (User) session.getAttribute("loginUser");
 		if (user == null) {
 			response.sendRedirect("/user/login");
