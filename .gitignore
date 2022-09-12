@@ -1,7 +1,0 @@
-/.settings
-/.project
-/.classpath
-/target
-/src/main/webapp/images/*
-log.log
-*.gz

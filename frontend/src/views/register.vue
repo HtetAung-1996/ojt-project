@@ -89,10 +89,12 @@ export default {
         });
         if (resp.status === 200) {
           const data = await resp.json();
-          if (data && data.role == "admin") {
-            this.$router.push({ path: "/" });
-          } else {
-            this.$router.push({ path: "/admin" });
+          if (data) {
+            if (data.role == "admin") {
+              this.$router.push({ path: "/admin" });
+            } else {
+              this.$router.push({ path: "/" });
+            }
           }
         } else {
           this.errorAlert = true;
