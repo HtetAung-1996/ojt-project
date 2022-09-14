@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
 
 import org.hibernate.annotations.ColumnDefault;
 
@@ -31,10 +32,12 @@ public class Movie implements java.io.Serializable {
 	private int id;
 
 	@Column(length = 50, nullable = false, unique = true)
+	@NotBlank(message = "Required")
 	private String title;
 
 	private String posterPath;
-
+	
+	@Column(nullable = false)
 	private int budget;
 
 	@Column(length = 200)
@@ -44,8 +47,11 @@ public class Movie implements java.io.Serializable {
 	private String trailer;
 
 	@Column(length = 1000)
+	@NotBlank(message = "Required")
 	private String overview;
 
+	@Column(nullable = false)
+	@NotBlank(message = "Required")
 	private String type;
 
 	@Column(nullable = false, columnDefinition = "boolean")

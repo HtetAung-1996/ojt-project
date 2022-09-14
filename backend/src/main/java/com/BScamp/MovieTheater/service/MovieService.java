@@ -3,10 +3,6 @@ package com.BScamp.MovieTheater.service;
 import java.util.List;
 import java.util.Set;
 
-import javax.servlet.http.HttpSession;
-
-import org.springframework.web.multipart.MultipartFile;
-
 import com.BScamp.MovieTheater.entity.Movie;
 
 public interface MovieService {
@@ -20,8 +16,6 @@ public interface MovieService {
 	public Movie updateMovie(int id, Movie mo);
 
 	public boolean deleteMovie(int id);
-
-	public void saveFile(MultipartFile file, HttpSession session);
 
 	public Set<String> getType();
 

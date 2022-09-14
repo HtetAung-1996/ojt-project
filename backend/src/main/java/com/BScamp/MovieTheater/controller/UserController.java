@@ -53,9 +53,9 @@ public class UserController {
 	}
 
 	@GetMapping("/logout")
-	public void logout(HttpSession session, HttpServletResponse response) throws IOException {
+	public Boolean logout(HttpSession session, HttpServletResponse response) throws IOException {
 		session.invalidate();
-		response.sendRedirect("/");
+		 return true;
 	}
 
 //	@GetMapping("/login")

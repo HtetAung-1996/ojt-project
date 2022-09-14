@@ -2,7 +2,7 @@
 /.project
 /.classpath
 /target
-/src/main/webapp/trailer/*
-/src/main/webapp/images/*
+# /src/main/resources/static/*
 log.log
 *.gz
+*.tmp
