@@ -2,7 +2,7 @@
 /.project
 /.classpath
 /target
-# /src/main/resources/static/*
+/src/main/resources/static/*
 log.log
 *.gz
 *.tmp
