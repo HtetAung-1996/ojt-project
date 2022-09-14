@@ -1,0 +1,2 @@
+DROP DATABASE IF EXISTS movie_theater;
+CREATE DATABASE IF NOT EXISTS movie_theater CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
