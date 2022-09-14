@@ -22,8 +22,8 @@ public class MovieContoller {
 	@Autowired
 	StorageService storageService;
 
-	@GetMapping("/movies")
-	public List<Movie> getMovies2() {
+	@GetMapping("/movie")
+	public List<Movie> getMovies() {
 		return movieService.getMovies();
 	}
 

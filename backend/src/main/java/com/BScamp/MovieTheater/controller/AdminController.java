@@ -7,8 +7,13 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -60,99 +65,40 @@ public class AdminController {
 	}
 
 	@PostMapping("/movie/create/poster")
-	public String createMovieSavePoster(@RequestParam("poster") MultipartFile poster, @RequestParam("fileType") String fileType) {
+	public String createMovieSavePoster(@RequestParam("poster") MultipartFile poster,
+			@RequestParam("fileType") String fileType) {
 		String fileName = storageService.saveFile(poster, fileType);
 		return fileName;
 	}
 
-//	@GetMapping("/movie/create")
-//	public ModelAndView createMovie() {
-//		return new ModelAndView("admin_create_movie", "toCreateMovie", new Movie());
-//	}
-//
-//	@PostMapping("/movie/create/save_movie")
-//	public ModelAndView createMovieSaveMovie(@ModelAttribute("movie") Movie movie, HttpSession session) {
-//		session.setAttribute("toCreateMovie", movie);
-//		return new ModelAndView("admin_create_movie_poster");
-//	}
-//
-//	@PostMapping("/movie/create/save_poster")
-//	public ModelAndView createMovieSavePoster(@RequestParam("poster") MultipartFile poster, HttpSession session) {
-//		movieService.saveFile(poster, session);
-//		Movie toCreateMovie = (Movie) session.getAttribute("toCreateMovie");
-//		toCreateMovie.setPosterPath(StringUtils.cleanPath(poster.getOriginalFilename()));
-//		session.setAttribute("toCreateMovie", toCreateMovie);
-//		return new ModelAndView("admin_create_movie_trailer");
-//	}
-//
-//	@PostMapping("/movie/create/save_trailer")
-//	public ModelAndView saveTrailer(@RequestParam("trailer") MultipartFile trailer, HttpSession session) {
-//		movieService.saveFile(trailer, session);
-//		Movie toCreateMovie = (Movie) session.getAttribute("toCreateMovie");
-//		toCreateMovie.setTrailer(StringUtils.cleanPath(trailer.getOriginalFilename()));
-//		session.setAttribute("toCreateMovie", toCreateMovie);
-//		return new ModelAndView("admin_movie_detail");
-//	}
-//
-//	@GetMapping("/movie/create/save_movie_detail")
-//	public void saveMovieDetails(HttpSession session, HttpServletResponse response) throws IOException {
-//		movieService.saveMovie((Movie) session.getAttribute("toCreateMovie"));
-//		session.removeAttribute("toCreateMovie");
-//		response.sendRedirect("/admin/");
-//	}
-//
-//	@GetMapping("/movie/update/update_movie/{id}")
-//	public ModelAndView updateMoviePage(@PathVariable("id") int id) {
-//		return new ModelAndView("admin_update_movie", "toUpdateMovie", movieService.getMovie(id));
-//	}
-//
-//	@PostMapping("/movie/update/{id}")
-//	public void updateMovie(@PathVariable("id") int id, @ModelAttribute("toUpdateMovie") Movie toUpdateMovie,
-//			HttpServletResponse response) throws IOException {
-//		Movie movie = movieService.getMovie(id);
-//		movie.setTitle(toUpdateMovie.getTitle());
-//		movie.setOverview(toUpdateMovie.getOverview());
-//		movie.setBudget(toUpdateMovie.getBudget());
-//		movie.setType(toUpdateMovie.getType());
-//		movie.setAdult(toUpdateMovie.getAdult());
-//		movieService.updateMovie(id, movie);
-//		response.sendRedirect("/admin/");
-//	}
-//
-//	@PostMapping("/movie/delete/{id}")
-//	public void deleteMovie(@PathVariable("id") int id, HttpServletResponse response) throws IOException {
-//		if (movieService.deleteMovie(id)) {
-//			response.sendRedirect("/admin/");
-//		}
-//	}
+	@PutMapping("/movie/update/poster")
+	public String updateMovieSavePoster(@RequestParam("poster") MultipartFile poster,
+			@RequestParam("fileType") String fileType, @RequestParam("filePath") String filePath) {
+		String fileName = storageService.updateFile(poster, fileType, filePath);
+		return fileName;
+	}
 
-//	// ------------------- API Only
-//
-//	@GetMapping("/movie")
-//	public List<Movie> listMovie() {
-//		return movieService.getMovies();
+	@DeleteMapping(value = "/movie/delete/{id}")
+	public ResponseEntity<?> deleteMovie(@PathVariable int id) {
+		String posterPath = movieService.getMovie(id).getPosterPath();
+		boolean isDeleted = movieService.deleteMovie(id);
+		if (!isDeleted) {
+			return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+		}
+		storageService.deleteFile(posterPath);
+		return ResponseEntity.ok().build();
+	}
+
+	@PutMapping("/movie/update/{id}")
+	public Movie updateMovie(@PathVariable int id, @Valid @RequestBody Movie movie) {
+		return movieService.updateMovie(id, movie);
+	}
+	
+//	@GetMapping("/user")
+//	public List<User> listUser() {
+//		return userService.getAllUsers();
 //	}
-//
-//	@PostMapping(value = "/movie")
-//	public Movie createMovie(@ModelAttribute Movie movie) {
-//		return movieService.saveMovie(movie);
-//	}
-//
-//	@GetMapping("/movie/{id}")
-//	public Movie getMovie(@PathVariable int id) {
-//		return movieService.getMovie(id);
-//	}
-//
-//	@PutMapping(value = "/movie/{id}")
-//	public Movie updateMovie2(@PathVariable int id, @ModelAttribute Movie movie) {
-//		return movieService.updateMovie(movie.getId(), movie);
-//	}
-//
-//	@DeleteMapping(value = "/movie/{id}")
-//	public boolean deleteMovie2(@PathVariable int id) {
-//		return movieService.deleteMovie(id);
-//	}
-//
+	
 //	@GetMapping("/record")
 //	public List<Record> listRecord() {
 //		return recordService.getRecords();

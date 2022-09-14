@@ -55,67 +55,7 @@ public class UserController {
 	@GetMapping("/logout")
 	public Boolean logout(HttpSession session, HttpServletResponse response) throws IOException {
 		session.invalidate();
-		 return true;
+		return true;
 	}
-
-//	@GetMapping("/login")
-//	public ModelAndView login() {
-//		ModelAndView mv = new ModelAndView();
-//		mv.addObject("activeHome", "");
-//		mv.addObject("activeLogin", "active");
-//		mv.addObject("activeRegister", "");
-//		mv.setViewName("login");
-//		return mv;
-//	}
-//
-//	@GetMapping("/logout")
-//	public void logout(HttpSession session, HttpServletResponse response) throws IOException {
-//		session.invalidate();
-//		response.sendRedirect("/");
-//	}
-//
-//	@PostMapping("/loginCheck")
-//	public void loginCheck(@RequestParam("gmail") String gmail, @RequestParam("password") String password,
-//			HttpSession session, HttpServletResponse response) throws IOException {
-//		session.removeAttribute("loginError");
-//		User user = userService.checkLoginUser(gmail, password);
-//		if (user == null) {
-//			session.setAttribute("loginError", "Invalid Gmail and password");
-//			response.sendRedirect("/user/login");
-//		} else {
-//			if (user.getRole() == UserRole.admin) {
-//				session.setAttribute("loginUser", user);
-//				response.sendRedirect("/admin/");
-//			} else {
-//				session.setAttribute("loginUser", user);
-//				response.sendRedirect("/");
-//			}
-//		}
-//	}
-//
-//	@GetMapping("/register")
-//	public ModelAndView register() {
-//		ModelAndView mv = new ModelAndView();
-//		mv.setViewName("register");
-//		mv.addObject("user", new User());
-//		mv.addObject("activeHome", "");
-//		mv.addObject("activeLogin", "");
-//		mv.addObject("activeRegister", "active");
-//		return mv;
-//	}
-//
-//	@PostMapping("/save")
-//	public void saveUserInfo(@ModelAttribute("user") User user, HttpServletResponse response, HttpSession session)
-//			throws IOException {
-//		session.removeAttribute("loginError");
-//		if (user.getName() == "") {
-//			session.setAttribute("loginError", "Error!");
-//			response.sendRedirect("/user/register");
-//		} else {
-//			User createdUser = userService.createUser(user);
-//			session.setAttribute("loginUser", createdUser);
-//			response.sendRedirect("/");
-//		}
-//	}
 
 }

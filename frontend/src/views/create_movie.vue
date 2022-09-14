@@ -2,7 +2,7 @@
   <div>
     <v-row>
       <v-col cols="2">
-        <sidebar></sidebar>
+        <sidebar_admin></sidebar_admin>
       </v-col>
 
       <v-col cols="10">
@@ -98,12 +98,12 @@
 </template>
 
 <script>
-import sidebar from "../components/sidebar.vue";
+import sidebar_admin from "../components/sidebar_admin.vue";
 import utils from "../utils/utils";
 
 export default {
   name: "create_movie",
-  components: { sidebar },
+  components: { sidebar_admin },
 
   data() {
     return {

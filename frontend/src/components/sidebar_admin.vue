@@ -23,7 +23,7 @@
 
 <script>
 export default {
-  name: "sidebar",
+  name: "sidebar_admin",
 
   data: () => ({
     menuItemList: [
