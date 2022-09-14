@@ -2,9 +2,7 @@
   <v-app>
     <v-main>
       <heading></heading>
-      <v-container>
-        <router-view />
-      </v-container>
+      <router-view class="mx-3 my-2" />
     </v-main>
   </v-app>
 </template>
@@ -19,8 +17,6 @@ export default {
     heading,
   },
 
-  data: () => ({
-    //
-  }),
+  data: () => ({}),
 };
 </script>

@@ -51,7 +51,7 @@ export default {
   data() {
     return {
       loginForm: false,
-      email: "a@gmail.com",
+      email: "admin@gmail.com",
       password: "1111",
       errorAlert: false,
       loading: false,
@@ -72,6 +72,7 @@ export default {
         if (resp.status === 200) {
           const data = await resp.json();
           if (data) {
+            this.$store.commit("setLoginUser", data);
             if (data.role == "admin") {
               this.$router.push({ path: "/admin" });
             } else {
