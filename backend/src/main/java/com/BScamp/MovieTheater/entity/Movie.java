@@ -35,26 +35,27 @@ public class Movie implements java.io.Serializable {
 	@NotBlank(message = "Required")
 	private String title;
 
+	@Column(length = 200)
 	private String posterPath;
-	
+
 	@Column(nullable = false)
 	private int budget;
 
 	@Column(length = 200)
 	private String homePage;
 
-	@Column(length = 500)
+	@Column(length = 200)
 	private String trailer;
 
-	@Column(length = 1000)
+	@Column(length = 200)
 	@NotBlank(message = "Required")
 	private String overview;
 
-	@Column(nullable = false)
+	@Column(length = 50, nullable = false)
 	@NotBlank(message = "Required")
 	private String type;
 
-	@Column(nullable = false, columnDefinition = "boolean")
+	@Column(columnDefinition = "boolean", nullable = false)
 	@ColumnDefault("false")
 	private Boolean adult;
 

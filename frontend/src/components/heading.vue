@@ -26,10 +26,10 @@ export default {
   }),
 
   created() {
-    this.loginUser = this.$store.getters.loginUser;
+    this.loginUser = this.$store.state.loginUser;
     this.$store.watch(
       () => {
-        return this.$store.getters.loginUser;
+        return this.$store.state.loginUser;
       },
       (newVal, oldVal) => {
         this.loginUser = newVal;
@@ -38,10 +38,10 @@ export default {
         deep: true,
       }
     );
-    this.isLogin = this.$store.getters.isLogin;
+    this.isLogin = this.$store.state.isLogin;
     this.$store.watch(
       () => {
-        return this.$store.getters.isLogin;
+        return this.$store.state.isLogin;
       },
       (newVal, oldVal) => {
         this.isLogin = newVal;

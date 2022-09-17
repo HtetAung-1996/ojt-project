@@ -5,7 +5,7 @@ import java.util.List;
 import com.BScamp.MovieTheater.entity.User;
 
 public interface UserService {
-	
+
 	public User createUser(User user);
 
 	public User getUser(int id);

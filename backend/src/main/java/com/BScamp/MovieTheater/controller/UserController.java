@@ -46,6 +46,7 @@ public class UserController {
 
 	@PostMapping("/register")
 	public ResponseEntity<User> register(@Valid @RequestBody User user, HttpSession session) throws IOException {
+		user.setRole(UserRole.user);
 		user.setStartJoinDate(LocalDate.now());
 		User createdUser = userService.createUser(user);
 		session.setAttribute("loginUser", createdUser);

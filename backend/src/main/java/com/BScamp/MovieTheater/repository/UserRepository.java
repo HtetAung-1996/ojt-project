@@ -7,7 +7,7 @@ import com.BScamp.MovieTheater.entity.User;
 public interface UserRepository extends JpaRepository<User, Integer> {
 
 	public User findByGmailAndPassword(String gmail, String password);
-	
+
 	public User findByName(String name);
 
 }

@@ -90,6 +90,7 @@ export default {
         if (resp.status === 200) {
           const data = await resp.json();
           if (data) {
+            this.$store.commit("setLoginUser", data);
             if (data.role == "admin") {
               this.$router.push({ path: "/admin" });
             } else {

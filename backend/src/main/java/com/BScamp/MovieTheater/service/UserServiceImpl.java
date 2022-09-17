@@ -13,22 +13,22 @@ import com.BScamp.MovieTheater.repository.UserRepository;
 public class UserServiceImpl implements UserService {
 
 	@Autowired
-	UserRepository userRepository;
+	UserRepository userRepo;
 
 	@Override
 	public User createUser(User user) {
 		user.setCreatedAt(LocalDateTime.now());
-		return userRepository.save(user);
+		return userRepo.save(user);
 	}
 
 	@Override
 	public User getUser(int id) {
-		return userRepository.findById(id).get();
+		return userRepo.findById(id).get();
 	}
 
 	@Override
 	public List<User> getAllUsers() {
-		return userRepository.findAll();
+		return userRepo.findAll();
 	}
 
 	@Override
@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
 			toUpdateUser.setLastJoinDate(user.getLastJoinDate());
 			toUpdateUser.setAccessCount(user.getAccessCount());
 			toUpdateUser.setUpdatedAt(LocalDateTime.now());
-			userRepository.save(toUpdateUser);
+			userRepo.save(toUpdateUser);
 		}
 		return user;
 	}
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
 	public boolean deleteUser(int id) {
 		User user = getUser(id);
 		if (user != null) {
-			userRepository.deleteById(id);
+			userRepo.deleteById(id);
 			return true;
 		}
 		return false;
@@ -60,7 +60,6 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User checkLoginUser(String gmail, String password) {
-		return userRepository.findByGmailAndPassword(gmail, password);
+		return userRepo.findByGmailAndPassword(gmail, password);
 	}
-
 }
