@@ -9,6 +9,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -23,26 +24,38 @@ public class StorageServiceImpl implements StorageService {
 
 	private final Random random = new Random();
 
+	@Value("${custom.delete.files}")
+	private boolean customDeleteFiles;
+
 	@Autowired
 	public StorageServiceImpl() throws IOException {
 
-		Path storagePath = Paths.get("").resolve("src").resolve("main").resolve("resources").resolve("static")
-				.resolve("images");
+		Path storagePath = Paths.get("").resolve("src").resolve("main")
+				.resolve("resources").resolve("static").resolve("images");
 		if (!Files.exists(storagePath)) {
 			Files.createDirectories(storagePath);
 		}
 		this.storagePath = storagePath;
+
 	}
 
 	@Override
-	public String saveFile(MultipartFile file, String fileType) {
+	public String save(MultipartFile file, String fileType) {
 
 		String filePath = null;
 
 		try {
-			String fileName = random.nextInt(999999) + "_" + StringUtils.cleanPath(file.getOriginalFilename());
-			Files.copy(file.getInputStream(), this.storagePath.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
-			filePath = "/image/" + (fileType == "image/jpg" ? "jpg" : "png") + "/" + fileName;
+			String fileName = random.nextInt(999999) + "_"
+					+ StringUtils.cleanPath(file.getOriginalFilename());
+			Files.copy(
+					file.getInputStream(), this.storagePath.resolve(fileName),
+					StandardCopyOption.REPLACE_EXISTING
+			);
+			filePath = "/image/"
+					+ (fileType == "image/jpg" || fileType == "image/jpeg"
+							? "jpg"
+							: "png")
+					+ "/" + fileName;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -60,7 +73,8 @@ public class StorageServiceImpl implements StorageService {
 			Path file = this.storagePath.resolve(fileName);
 			Resource resource = new UrlResource(file.toUri());
 			if (resource.exists() || resource.isReadable()) {
-				retBytes = StreamUtils.copyToByteArray(resource.getInputStream());
+				retBytes = StreamUtils
+						.copyToByteArray(resource.getInputStream());
 			}
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
@@ -73,7 +87,7 @@ public class StorageServiceImpl implements StorageService {
 	}
 
 	@Override
-	public boolean deleteFile(String filePath) {
+	public boolean delete(String filePath) {
 
 		try {
 			Files.delete(this.storagePath.resolve(filePath));
@@ -86,7 +100,9 @@ public class StorageServiceImpl implements StorageService {
 	}
 
 	@Override
-	public String updateFile(MultipartFile file, String fileType, String filePath) {
+	public String update(
+			MultipartFile file, String fileType, String filePath
+	) {
 
 		String retfilePath = null;
 
@@ -98,14 +114,40 @@ public class StorageServiceImpl implements StorageService {
 					e.printStackTrace();
 				}
 			}
-			String fileName = random.nextInt(999999) + "_" + StringUtils.cleanPath(file.getOriginalFilename());
-			Files.copy(file.getInputStream(), this.storagePath.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
-			retfilePath = "/image/" + (fileType == "image/jpg" ? "jpg" : "png") + "/" + fileName;
+			String fileName = random.nextInt(999999) + "_"
+					+ StringUtils.cleanPath(file.getOriginalFilename());
+			Files.copy(
+					file.getInputStream(), this.storagePath.resolve(fileName),
+					StandardCopyOption.REPLACE_EXISTING
+			);
+			retfilePath = "/image/" + (fileType == "image/jpg" ? "jpg" : "png")
+					+ "/" + fileName;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
 		return retfilePath;
+
+	}
+
+	@Override
+	public void clearAll() {
+
+		try {
+			if (customDeleteFiles) {
+				Files.walk(storagePath).sorted().forEach(t -> {
+					try {
+						if (!Files.isDirectory(t)) {
+							Files.deleteIfExists(t);
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				});
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 	}
 

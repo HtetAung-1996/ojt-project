@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 
 import org.hibernate.annotations.ColumnDefault;
@@ -51,9 +53,9 @@ public class Movie implements java.io.Serializable {
 	@NotBlank(message = "Required")
 	private String overview;
 
-	@Column(length = 50, nullable = false)
-	@NotBlank(message = "Required")
-	private String type;
+	@ManyToOne
+	@JoinColumn(name = "category_id", referencedColumnName = "id")
+	private Category category;
 
 	@Column(columnDefinition = "boolean", nullable = false)
 	@ColumnDefault("false")

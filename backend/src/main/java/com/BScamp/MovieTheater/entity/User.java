@@ -46,6 +46,10 @@ public class User implements java.io.Serializable {
 	@NotBlank(message = "Required")
 	private String gmail;
 
+	@Column(columnDefinition = "ENUM('active', 'deactivated', 'banned', 'violated') NOT NULL")
+	@Enumerated(EnumType.STRING)
+	private UserStatus status;
+
 	@Column(columnDefinition = "ENUM('admin', 'user') NOT NULL")
 	@Enumerated(EnumType.STRING)
 	private UserRole role;

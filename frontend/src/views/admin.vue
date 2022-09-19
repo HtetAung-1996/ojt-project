@@ -130,12 +130,16 @@
               required
             ></v-text-field>
 
-            <v-text-field
-              v-model="toUpdateMovie.type"
+            <v-select
+              v-model="toUpdateMovie.category"
+              :items="movieCategoryList"
+              item-text="name"
+              item-value="id"
               :rules="[(v) => !!v || 'Required']"
-              label="Type"
+              label="Category"
               required
-            ></v-text-field>
+            >
+            </v-select>
 
             <v-checkbox
               v-model="toUpdateMovie.adult"
@@ -194,7 +198,7 @@ export default {
         { text: "Title", value: "title", sortable: true },
         { text: "Budget", value: "budget", sortable: true },
         { text: "Overview", value: "overview", sortable: false },
-        { text: "Type", value: "type", sortable: true },
+        { text: "Category", value: "category.name", sortable: true },
         { text: "Adult", value: "adult" },
         { text: "CreatedAt", value: "createdAt", sortable: true },
         { text: "UpdatedAt", value: "updatedAt", sortable: false },
@@ -211,7 +215,7 @@ export default {
         title: "",
         overview: "",
         budget: 0,
-        type: "",
+        category: 1,
         adult: false,
         posterPath: "",
         poster: null,
@@ -219,10 +223,13 @@ export default {
 
       errorAlert: false,
       loading: false,
+
+      movieCategoryList: [],
     };
   },
 
   async created() {
+    await this.fetchMovieCategories();
     await this.fetchMovies();
   },
 
@@ -232,8 +239,17 @@ export default {
       if (resp.status === 200) {
         const data = await resp.json();
         if (data) {
-          console.log(data);
           this.movieList = data;
+        }
+      }
+    },
+
+    async fetchMovieCategories() {
+      const resp = await utils.http.get("/admin/category");
+      if (resp.status === 200) {
+        const data = await resp.json();
+        if (data) {
+          this.movieCategoryList = data;
         }
       }
     },
@@ -272,7 +288,6 @@ export default {
           );
           if (respPoster.status === 200) {
             posterPath = await respPoster.text();
-            console.log(posterPath);
           } else {
             console.debug("Poster Update Failed");
           }
@@ -284,13 +299,12 @@ export default {
             title: this.toUpdateMovie.title,
             overview: this.toUpdateMovie.overview,
             budget: this.toUpdateMovie.budget,
-            type: this.toUpdateMovie.type,
+            category: { id: this.toUpdateMovie.category },
             adult: this.toUpdateMovie.adult,
             posterPath: posterPath,
           }
         );
         if (respMovie.status === 200) {
-          console.log(await respMovie.json());
           this.toUpdateMovie.poster = null;
           this.updateDialog = false;
           await this.fetchMovies();

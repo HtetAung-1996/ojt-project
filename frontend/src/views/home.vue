@@ -6,17 +6,12 @@
           <v-navigation-drawer permanent>
             <v-list dense nav>
               <v-list-item
-                v-for="cat in catList"
-                :key="cat.title"
+                v-for="(cat, index) in movieCategoryList"
                 link
-                @click=""
+                @click="onClickCategory(cat)"
               >
-                <v-list-item-icon>
-                  <v-icon>{{ cat.icon }}</v-icon>
-                </v-list-item-icon>
-
                 <v-list-item-content>
-                  <v-list-item-title>{{ cat.title }}</v-list-item-title>
+                  <v-list-item-title>{{ cat.name }}</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
             </v-list>
@@ -27,7 +22,7 @@
       <v-col cols="10">
         <v-row>
           <v-col cols="3" v-for="(movie, index) in movieList">
-            <v-card>
+            <v-card @click="goToMovieDetails(movie)">
               <v-card-text>
                 <v-img
                   :src="localDomain + movie.posterPath"
@@ -60,10 +55,13 @@ export default {
 
       catList: [],
       movieList: [],
+
+      movieCategoryList: [],
     };
   },
 
   async created() {
+    await this.fetchMovieCategories();
     await this.fetchMovies();
   },
 
@@ -73,7 +71,32 @@ export default {
       if (resp.status === 200) {
         const data = await resp.json();
         if (data) {
-          console.log(data);
+          this.movieList = data;
+        }
+      }
+    },
+
+    async fetchMovieCategories() {
+      const resp = await utils.http.get("/admin/category");
+      if (resp.status === 200) {
+        const data = await resp.json();
+        if (data) {
+          this.movieCategoryList = data;
+        }
+      }
+    },
+
+    goToMovieDetails(movie) {
+      this.$router.push({
+        path: "/movie_details/" + movie.id,
+      });
+    },
+
+    async onClickCategory(cat) {
+      const resp = await utils.http.get("/movie/" + cat.id);
+      if (resp.status === 200) {
+        const data = await resp.json();
+        if (data) {
           this.movieList = data;
         }
       }
