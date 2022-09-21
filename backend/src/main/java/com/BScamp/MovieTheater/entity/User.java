@@ -34,19 +34,23 @@ public class User implements java.io.Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 
-	@Column(nullable = false)
+	@Column(length = 30, nullable = false)
 	@NotBlank(message = "Required")
 	private String name;
 
-	@Column(nullable = false)
+	@Column(length = 100, nullable = false)
 	@NotBlank(message = "Required")
 	private String password;
 
-	@Column(nullable = false, unique = true)
+	@Column(length = 100, nullable = false, unique = true)
 	@NotBlank(message = "Required")
 	private String gmail;
 
-	@Column(columnDefinition = "ENUM('admin', 'user')")
+	@Column(columnDefinition = "ENUM('active', 'deactivated', 'banned', 'violated') NOT NULL")
+	@Enumerated(EnumType.STRING)
+	private UserStatus status;
+
+	@Column(columnDefinition = "ENUM('admin', 'user') NOT NULL")
 	@Enumerated(EnumType.STRING)
 	private UserRole role;
 

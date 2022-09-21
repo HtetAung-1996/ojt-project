@@ -5,17 +5,21 @@ import java.util.List;
 import com.BScamp.MovieTheater.entity.User;
 
 public interface UserService {
-	
-	public User createUser(User user);
 
-	public User getUser(int id);
+	public List<User> getAll();
 
-	public List<User> getAllUsers();
+	public User get(int id);
 
-	public User updateUser(int id, User user);
+	public User create(User user);
 
-	public boolean deleteUser(int id);
+	public User update(int id, User user);
+
+	public boolean delete(int id);
 
 	public User checkLoginUser(String gmail, String password);
+	
+	public User updateStatus(int id, String status);
+	
+	public List<String> getAllStatus();
 
 }

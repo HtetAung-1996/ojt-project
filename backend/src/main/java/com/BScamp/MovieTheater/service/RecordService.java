@@ -6,14 +6,16 @@ import com.BScamp.MovieTheater.entity.Record;
 
 public interface RecordService {
 
-	public Record saveRecord(Record record);
+	public List<Record> getAll();
 
-	public Record getRecord(int id);
+	public Record get(int id);
 
-	public List<Record> getRecords();
+	public Record create(Record record);
 
-	public Record updateRecord(int id, Record mo);
+	public Record update(int id, Record mo);
 
-	public boolean deleteRecord(int id);
+	public boolean delete(int id);
+
+	public List<Record> getAllByUserID(int userID);
 
 }

@@ -49,12 +49,16 @@
             required
           ></v-text-field>
 
-          <v-text-field
-            v-model="type"
+          <v-select
+            v-model="category"
+            :items="movieCategoryList"
+            item-text="name"
+            item-value="id"
             :rules="[(v) => !!v || 'Required']"
-            label="Type"
+            label="Category"
             required
-          ></v-text-field>
+          >
+          </v-select>
 
           <v-checkbox v-model="adult" label="Adult"></v-checkbox>
 
@@ -102,7 +106,7 @@ import sidebar_admin from "../components/sidebar_admin.vue";
 import utils from "../utils/utils";
 
 export default {
-  name: "create_movie",
+  name: "admin_create_movie",
   components: { sidebar_admin },
 
   data() {
@@ -111,15 +115,31 @@ export default {
       title: "Test",
       overview: "Overview",
       budget: 1000,
-      type: "Adventure",
+      category: 1,
       adult: false,
       errorAlert: false,
       loading: false,
       poster: null,
+
+      movieCategoryList: [],
     };
   },
 
+  async created() {
+    await this.fetchMovieCategories();
+  },
+
   methods: {
+    async fetchMovieCategories() {
+      const resp = await utils.http.get("/admin/category");
+      if (resp.status === 200) {
+        const data = await resp.json();
+        if (data) {
+          this.movieCategoryList = data;
+        }
+      }
+    },
+
     async createMovie() {
       if (this.$refs.movieForm.validate()) {
         this.errorAlert = false;
@@ -137,7 +157,7 @@ export default {
               title: this.title,
               overview: this.overview,
               budget: this.budget,
-              type: this.type,
+              category: { id: this.category },
               adult: this.adult,
               posterPath: respPosterData,
             });

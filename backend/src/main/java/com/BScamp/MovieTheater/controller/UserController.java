@@ -11,8 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.BScamp.MovieTheater.entity.LoginRequest;
@@ -28,34 +30,43 @@ public class UserController {
 	UserService userService;
 
 	@PostMapping("/login")
-	public ResponseEntity<User> login(@Valid @RequestBody LoginRequest lognReq, HttpSession session)
-			throws IOException {
-		User user = userService.checkLoginUser(lognReq.getGmail(), lognReq.getPassword());
+	public ResponseEntity<User> login(
+			@Valid @RequestBody LoginRequest lognReq, HttpSession session
+	) throws IOException {
+		User user = userService
+				.checkLoginUser(lognReq.getGmail(), lognReq.getPassword());
 		if (user == null) {
 			return ResponseEntity.notFound().build();
-		} else {
-			if (user.getRole() == UserRole.admin) {
-				session.setAttribute("loginUser", user);
-				return ResponseEntity.ok().body(user);
-			} else {
-				session.setAttribute("loginUser", user);
-				return ResponseEntity.ok().body(user);
-			}
 		}
+		return ResponseEntity.ok().body(user);
 	}
 
 	@PostMapping("/register")
-	public ResponseEntity<User> register(@Valid @RequestBody User user, HttpSession session) throws IOException {
+	public ResponseEntity<User> register(
+			@Valid @RequestBody User user, HttpSession session
+	) throws IOException {
+		user.setRole(UserRole.user);
 		user.setStartJoinDate(LocalDate.now());
-		User createdUser = userService.createUser(user);
+		User createdUser = userService.create(user);
 		session.setAttribute("loginUser", createdUser);
 		return ResponseEntity.ok().body(createdUser);
 	}
 
 	@GetMapping("/logout")
-	public Boolean logout(HttpSession session, HttpServletResponse response) throws IOException {
+	public Boolean logout(HttpSession session, HttpServletResponse response)
+			throws IOException {
 		session.invalidate();
 		return true;
+	}
+
+	@GetMapping("/profile")
+	public User getProfile(@RequestParam int id) throws IOException {
+		return userService.get(id);
+	}
+
+	@PutMapping("/profile/update")
+	public User getProfile(@RequestBody User user) throws IOException {
+		return userService.update(user.getId(), user);
 	}
 
 }

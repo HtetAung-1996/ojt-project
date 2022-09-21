@@ -11,6 +11,18 @@ async function post(path, body) {
   return resp;
 }
 
+async function postFormData(path, body) {
+  const formData = new FormData();
+  for (let key in body) {
+    formData.append(key, body[key]);
+  }
+  const resp = await fetch(constant.localDomain + path, {
+    method: "POST",
+    body: formData,
+  });
+  return resp;
+}
+
 async function postImg(path, file, fileType) {
   let formData = new FormData();
   formData.append("poster", file);
@@ -52,6 +64,18 @@ async function put(path, body) {
   return resp;
 }
 
+async function putFormData(path, body) {
+  const formData = new FormData();
+  for (let key in body) {
+    formData.append(key, body[key]);
+  }
+  const resp = await fetch(constant.localDomain + path, {
+    method: "PUT",
+    body: formData,
+  });
+  return resp;
+}
+
 async function del(path, body) {
   const resp = await fetch(constant.localDomain + path, {
     method: "DELETE",
@@ -63,4 +87,13 @@ async function del(path, body) {
   return resp;
 }
 
-export default { post, postImg, putImg, get, put, del };
+export default {
+  post,
+  postImg,
+  putImg,
+  get,
+  put,
+  del,
+  postFormData,
+  putFormData,
+};

@@ -1,58 +1,62 @@
 package com.BScamp.MovieTheater.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.BScamp.MovieTheater.entity.User;
-import com.BScamp.MovieTheater.repository.UserRepository;
+import com.BScamp.MovieTheater.entity.UserStatus;
+import com.BScamp.MovieTheater.repository.UserRepo;
 
 @Service
 public class UserServiceImpl implements UserService {
 
 	@Autowired
-	UserRepository userRepository;
+	UserRepo userRepo;
+
+	@Autowired
+	PasswordEncoder pwEncoder;
 
 	@Override
-	public User createUser(User user) {
+	public User create(User user) {
+		user.setStatus(UserStatus.active);
+		user.setPassword(pwEncoder.encode(user.getPassword()));
 		user.setCreatedAt(LocalDateTime.now());
-		return userRepository.save(user);
+		return userRepo.save(user);
 	}
 
 	@Override
-	public User getUser(int id) {
-		return userRepository.findById(id).get();
+	public User get(int id) {
+		return userRepo.findById(id).orElse(null);
 	}
 
 	@Override
-	public List<User> getAllUsers() {
-		return userRepository.findAll();
+	public List<User> getAll() {
+		return userRepo.findAll();
 	}
 
 	@Override
-	public User updateUser(int id, User user) {
-		User toUpdateUser = getUser(id);
+	public User update(int id, User user) {
+		User toUpdateUser = get(id);
 		if (toUpdateUser != null) {
 			toUpdateUser.setName(user.getName());
-			toUpdateUser.setPassword(user.getPassword());
 			toUpdateUser.setGmail(user.getGmail());
-			toUpdateUser.setRole(user.getRole());
-			toUpdateUser.setStartJoinDate(user.getStartJoinDate());
-			toUpdateUser.setLastJoinDate(user.getLastJoinDate());
-			toUpdateUser.setAccessCount(user.getAccessCount());
 			toUpdateUser.setUpdatedAt(LocalDateTime.now());
-			userRepository.save(toUpdateUser);
+			userRepo.save(toUpdateUser);
 		}
-		return user;
+		return toUpdateUser;
 	}
 
 	@Override
-	public boolean deleteUser(int id) {
-		User user = getUser(id);
+	public boolean delete(int id) {
+		User user = get(id);
 		if (user != null) {
-			userRepository.deleteById(id);
+			userRepo.deleteById(id);
 			return true;
 		}
 		return false;
@@ -60,7 +64,32 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User checkLoginUser(String gmail, String password) {
-		return userRepository.findByGmailAndPassword(gmail, password);
+		User user = userRepo.findByGmail(gmail);
+		if (pwEncoder.matches(password, user.getPassword())) {
+			user.setPassword("*****");
+			return user;
+		}
+		return null;
+	}
+
+	@Override
+	public User updateStatus(int id, String status) {
+		User toUpdateUser = get(id);
+		if (toUpdateUser != null) {
+			toUpdateUser.setStatus(UserStatus.valueOf(status));
+			toUpdateUser.setUpdatedAt(LocalDateTime.now());
+			userRepo.save(toUpdateUser);
+		}
+		return toUpdateUser;
+	}
+
+	@Override
+	public List<String> getAllStatus() {
+		List<String> userStatusList = new ArrayList<>();
+		for (UserStatus role : Arrays.asList(UserStatus.values())) {
+			userStatusList.add(role.toString());
+		}
+		return userStatusList;
 	}
 
 }

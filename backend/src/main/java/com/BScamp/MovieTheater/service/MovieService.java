@@ -1,24 +1,22 @@
 package com.BScamp.MovieTheater.service;
 
 import java.util.List;
-import java.util.Set;
 
+import com.BScamp.MovieTheater.entity.Category;
 import com.BScamp.MovieTheater.entity.Movie;
 
 public interface MovieService {
-	
-	public Movie saveMovie(Movie movie);
 
-	public Movie getMovie(int id);
+	public List<Movie> getAll();
 
-	public List<Movie> getMovies();
+	public Movie get(int id);
 
-	public Movie updateMovie(int id, Movie mo);
+	public Movie create(Movie movie);
 
-	public boolean deleteMovie(int id);
+	public Movie update(int id, Movie movie);
 
-	public Set<String> getType();
+	public boolean delete(int id);
 
-	public List<Movie> getCategories(String type);
-	
+	public List<Movie> getAllByCategory(Category category);
+
 }

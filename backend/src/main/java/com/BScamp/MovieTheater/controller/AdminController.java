@@ -1,9 +1,7 @@
 package com.BScamp.MovieTheater.controller;
 
-import java.io.IOException;
+import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
+import com.BScamp.MovieTheater.entity.Category;
 import com.BScamp.MovieTheater.entity.Movie;
+import com.BScamp.MovieTheater.entity.Record;
 import com.BScamp.MovieTheater.entity.User;
-import com.BScamp.MovieTheater.entity.UserRole;
+import com.BScamp.MovieTheater.service.CategoryService;
 import com.BScamp.MovieTheater.service.MovieService;
 import com.BScamp.MovieTheater.service.RecordService;
 import com.BScamp.MovieTheater.service.StorageService;
@@ -35,83 +34,94 @@ public class AdminController {
 
 	@Autowired
 	MovieService movieService;
+
 	@Autowired
 	StorageService storageService;
+
 	@Autowired
 	RecordService recordService;
+
 	@Autowired
 	UserService userService;
 
-	@GetMapping("/")
-	public ModelAndView homePage(HttpSession session, HttpServletResponse response) throws IOException {
-
-		User user = (User) session.getAttribute("loginUser");
-		if (user == null) {
-			response.sendRedirect("/user/login");
-			return null;
-		}
-		if (user.getRole() != UserRole.admin) {
-			response.sendRedirect("/");
-			return null;
-		}
-		return new ModelAndView("admin", "movies", movieService.getMovies());
-	}
+	@Autowired
+	CategoryService categoryService;
 
 	// ------------------- Movie
 
 	@PostMapping("/movie/create")
 	public Movie createMovie(@Valid @RequestBody Movie movie) {
-		return movieService.saveMovie(movie);
+		return movieService.create(movie);
 	}
 
 	@PostMapping("/movie/create/poster")
-	public String createMovieSavePoster(@RequestParam("poster") MultipartFile poster,
-			@RequestParam("fileType") String fileType) {
-		String fileName = storageService.saveFile(poster, fileType);
+	public String createMovieSavePoster(
+			@RequestParam("poster") MultipartFile poster,
+			@RequestParam("fileType") String fileType
+	) {
+		String fileName = storageService.save(poster, fileType);
 		return fileName;
 	}
 
 	@PutMapping("/movie/update/poster")
-	public String updateMovieSavePoster(@RequestParam("poster") MultipartFile poster,
-			@RequestParam("fileType") String fileType, @RequestParam("filePath") String filePath) {
-		String fileName = storageService.updateFile(poster, fileType, filePath);
+	public String updateMovieSavePoster(
+			@RequestParam("poster") MultipartFile poster,
+			@RequestParam("fileType") String fileType,
+			@RequestParam("filePath") String filePath
+	) {
+		String fileName = storageService.update(poster, fileType, filePath);
 		return fileName;
 	}
 
 	@DeleteMapping(value = "/movie/delete/{id}")
 	public ResponseEntity<?> deleteMovie(@PathVariable int id) {
-		String posterPath = movieService.getMovie(id).getPosterPath();
-		boolean isDeleted = movieService.deleteMovie(id);
+		String posterPath = movieService.get(id).getPosterPath();
+		boolean isDeleted = movieService.delete(id);
 		if (!isDeleted) {
 			return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
 		}
-		storageService.deleteFile(posterPath);
+		storageService.delete(posterPath);
 		return ResponseEntity.ok().build();
 	}
 
 	@PutMapping("/movie/update/{id}")
-	public Movie updateMovie(@PathVariable int id, @Valid @RequestBody Movie movie) {
-		return movieService.updateMovie(id, movie);
+	public Movie updateMovie(
+			@PathVariable int id, @Valid @RequestBody Movie movie
+	) {
+		return movieService.update(id, movie);
 	}
-	
-//	@GetMapping("/user")
-//	public List<User> listUser() {
-//		return userService.getAllUsers();
-//	}
-	
-//	@GetMapping("/record")
-//	public List<Record> listRecord() {
-//		return recordService.getRecords();
-//	}
-//
-//	@GetMapping("/user")
-//	public List<User> listUser() {
-//		return userService.getAllUsers();
-//	}
-//
-//	@GetMapping("/user/{id}")
-//	public User getUser(@PathVariable int id) {
-//		return userService.getUser(id);
-//	}
+
+	// ------------------- User
+
+	@GetMapping("/user")
+	public List<User> listUser() {
+		return userService.getAll();
+	}
+
+	@PutMapping("/user/update_status")
+	public User updateUserStatus(
+			@RequestParam int id, @RequestParam String status
+	) {
+		return userService.updateStatus(id, status);
+	}
+
+	@GetMapping("/user_status")
+	public List<String> listUserStatus() {
+		return userService.getAllStatus();
+	}
+
+	// ------------------- Record
+
+	@GetMapping("/record")
+	public List<Record> listRecord() {
+		return recordService.getAll();
+	}
+
+	// ------------------- Category
+
+	@GetMapping("/category")
+	public List<Category> listCategory() {
+		return categoryService.getAll();
+	}
 
 }

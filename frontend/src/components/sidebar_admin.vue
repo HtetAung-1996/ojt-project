@@ -35,7 +35,17 @@ export default {
       {
         title: "Create Movie",
         icon: "mdi-movie",
-        path: "/create_movie",
+        path: "/admin/create_movie",
+      },
+      {
+        title: "User List",
+        icon: "mdi-account-supervisor ",
+        path: "/admin/user_list",
+      },
+      {
+        title: "Record List",
+        icon: "mdi-account-supervisor ",
+        path: "/admin/record_list",
       },
     ],
   }),

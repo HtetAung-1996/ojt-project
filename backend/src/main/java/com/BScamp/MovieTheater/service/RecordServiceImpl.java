@@ -7,33 +7,34 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.BScamp.MovieTheater.entity.Record;
-import com.BScamp.MovieTheater.repository.RecordRepository;
+import com.BScamp.MovieTheater.entity.User;
+import com.BScamp.MovieTheater.repository.RecordRepo;
 
 @Service
 public class RecordServiceImpl implements RecordService {
 
 	@Autowired
-	RecordRepository recordRepo;
+	RecordRepo recordRepo;
 
 	@Override
-	public Record saveRecord(Record record) {
+	public Record create(Record record) {
 		record.setCreatedAt(LocalDateTime.now());
 		return recordRepo.save(record);
 	}
 
 	@Override
-	public Record getRecord(int id) {
+	public Record get(int id) {
 		return recordRepo.findById(id).orElse(null);
 	}
 
 	@Override
-	public List<Record> getRecords() {
+	public List<Record> getAll() {
 		return recordRepo.findAll();
 	}
 
 	@Override
-	public Record updateRecord(int id, Record rec) {
-		Record record = getRecord(id);
+	public Record update(int id, Record rec) {
+		Record record = get(id);
 		if (record != null) {
 			record.setUser(rec.getUser());
 			record.setMovie(rec.getMovie());
@@ -44,9 +45,16 @@ public class RecordServiceImpl implements RecordService {
 	}
 
 	@Override
-	public boolean deleteRecord(int id) {
+	public boolean delete(int id) {
 		recordRepo.deleteById(id);
 		return true;
+	}
+
+	@Override
+	public List<Record> getAllByUserID(int userID) {
+		User user = new User();
+		user.setId(userID);
+		return recordRepo.findAllByUser(user);
 	}
 
 }
