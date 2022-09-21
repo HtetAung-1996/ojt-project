@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -32,11 +33,17 @@ public class MovieTheaterApplication implements CommandLineRunner {
 	@Autowired
 	CategoryService categoryService;
 
+	@Value("${spring.jpa.hibernate.ddl-auto}")
+	private String ddlMode;
+
+	@Value("${custom.delete.files}")
+	private String deleteFiles;
+
 	@Override
 	public void run(String... args) throws Exception {
 
-		User adminUser = userService.get(1);
-		if (adminUser == null) {
+		if (ddlMode.equals("create")) {
+
 			userService.create(
 					new User(
 							1, "Admin", "1111", "admin@gmail.com",
@@ -44,9 +51,7 @@ public class MovieTheaterApplication implements CommandLineRunner {
 							null, 0, LocalDateTime.now(), null
 					)
 			);
-		}
 
-		if (categoryService.getAll().size() <= 0) {
 			categoryService.create(new Category(1, "Adventure"));
 			categoryService.create(new Category(2, "Science Fiction"));
 			categoryService.create(new Category(3, "Horror"));
@@ -57,9 +62,12 @@ public class MovieTheaterApplication implements CommandLineRunner {
 			categoryService.create(new Category(8, "Fantasy"));
 			categoryService.create(new Category(9, "Mystery"));
 			categoryService.create(new Category(10, "Action"));
+
 		}
 
-		storageService.clearAll();
+		if (deleteFiles.equals("true")) {
+			storageService.clearAll();
+		}
 
 	}
 }

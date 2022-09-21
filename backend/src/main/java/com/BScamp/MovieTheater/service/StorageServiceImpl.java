@@ -100,12 +100,12 @@ public class StorageServiceImpl implements StorageService {
 	}
 
 	@Override
-	public String update(
-			MultipartFile file, String fileType, String filePath
-	) {
+	public String update(MultipartFile file, String fileType, String filePath) {
 
 		String retfilePath = null;
 
+		filePath = filePath.replace("/image/jpg/", "");
+		filePath = filePath.replace("/image/png/", "");
 		try {
 			if (filePath != null && filePath != "") {
 				try {

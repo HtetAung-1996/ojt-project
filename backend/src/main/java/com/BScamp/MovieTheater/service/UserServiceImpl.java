@@ -66,7 +66,6 @@ public class UserServiceImpl implements UserService {
 	public User checkLoginUser(String gmail, String password) {
 		User user = userRepo.findByGmail(gmail);
 		if (pwEncoder.matches(password, user.getPassword())) {
-			user.setPassword("*****");
 			return user;
 		}
 		return null;

@@ -3,7 +3,6 @@ package com.BScamp.MovieTheater.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.validation.constraints.NotBlank;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,10 +16,11 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Category {
+public class Category implements java.io.Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
-	@NotBlank(message = "Required")
 	private int id;
 
 	@Column(length = 50, nullable = false)

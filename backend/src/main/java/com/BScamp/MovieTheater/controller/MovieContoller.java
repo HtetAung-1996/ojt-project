@@ -33,7 +33,7 @@ public class MovieContoller {
 		return movieService.getAll();
 	}
 
-	@GetMapping("/movie/{category_id}")
+	@GetMapping("/movie/category/{category_id}")
 	public List<Movie> getMoviesByCategory(
 			@PathVariable("category_id") int categoryID
 	) {

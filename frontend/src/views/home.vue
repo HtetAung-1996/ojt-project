@@ -93,7 +93,7 @@ export default {
     },
 
     async onClickCategory(cat) {
-      const resp = await utils.http.get("/movie/" + cat.id);
+      const resp = await utils.http.get("/movie/category/" + cat.id);
       if (resp.status === 200) {
         const data = await resp.json();
         if (data) {
