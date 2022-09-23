@@ -42,6 +42,7 @@ public class MovieServiceImpl implements MovieService {
 			toUpdateMovie.setCategory(movie.getCategory());
 			toUpdateMovie.setAdult(movie.getAdult());
 			toUpdateMovie.setPosterPath(movie.getPosterPath());
+			toUpdateMovie.setTrailerPath(movie.getTrailerPath());
 			toUpdateMovie.setUpdatedAt(LocalDateTime.now());
 			movieRepo.save(toUpdateMovie);
 		}

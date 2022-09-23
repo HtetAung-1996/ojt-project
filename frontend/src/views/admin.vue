@@ -71,7 +71,7 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="updateDialog" width="400">
+    <v-dialog v-model="updateDialog" width="500">
       <v-card>
         <v-toolbar color="primary" dark>
           <div>Update This Movie?</div>
@@ -153,7 +153,64 @@
               prepend-icon="mdi-camera"
               placeholder="Choose Poster Image"
               accept="image/png, image/jpeg"
+              :rules="[
+                (v) =>
+                  !v ||
+                  v.size < 10000000 ||
+                  'Image size should be less than 10 MB!',
+              ]"
+              @change="onChangePoster"
             ></v-file-input>
+
+            <v-img
+              v-if="posterPreviewPath == null"
+              :src="localDomain + toUpdateMovie.posterPath"
+              width="200"
+              height="150"
+              contain
+            >
+            </v-img>
+
+            <v-img
+              v-if="posterPreviewPath != null"
+              :src="posterPreviewPath"
+              width="200"
+              height="150"
+              contain
+            >
+            </v-img>
+
+            <v-file-input
+              v-model="toUpdateMovie.trailer"
+              label="Trailer"
+              show-size
+              prepend-icon="mdi-camera"
+              placeholder="Choose Trailer"
+              accept="video/mp4"
+              :rules="[
+                (v) =>
+                  !v ||
+                  v.size < 100000000 ||
+                  'Image size should be less than 100 MB!',
+              ]"
+              @change="onChangeTrailer"
+            ></v-file-input>
+
+            <video
+              v-if="trailerPreviewPath == null"
+              class="mb-2"
+              width="100%"
+              :src="localDomain + toUpdateMovie.trailerPath"
+              controls
+            ></video>
+
+            <video
+              v-if="trailerPreviewPath != null"
+              class="mb-2"
+              width="100%"
+              :src="trailerPreviewPath"
+              controls
+            ></video>
 
             <v-btn
               :disabled="!movieForm"
@@ -161,7 +218,7 @@
               class="mr-4"
               @click="updateMovie"
             >
-              <span v-if="!loading">Login</span>
+              <span v-if="!loading">Update</span>
               <v-progress-circular
                 v-else
                 indeterminate
@@ -219,7 +276,11 @@ export default {
         adult: false,
         posterPath: "",
         poster: null,
+        trailerPath: "",
+        trailer: null,
       },
+      posterPreviewPath: null,
+      trailerPreviewPath: null,
 
       errorAlert: false,
       loading: false,
@@ -270,6 +331,9 @@ export default {
       this.updateDialog = true;
       this.toUpdateMovie = Object.assign({}, item);
       this.toUpdateMovie.poster = null;
+      this.toUpdateMovie.trailer = null;
+      this.posterPreviewPath = null;
+      this.trailerPreviewPath = null;
     },
 
     async updateMovie() {
@@ -278,10 +342,11 @@ export default {
         this.loading = true;
 
         let posterPath = this.toUpdateMovie.posterPath;
+        let trailerPath = this.toUpdateMovie.trailerPath;
 
         if (this.toUpdateMovie.poster != null) {
-          const respPoster = await utils.http.putImg(
-            "/admin/movie/update/poster",
+          const respPoster = await utils.http.putMedia(
+            "/admin/file/update",
             this.toUpdateMovie.poster,
             this.toUpdateMovie.poster.type,
             this.toUpdateMovie.posterPath
@@ -290,6 +355,20 @@ export default {
             posterPath = await respPoster.text();
           } else {
             console.debug("Poster Update Failed");
+          }
+        }
+
+        if (this.toUpdateMovie.trailer != null) {
+          const respTrailer = await utils.http.putMedia(
+            "/admin/file/update",
+            this.toUpdateMovie.trailer,
+            this.toUpdateMovie.trailer.type,
+            this.toUpdateMovie.trailerPath
+          );
+          if (respTrailer.status === 200) {
+            trailerPath = await respTrailer.text();
+          } else {
+            console.debug("Trailer Update Failed");
           }
         }
 
@@ -302,6 +381,7 @@ export default {
             category: this.toUpdateMovie.category,
             adult: this.toUpdateMovie.adult,
             posterPath: posterPath,
+            trailerPath: trailerPath,
           }
         );
         if (respMovie.status === 200) {
@@ -314,6 +394,15 @@ export default {
 
         this.loading = false;
       }
+    },
+
+    onChangePoster(poster) {
+      this.posterPreviewPath = URL.createObjectURL(poster);
+    },
+
+    onChangeTrailer(trailer) {
+      console.log(trailer);
+      this.trailerPreviewPath = URL.createObjectURL(trailer);
     },
   },
 };

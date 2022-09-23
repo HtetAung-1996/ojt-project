@@ -54,22 +54,22 @@ public class AdminController {
 		return movieService.create(movie);
 	}
 
-	@PostMapping("/movie/create/poster")
-	public String createMovieSavePoster(
-			@RequestParam("poster") MultipartFile poster,
+	@PostMapping("/file/create")
+	public String createFile(
+			@RequestParam("file") MultipartFile file,
 			@RequestParam("fileType") String fileType
 	) {
-		String fileName = storageService.save(poster, fileType);
+		String fileName = storageService.save(file, fileType);
 		return fileName;
 	}
 
-	@PutMapping("/movie/update/poster")
-	public String updateMovieSavePoster(
-			@RequestParam("poster") MultipartFile poster,
+	@PutMapping("/file/update")
+	public String updateFile(
+			@RequestParam("file") MultipartFile file,
 			@RequestParam("fileType") String fileType,
 			@RequestParam("filePath") String filePath
 	) {
-		String fileName = storageService.update(poster, fileType, filePath);
+		String fileName = storageService.update(file, fileType, filePath);
 		return fileName;
 	}
 

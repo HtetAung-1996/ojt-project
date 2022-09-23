@@ -76,15 +76,50 @@
                 v.size < 10000000 ||
                 'Image size should be less than 10 MB!',
             ]"
+            @change="onChangePoster"
           ></v-file-input>
+
+          <v-img
+            v-if="posterPreviewPath != null"
+            :src="posterPreviewPath"
+            width="200"
+            height="150"
+            contain
+          >
+          </v-img>
+
+          <v-file-input
+            v-model="trailer"
+            label="Trailer"
+            show-size
+            prepend-icon="mdi-camera"
+            placeholder="Choose Trailer"
+            accept="video/mp4"
+            :rules="[
+              (v) => !!v || 'Required',
+              (v) =>
+                !v ||
+                v.size < 100000000 ||
+                'Image size should be less than 100 MB!',
+            ]"
+            @change="onChangeTrailer"
+          ></v-file-input>
+
+          <video
+            v-if="trailerPreviewPath != null"
+            class="mb-2"
+            width="100%"
+            :src="trailerPreviewPath"
+            controls
+          ></video>
 
           <v-btn
             :disabled="!movieForm"
             color="success"
-            class="mr-4"
+            class="mt-4 mr-4"
             @click="createMovie"
           >
-            <span v-if="!loading">Login</span>
+            <span v-if="!loading">Save</span>
             <v-progress-circular
               v-else
               indeterminate
@@ -120,6 +155,9 @@ export default {
       errorAlert: false,
       loading: false,
       poster: null,
+      posterPreviewPath: null,
+      trailer: null,
+      trailerPreviewPath: null,
 
       movieCategoryList: [],
     };
@@ -145,34 +183,57 @@ export default {
         this.errorAlert = false;
         this.loading = true;
 
-        const respPoster = await utils.http.postImg(
-          "/admin/movie/create/poster",
+        let respPosterData = null;
+        const respPoster = await utils.http.postMedia(
+          "/admin/file/create",
           this.poster,
           this.poster.type
         );
         if (respPoster.status === 200) {
-          const respPosterData = await respPoster.text();
-          if (respPosterData) {
-            const respMovie = await utils.http.post("/admin/movie/create", {
-              title: this.title,
-              overview: this.overview,
-              budget: this.budget,
-              category: { id: this.category },
-              adult: this.adult,
-              posterPath: respPosterData,
-            });
-            if (respMovie.status === 200) {
-              this.$router.push({ path: "/admin" });
-            } else {
-              this.errorAlert = true;
-            }
-          }
+          respPosterData = await respPoster.text();
         } else {
           this.errorAlert = true;
         }
 
+        let respTrailerData = null;
+        const respTrailer = await utils.http.postMedia(
+          "/admin/file/create",
+          this.trailer,
+          this.trailer.type
+        );
+        if (respTrailer.status === 200) {
+          respTrailerData = await respTrailer.text();
+        } else {
+          this.errorAlert = true;
+        }
+
+        if (respPosterData && respTrailerData) {
+          const respMovie = await utils.http.post("/admin/movie/create", {
+            title: this.title,
+            overview: this.overview,
+            budget: this.budget,
+            category: { id: this.category },
+            adult: this.adult,
+            posterPath: respPosterData,
+            trailerPath: respTrailerData,
+          });
+          if (respMovie.status === 200) {
+            this.$router.push({ path: "/admin" });
+          } else {
+            this.errorAlert = true;
+          }
+        }
+
         this.loading = false;
       }
+    },
+
+    onChangePoster(poster) {
+      this.posterPreviewPath = URL.createObjectURL(poster);
+    },
+
+    onChangeTrailer(trailer) {
+      this.trailerPreviewPath = URL.createObjectURL(trailer);
     },
   },
 };
