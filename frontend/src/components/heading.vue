@@ -12,6 +12,10 @@
       >ログイン</router-link
     >
     <span v-if="isLogin">|</span>
+    <router-link v-if="isLogin" class="mx-2 navlink" to="/profile"
+      >プロフィール</router-link
+    >
+    <span v-if="isLogin">|</span>
     <a v-if="isLogin" class="mx-2 navlink" @click="logout()">ログアウト</a>
   </v-app-bar>
 </template>

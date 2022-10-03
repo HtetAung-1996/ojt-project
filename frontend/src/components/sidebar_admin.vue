@@ -1,5 +1,5 @@
 <template>
-  <v-card height="600" class="mx-auto">
+  <v-card class="mx-auto">
     <v-navigation-drawer permanent>
       <v-list dense nav>
         <v-list-item

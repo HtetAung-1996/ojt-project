@@ -14,7 +14,7 @@
           <template v-slot:item.posterPath="{ item }">
             <v-img
               :src="localDomain + item.posterPath"
-              width="200"
+              width="150"
               height="150"
               contain
             ></v-img>
@@ -107,8 +107,8 @@
               :rules="[
                 (v) => !!v || 'Required',
                 (v) =>
-                  (v && v.length <= 1000) ||
-                  'Overview must be less than 1000 characters',
+                  (v && v.length <= 200) ||
+                  'Overview must be less than 200 characters',
               ]"
               label="Overview"
               required
@@ -227,7 +227,7 @@
             </v-btn>
 
             <v-alert class="mt-3" v-show="errorAlert" dense type="error">
-              Create Movie Failed!
+              Update Movie Failed!
             </v-alert>
           </v-form>
         </v-card-text>
@@ -254,7 +254,7 @@ export default {
         { text: "Poster", value: "posterPath", sortable: false },
         { text: "Title", value: "title", sortable: true },
         { text: "Budget", value: "budget", sortable: true },
-        { text: "Overview", value: "overview", sortable: false },
+        { text: "Overview", value: "overview", width: 200, sortable: false },
         { text: "Category", value: "category.name", sortable: true },
         { text: "Adult", value: "adult" },
         { text: "CreatedAt", value: "createdAt", sortable: true },

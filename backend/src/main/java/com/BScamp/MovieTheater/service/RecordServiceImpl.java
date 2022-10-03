@@ -8,18 +8,27 @@ import org.springframework.stereotype.Service;
 
 import com.BScamp.MovieTheater.entity.Record;
 import com.BScamp.MovieTheater.entity.User;
+import com.BScamp.MovieTheater.entity.UserRole;
 import com.BScamp.MovieTheater.repository.RecordRepo;
+import com.BScamp.MovieTheater.repository.UserRepo;
 
 @Service
 public class RecordServiceImpl implements RecordService {
 
 	@Autowired
 	RecordRepo recordRepo;
+	
+	@Autowired
+	UserRepo userRepo;
 
 	@Override
 	public Record create(Record record) {
-		record.setCreatedAt(LocalDateTime.now());
-		return recordRepo.save(record);
+		User user = userRepo.findById(record.getUser().getId()).orElse(null);
+		if (user != null && user.getRole() == UserRole.user) {
+			record.setCreatedAt(LocalDateTime.now());
+			return recordRepo.save(record);
+		}
+		return new Record();
 	}
 
 	@Override
