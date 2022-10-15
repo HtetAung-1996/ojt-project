@@ -73,22 +73,30 @@ public class AdminController {
 		return fileName;
 	}
 
+	@PutMapping("/movie/update/{id}")
+	public ResponseEntity<Movie> updateMovie(
+			@PathVariable int id, @Valid @RequestBody Movie movie
+	) {
+		Movie updatedMovie = movieService.update(id, movie);
+		if (updatedMovie == null) {
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.ok().body(updatedMovie);
+	}
+
 	@DeleteMapping(value = "/movie/delete/{id}")
 	public ResponseEntity<?> deleteMovie(@PathVariable int id) {
-		String posterPath = movieService.get(id).getPosterPath();
+		Movie movie = movieService.get(id);
+		if (movie == null) {
+			return ResponseEntity.notFound().build();
+		}
+		String posterPath = movie.getPosterPath();
 		boolean isDeleted = movieService.delete(id);
 		if (!isDeleted) {
 			return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
 		}
 		storageService.delete(posterPath);
 		return ResponseEntity.ok().build();
-	}
-
-	@PutMapping("/movie/update/{id}")
-	public Movie updateMovie(
-			@PathVariable int id, @Valid @RequestBody Movie movie
-	) {
-		return movieService.update(id, movie);
 	}
 
 	// ------------------- User

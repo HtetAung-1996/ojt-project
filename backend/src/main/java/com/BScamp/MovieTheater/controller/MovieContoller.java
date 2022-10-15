@@ -34,16 +34,21 @@ public class MovieContoller {
 	}
 
 	@GetMapping("/movie/category/{category_id}")
-	public List<Movie> getMoviesByCategory(
+	public ResponseEntity<List<Movie>> getMoviesByCategory(
 			@PathVariable("category_id") int categoryID
 	) {
 		Category category = categoryServie.get(categoryID);
-		return movieService.getAllByCategory(category);
+		List<Movie> movieList = movieService.getAllByCategory(category);
+		return ResponseEntity.ok().body(movieList);
 	}
 
 	@GetMapping("/movie/{movie_id}")
-	public Movie getMovie(@PathVariable("movie_id") int movieID) {
-		return movieService.get(movieID);
+	public  ResponseEntity<Movie> getMovie(@PathVariable("movie_id") int movieID) {
+		Movie movie =  movieService.get(movieID);
+		if (movie == null) {
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.ok().body(movie);
 	}
 
 	@GetMapping("/media/{fileType}/{fileName}")

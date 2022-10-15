@@ -6,9 +6,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.BScamp.MovieTheater.entity.Movie;
 import com.BScamp.MovieTheater.entity.Record;
 import com.BScamp.MovieTheater.entity.User;
 import com.BScamp.MovieTheater.entity.UserRole;
+import com.BScamp.MovieTheater.repository.MovieRepo;
 import com.BScamp.MovieTheater.repository.RecordRepo;
 import com.BScamp.MovieTheater.repository.UserRepo;
 
@@ -20,15 +22,24 @@ public class RecordServiceImpl implements RecordService {
 	
 	@Autowired
 	UserRepo userRepo;
+	@Autowired
+	MovieRepo movieRepo;
 
 	@Override
 	public Record create(Record record) {
 		User user = userRepo.findById(record.getUser().getId()).orElse(null);
-		if (user != null && user.getRole() == UserRole.user) {
+		if (user == null) {
+			return null;
+		}
+		Movie movie = movieRepo.findById(record.getMovie().getId()).orElse(null);
+		if (movie == null) {
+			return null;
+		}
+		if (user.getRole() == UserRole.user) {
 			record.setCreatedAt(LocalDateTime.now());
 			return recordRepo.save(record);
 		}
-		return new Record();
+		return null;
 	}
 
 	@Override

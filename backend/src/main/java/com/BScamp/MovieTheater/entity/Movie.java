@@ -38,6 +38,7 @@ public class Movie implements java.io.Serializable {
 	private String title;
 
 	@Column(length = 200)
+	@NotBlank(message = "Required")
 	private String posterPath;
 
 	@Column(nullable = false)
@@ -47,6 +48,7 @@ public class Movie implements java.io.Serializable {
 	private String homePage;
 
 	@Column(length = 200)
+	@NotBlank(message = "Required")
 	private String trailerPath;
 
 	@Column(length = 200)

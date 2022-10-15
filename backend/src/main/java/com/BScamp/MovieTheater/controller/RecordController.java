@@ -2,7 +2,10 @@ package com.BScamp.MovieTheater.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,8 +27,18 @@ public class RecordController {
 	}
 
 	@PostMapping("/record/add")
-	public Record addRecord(@RequestBody Record record) {
-		return recordService.create(record);
+	public ResponseEntity<?> addRecord(@Valid @RequestBody Record record) {
+		if (record.getUser().getId() <= 0) {
+			return ResponseEntity.badRequest().build();
+		}
+		if (record.getMovie().getId() <= 0) {
+			return ResponseEntity.badRequest().build();
+		}
+		Record createdRecord = recordService.create(record);
+		if (createdRecord == null) {
+			return ResponseEntity.badRequest().body("User not found, Movie not found. User role not user");
+		}
+		return ResponseEntity.ok().body(createdRecord);
 	}
 
 }
