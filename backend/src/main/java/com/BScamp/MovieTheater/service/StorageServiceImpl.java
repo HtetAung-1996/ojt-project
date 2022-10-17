@@ -51,11 +51,19 @@ public class StorageServiceImpl implements StorageService {
 					file.getInputStream(), this.storagePath.resolve(fileName),
 					StandardCopyOption.REPLACE_EXISTING
 			);
-			filePath = "/image/"
-					+ (fileType == "image/jpg" || fileType == "image/jpeg"
-							? "jpg"
-							: "png")
-					+ "/" + fileName;
+			switch (fileType) {
+				case "video/mp4" :
+					filePath = "/media/mp4/" + fileName;
+					break;
+				case "image/jpg" :
+				case "image/jpeg" :
+					filePath = "/media/jpg/" + fileName;
+					break;
+				case "image/png" :
+				default :
+					filePath = "/media/png/" + fileName;
+					break;
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -100,12 +108,13 @@ public class StorageServiceImpl implements StorageService {
 	}
 
 	@Override
-	public String update(
-			MultipartFile file, String fileType, String filePath
-	) {
+	public String update(MultipartFile file, String fileType, String filePath) {
 
 		String retfilePath = null;
 
+		filePath = filePath.replace("/media/jpg/", "");
+		filePath = filePath.replace("/media/png/", "");
+		filePath = filePath.replace("/media/mp4/", "");
 		try {
 			if (filePath != null && filePath != "") {
 				try {
@@ -120,8 +129,19 @@ public class StorageServiceImpl implements StorageService {
 					file.getInputStream(), this.storagePath.resolve(fileName),
 					StandardCopyOption.REPLACE_EXISTING
 			);
-			retfilePath = "/image/" + (fileType == "image/jpg" ? "jpg" : "png")
-					+ "/" + fileName;
+			switch (fileType) {
+				case "video/mp4" :
+					retfilePath = "/media/mp4/" + fileName;
+					break;
+				case "image/jpg" :
+				case "image/jpeg" :
+					retfilePath = "/media/jpg/" + fileName;
+					break;
+				case "image/png" :
+				default :
+					retfilePath = "/media/png/" + fileName;
+					break;
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

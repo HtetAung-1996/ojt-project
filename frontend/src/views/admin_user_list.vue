@@ -40,10 +40,49 @@
           <v-form ref="updateForm" v-model="updateForm">
             <v-text-field
               v-model="toUpdateUser.id"
-              :counter="50"
-              :rules="[(v) => !!v || 'Required']"
               label="User ID"
-              required
+              disabled
+            ></v-text-field>
+
+            <v-text-field
+              v-model="toUpdateUser.name"
+              label="User Name"
+              disabled
+            ></v-text-field>
+
+            <v-text-field
+              v-model="toUpdateUser.gmail"
+              label="User Gmail"
+              disabled
+            ></v-text-field>
+
+            <v-text-field
+              v-model="toUpdateUser.status"
+              label="User Status"
+              disabled
+            ></v-text-field>
+
+            <v-text-field
+              v-model="toUpdateUser.role"
+              label="User Role"
+              disabled
+            ></v-text-field>
+
+            <v-text-field
+              v-model="toUpdateUser.startJoinDate"
+              label="User Start Join Date"
+              disabled
+            ></v-text-field>
+
+            <v-text-field
+              v-model="toUpdateUser.lastJoinDate"
+              label="User Last Join Date"
+              disabled
+            ></v-text-field>
+
+            <v-text-field
+              v-model="toUpdateUser.accessCount"
+              label="User Access Count"
               disabled
             ></v-text-field>
 

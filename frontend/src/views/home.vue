@@ -2,7 +2,7 @@
   <div>
     <v-row>
       <v-col cols="2">
-        <v-card height="600" class="mx-auto">
+        <v-card class="mx-auto">
           <v-navigation-drawer permanent>
             <v-list dense nav>
               <v-list-item
@@ -29,9 +29,9 @@
                   max-height="250"
                   contain
                 ></v-img>
-                <div>{{ movie.title }}</div>
-                <div>{{ movie.budget }}</div>
-                <div>{{ movie.adult }}</div>
+                <div class="text-h6">{{ movie.title }}</div>
+                <div class="text-body-1">{{ movie.budget }} Kyat</div>
+                <div v-show="movie.adult" class="text-body-1">Adult</div>
               </v-card-text>
             </v-card>
           </v-col>
@@ -93,7 +93,7 @@ export default {
     },
 
     async onClickCategory(cat) {
-      const resp = await utils.http.get("/movie/" + cat.id);
+      const resp = await utils.http.get("/movie/category/" + cat.id);
       if (resp.status === 200) {
         const data = await resp.json();
         if (data) {

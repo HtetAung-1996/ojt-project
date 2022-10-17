@@ -60,13 +60,26 @@ public class UserController {
 	}
 
 	@GetMapping("/profile")
-	public User getProfile(@RequestParam int id) throws IOException {
-		return userService.get(id);
+	public ResponseEntity<User> getProfile(@RequestParam int id)
+			throws IOException {
+		User user = userService.get(id);
+		if (user == null) {
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.ok().body(user);
 	}
 
 	@PutMapping("/profile/update")
-	public User getProfile(@RequestBody User user) throws IOException {
-		return userService.update(user.getId(), user);
+	public ResponseEntity<User> getProfile(@Valid @RequestBody User user)
+			throws IOException {
+		if (user.getId() == 0) {
+			return ResponseEntity.badRequest().build();
+		}
+		User updatedUser = userService.update(user.getId(), user);
+		if (updatedUser == null) {
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.ok().body(updatedUser);
 	}
 
 }

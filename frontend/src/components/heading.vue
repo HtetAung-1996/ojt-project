@@ -1,18 +1,22 @@
 <template>
   <v-app-bar app color="deep-purple lighten-1" dense dark>
-    <a class="navtitle" href="/">Movie Theater</a>
+    <a class="navtitle" href="/">ムービー</a>
     <v-spacer></v-spacer>
-    <router-link class="mx-2 navlink" to="/">Home</router-link>
+    <router-link class="mx-2 navlink" to="/">ホーム</router-link>
     <span v-if="!isLogin">|</span>
     <router-link v-if="!isLogin" class="mx-2 navlink" to="/register"
-      >Register</router-link
+      >アカウント登録</router-link
     >
     <span v-if="!isLogin">|</span>
     <router-link v-if="!isLogin" class="mx-2 navlink" to="/login"
-      >Login</router-link
+      >ログイン</router-link
     >
     <span v-if="isLogin">|</span>
-    <a v-if="isLogin" class="mx-2 navlink" @click="logout()">Logout</a>
+    <router-link v-if="isLogin" class="mx-2 navlink" to="/profile"
+      >プロフィール</router-link
+    >
+    <span v-if="isLogin">|</span>
+    <a v-if="isLogin" class="mx-2 navlink" @click="logout()">ログアウト</a>
   </v-app-bar>
 </template>
 

@@ -65,8 +65,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User checkLoginUser(String gmail, String password) {
 		User user = userRepo.findByGmail(gmail);
+		if (user == null) {
+			return null;
+		}
 		if (pwEncoder.matches(password, user.getPassword())) {
-			user.setPassword("*****");
 			return user;
 		}
 		return null;
