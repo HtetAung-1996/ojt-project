@@ -41,3 +41,4 @@ git@github.com:HtetAung-1996/ojt-project.git
 
 ### プロジェクト設計
 - documentationの下のファイルにある
+- test
