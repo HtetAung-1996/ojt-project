@@ -35,6 +35,9 @@ const routes = [
     path: "/movie_details/:id",
     name: "movie_details",
     component: movie_details,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: "/profile",
