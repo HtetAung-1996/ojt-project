@@ -1,22 +1,30 @@
 
 ## BS Camp OJT Project
 
+Movie Theater Project
+
+```
 Frontend Vuejs
 Backend Spring Boot
-
-Login api Fix
+```
 
 ### Frontend
 
+```
 cd .\frontend\
 npm install
 npm run serve
+
 npm run build
 npm run lint
+```
 
 ### Backend
 
-Eclipse
+```
+Inside Eclipse
+Spring Boot Application Run
+```
 
 ### ローカルでの実行方法
 
