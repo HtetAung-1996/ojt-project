@@ -6,10 +6,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Random;
+import java.time.Instant;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -22,16 +21,11 @@ public class StorageServiceImpl implements StorageService {
 
 	private final Path storagePath;
 
-	private final Random random = new Random();
-
-	@Value("${custom.delete.files}")
-	private boolean customDeleteFiles;
-
 	@Autowired
 	public StorageServiceImpl() throws IOException {
 
 		Path storagePath = Paths.get("").resolve("src").resolve("main")
-				.resolve("resources").resolve("static").resolve("images");
+				.resolve("resources").resolve("static").resolve("media");
 		if (!Files.exists(storagePath)) {
 			Files.createDirectories(storagePath);
 		}
@@ -45,7 +39,7 @@ public class StorageServiceImpl implements StorageService {
 		String filePath = null;
 
 		try {
-			String fileName = random.nextInt(999999) + "_"
+			String fileName = Instant.now().getEpochSecond() + "_"
 					+ StringUtils.cleanPath(file.getOriginalFilename());
 			Files.copy(
 					file.getInputStream(), this.storagePath.resolve(fileName),
@@ -123,7 +117,8 @@ public class StorageServiceImpl implements StorageService {
 					e.printStackTrace();
 				}
 			}
-			String fileName = random.nextInt(999999) + "_"
+
+			String fileName = Instant.now().getEpochSecond() + "_"
 					+ StringUtils.cleanPath(file.getOriginalFilename());
 			Files.copy(
 					file.getInputStream(), this.storagePath.resolve(fileName),
@@ -154,17 +149,15 @@ public class StorageServiceImpl implements StorageService {
 	public void clearAll() {
 
 		try {
-			if (customDeleteFiles) {
-				Files.walk(storagePath).sorted().forEach(t -> {
-					try {
-						if (!Files.isDirectory(t)) {
-							Files.deleteIfExists(t);
-						}
-					} catch (IOException e) {
-						e.printStackTrace();
+			Files.walk(storagePath).sorted().forEach(t -> {
+				try {
+					if (!Files.isDirectory(t)) {
+						Files.deleteIfExists(t);
 					}
-				});
-			}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			});
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

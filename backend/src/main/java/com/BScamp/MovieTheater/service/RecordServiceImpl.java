@@ -19,7 +19,7 @@ public class RecordServiceImpl implements RecordService {
 
 	@Autowired
 	RecordRepo recordRepo;
-	
+
 	@Autowired
 	UserRepo userRepo;
 	@Autowired
@@ -31,7 +31,8 @@ public class RecordServiceImpl implements RecordService {
 		if (user == null) {
 			return null;
 		}
-		Movie movie = movieRepo.findById(record.getMovie().getId()).orElse(null);
+		Movie movie = movieRepo.findById(record.getMovie().getId())
+				.orElse(null);
 		if (movie == null) {
 			return null;
 		}

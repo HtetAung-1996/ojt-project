@@ -19,4 +19,6 @@ public interface MovieService {
 
 	public List<Movie> getAllByCategory(Category category);
 
+	public Movie getByTitle(String title);
+
 }

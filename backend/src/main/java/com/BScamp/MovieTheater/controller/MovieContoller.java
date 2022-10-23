@@ -43,8 +43,10 @@ public class MovieContoller {
 	}
 
 	@GetMapping("/movie/{movie_id}")
-	public  ResponseEntity<Movie> getMovie(@PathVariable("movie_id") int movieID) {
-		Movie movie =  movieService.get(movieID);
+	public ResponseEntity<Movie> getMovie(
+			@PathVariable("movie_id") int movieID
+	) {
+		Movie movie = movieService.get(movieID);
 		if (movie == null) {
 			return ResponseEntity.notFound().build();
 		}
@@ -52,15 +54,15 @@ public class MovieContoller {
 	}
 
 	@GetMapping("/media/{fileType}/{fileName}")
-	public ResponseEntity<byte[]> getPoster(
+	public ResponseEntity<?> getPoster(
 			@PathVariable("fileType") String fileType,
 			@PathVariable("fileName") String fileName
 	) throws IOException {
-		byte[] fileBytes = storageService.load(fileName);
 		MediaType contentType = MediaType.IMAGE_PNG;
 		switch (fileType) {
 			case "mp4" :
-				contentType = MediaType.IMAGE_JPEG;
+				contentType = MediaType.APPLICATION_OCTET_STREAM;
+				break;
 			case "jpg" :
 				contentType = MediaType.IMAGE_JPEG;
 				break;
@@ -68,7 +70,12 @@ public class MovieContoller {
 				contentType = MediaType.IMAGE_PNG;
 				break;
 			default :
-				break;
+				return ResponseEntity.badRequest()
+						.body("Unsupported File Type");
+		}
+		byte[] fileBytes = storageService.load(fileName);
+		if (fileBytes == null) {
+			return ResponseEntity.notFound().build();
 		}
 		return ResponseEntity.ok().contentType(contentType).body(fileBytes);
 	}

@@ -130,6 +130,9 @@
           <v-alert class="mt-3" v-show="errorAlert" dense type="error">
             Create Movie Failed!
           </v-alert>
+          <v-alert class="mt-3" v-show="errorAlert2" dense type="error">
+            Movie with same title exists!
+          </v-alert>
         </v-form>
       </v-col>
     </v-row>
@@ -153,6 +156,7 @@ export default {
       category: 1,
       adult: false,
       errorAlert: false,
+      errorAlert2: false,
       loading: false,
       poster: null,
       posterPreviewPath: null,
@@ -183,44 +187,62 @@ export default {
         this.errorAlert = false;
         this.loading = true;
 
-        let respPosterData = null;
-        const respPoster = await utils.http.postMedia(
-          "/admin/file/create",
-          this.poster,
-          this.poster.type
+        let titleCheckOK = false;
+        const respTitleCheck = await utils.http.get(
+          "/admin/movie/title/" + this.title
         );
-        if (respPoster.status === 200) {
-          respPosterData = await respPoster.text();
+        if (respTitleCheck.status === 200) {
+          const data = await respTitleCheck.json();
+          if (data) {
+            this.errorAlert2 = true;
+          } else {
+            this.errorAlert2 = false;
+            titleCheckOK = true;
+          }
         } else {
-          this.errorAlert = true;
+          this.errorAlert2 = true;
         }
 
-        let respTrailerData = null;
-        const respTrailer = await utils.http.postMedia(
-          "/admin/file/create",
-          this.trailer,
-          this.trailer.type
-        );
-        if (respTrailer.status === 200) {
-          respTrailerData = await respTrailer.text();
-        } else {
-          this.errorAlert = true;
-        }
-
-        if (respPosterData && respTrailerData) {
-          const respMovie = await utils.http.post("/admin/movie/create", {
-            title: this.title,
-            overview: this.overview,
-            budget: this.budget,
-            category: { id: this.category },
-            adult: this.adult,
-            posterPath: respPosterData,
-            trailerPath: respTrailerData,
-          });
-          if (respMovie.status === 200) {
-            this.$router.push({ path: "/admin" });
+        if (titleCheckOK) {
+          let respPosterData = null;
+          const respPoster = await utils.http.postMedia(
+            "/admin/file/create",
+            this.poster,
+            this.poster.type
+          );
+          if (respPoster.status === 200) {
+            respPosterData = await respPoster.text();
           } else {
             this.errorAlert = true;
+          }
+
+          let respTrailerData = null;
+          const respTrailer = await utils.http.postMedia(
+            "/admin/file/create",
+            this.trailer,
+            this.trailer.type
+          );
+          if (respTrailer.status === 200) {
+            respTrailerData = await respTrailer.text();
+          } else {
+            this.errorAlert = true;
+          }
+
+          if (respPosterData && respTrailerData) {
+            const respMovie = await utils.http.post("/admin/movie/create", {
+              title: this.title,
+              overview: this.overview,
+              budget: this.budget,
+              category: { id: this.category },
+              adult: this.adult,
+              posterPath: respPosterData,
+              trailerPath: respTrailerData,
+            });
+            if (respMovie.status === 200) {
+              this.$router.push({ path: "/admin" });
+            } else {
+              this.errorAlert = true;
+            }
           }
         }
 

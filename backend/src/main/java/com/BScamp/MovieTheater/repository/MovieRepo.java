@@ -12,5 +12,7 @@ import com.BScamp.MovieTheater.entity.Movie;
 public interface MovieRepo extends JpaRepository<Movie, Integer> {
 
 	public List<Movie> findByCategory(Category category);
+	
+	public Movie findByTitle(String title);
 
 }
