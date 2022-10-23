@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.MimeType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -44,8 +43,10 @@ public class MovieContoller {
 	}
 
 	@GetMapping("/movie/{movie_id}")
-	public  ResponseEntity<Movie> getMovie(@PathVariable("movie_id") int movieID) {
-		Movie movie =  movieService.get(movieID);
+	public ResponseEntity<Movie> getMovie(
+			@PathVariable("movie_id") int movieID
+	) {
+		Movie movie = movieService.get(movieID);
 		if (movie == null) {
 			return ResponseEntity.notFound().build();
 		}
@@ -69,7 +70,8 @@ public class MovieContoller {
 				contentType = MediaType.IMAGE_PNG;
 				break;
 			default :
-				return ResponseEntity.badRequest().body("Unsupported File Type");
+				return ResponseEntity.badRequest()
+						.body("Unsupported File Type");
 		}
 		byte[] fileBytes = storageService.load(fileName);
 		if (fileBytes == null) {

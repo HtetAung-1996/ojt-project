@@ -99,6 +99,17 @@ public class AdminController {
 		return ResponseEntity.ok().build();
 	}
 
+	@GetMapping("/movie/title/{title}")
+	public ResponseEntity<Boolean> findMovieByTitle(
+			@PathVariable("title") String title
+	) {
+		Movie movie = movieService.getByTitle(title);
+		if (movie == null) {
+			return ResponseEntity.ok().body(false);
+		}
+		return ResponseEntity.ok().body(true);
+	}
+
 	// ------------------- User
 
 	@GetMapping("/user")

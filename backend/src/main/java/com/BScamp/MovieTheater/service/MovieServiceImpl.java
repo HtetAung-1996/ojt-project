@@ -64,4 +64,9 @@ public class MovieServiceImpl implements MovieService {
 		return movieRepo.findByCategory(category);
 	}
 
+	@Override
+	public Movie getByTitle(String title) {
+		return movieRepo.findByTitle(title);
+	}
+
 }

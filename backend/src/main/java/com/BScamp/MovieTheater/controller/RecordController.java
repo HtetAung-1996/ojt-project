@@ -36,7 +36,9 @@ public class RecordController {
 		}
 		Record createdRecord = recordService.create(record);
 		if (createdRecord == null) {
-			return ResponseEntity.badRequest().body("User not found, Movie not found. User role not user");
+			return ResponseEntity.badRequest().body(
+					"User not found, Movie not found. User role not user"
+			);
 		}
 		return ResponseEntity.ok().body(createdRecord);
 	}
