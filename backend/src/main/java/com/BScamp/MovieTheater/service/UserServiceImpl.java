@@ -24,6 +24,14 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User create(User user) {
+		// Check User with Same Gmail Exists
+		User tempGmailCheckUser = userRepo.findByGmail(user.getGmail());
+		// User with same gmail exists
+		if (tempGmailCheckUser != null) {
+			return null;
+		}
+		
+		// Create User
 		user.setStatus(UserStatus.active);
 		user.setPassword(pwEncoder.encode(user.getPassword()));
 		user.setCreatedAt(LocalDateTime.now());
@@ -88,8 +96,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<String> getAllStatus() {
 		List<String> userStatusList = new ArrayList<>();
-		for (UserStatus role : Arrays.asList(UserStatus.values())) {
-			userStatusList.add(role.toString());
+		for (UserStatus status : Arrays.asList(UserStatus.values())) {
+			userStatusList.add(status.toString());
 		}
 		return userStatusList;
 	}

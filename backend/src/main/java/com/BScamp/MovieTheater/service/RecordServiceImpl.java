@@ -28,18 +28,24 @@ public class RecordServiceImpl implements RecordService {
 	@Override
 	public Record create(Record record) {
 		User user = userRepo.findById(record.getUser().getId()).orElse(null);
+		// User does not exist
 		if (user == null) {
 			return null;
 		}
+
 		Movie movie = movieRepo.findById(record.getMovie().getId())
 				.orElse(null);
+		// Movie does not exist
 		if (movie == null) {
 			return null;
 		}
+
+		// Create Record Only If user role is user
 		if (user.getRole() == UserRole.user) {
 			record.setCreatedAt(LocalDateTime.now());
 			return recordRepo.save(record);
 		}
+		
 		return null;
 	}
 

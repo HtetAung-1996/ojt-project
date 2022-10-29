@@ -42,12 +42,15 @@ public class UserController {
 	}
 
 	@PostMapping("/register")
-	public ResponseEntity<User> register(
+	public ResponseEntity<?> register(
 			@Valid @RequestBody User user, HttpSession session
 	) throws IOException {
 		user.setRole(UserRole.user);
 		user.setStartJoinDate(LocalDate.now());
 		User createdUser = userService.create(user);
+		if (createdUser == null) {
+			return ResponseEntity.badRequest().body("User with same gmail already exists!");
+		}
 		session.setAttribute("loginUser", createdUser);
 		return ResponseEntity.ok().body(createdUser);
 	}
@@ -70,9 +73,9 @@ public class UserController {
 	}
 
 	@PutMapping("/profile/update")
-	public ResponseEntity<User> getProfile(@Valid @RequestBody User user)
+	public ResponseEntity<User> updateProfile(@Valid @RequestBody User user)
 			throws IOException {
-		if (user.getId() == 0) {
+		if (user.getId() <= 0) {
 			return ResponseEntity.badRequest().build();
 		}
 		User updatedUser = userService.update(user.getId(), user);

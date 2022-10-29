@@ -12,7 +12,7 @@ public interface RecordService {
 
 	public Record create(Record record);
 
-	public Record update(int id, Record mo);
+	public Record update(int id, Record record);
 
 	public boolean delete(int id);
 

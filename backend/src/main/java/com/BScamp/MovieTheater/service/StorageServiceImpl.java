@@ -72,9 +72,9 @@ public class StorageServiceImpl implements StorageService {
 		byte[] retBytes = null;
 
 		try {
-			Path file = this.storagePath.resolve(fileName);
-			Resource resource = new UrlResource(file.toUri());
-			if (resource.exists() || resource.isReadable()) {
+			Path filePath = this.storagePath.resolve(fileName);
+			Resource resource = new UrlResource(filePath.toUri());
+			if (resource.exists() && resource.isReadable()) {
 				retBytes = StreamUtils
 						.copyToByteArray(resource.getInputStream());
 			}
@@ -149,10 +149,10 @@ public class StorageServiceImpl implements StorageService {
 	public void clearAll() {
 
 		try {
-			Files.walk(storagePath).sorted().forEach(t -> {
+			Files.walk(this.storagePath).sorted().forEach(file -> {
 				try {
-					if (!Files.isDirectory(t)) {
-						Files.deleteIfExists(t);
+					if (!Files.isDirectory(file)) {
+						Files.deleteIfExists(file);
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
