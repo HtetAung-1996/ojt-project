@@ -31,12 +31,21 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public Category update(int id, Category category) {
-		category.setId(id);
+		Category toUpdateCategory = this.get(id);
+		if (toUpdateCategory == null) {
+			return null;
+		}
+		toUpdateCategory.setId(id);
+		toUpdateCategory.setName(category.getName());
 		return categroyRepo.save(category);
 	}
 
 	@Override
 	public boolean delete(int id) {
+		Category category = this.get(id);
+		if (category == null) {
+			return false;
+		}
 		categroyRepo.deleteById(id);
 		return true;
 	}
