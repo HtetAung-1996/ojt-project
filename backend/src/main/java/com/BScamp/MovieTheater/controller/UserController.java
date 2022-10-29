@@ -27,7 +27,7 @@ public class UserController {
 
 	@Autowired
 	UserService userService;
-	
+
 	@Autowired
 	PasswordEncoder pwEncoder;
 
@@ -67,20 +67,31 @@ public class UserController {
 		}
 		return ResponseEntity.ok().body(user);
 	}
-	
+
 	@PostMapping("/changePwd")
-	public ResponseEntity<Object> changePassword(@Valid @RequestBody ChangePassword changePwd) throws IOException {		
+	public ResponseEntity<Object> changePassword(
+			@Valid @RequestBody ChangePassword changePwd
+	) throws IOException {
 		User user = userService.get(changePwd.getOri_id());
-		if(user==null) {			
-			return new ResponseEntity<Object>(new Exception("Something wrong"), HttpStatus.CONFLICT);
+		if (user == null) {
+			return new ResponseEntity<Object>(
+					new Exception("Something wrong"), HttpStatus.CONFLICT
+			);
 		}
-		if(!changePwd.getCon_new_pwd().equals(changePwd.getNew_pwd())) {			
-			return new ResponseEntity<Object>(new Exception("Confirm Password does not match"), HttpStatus.CONFLICT);
-		}				
-		if(!pwEncoder.matches(changePwd.getCurrent_pwd(), user.getPassword())) {			
-			return new ResponseEntity<Object>(new Exception("Current Password does not match"), HttpStatus.CONFLICT);
+		if (!changePwd.getCon_new_pwd().equals(changePwd.getNew_pwd())) {
+			return new ResponseEntity<Object>(
+					new Exception("Confirm Password does not match"),
+					HttpStatus.CONFLICT
+			);
 		}
-		userService.updatePwd(user.getId(),changePwd.getNew_pwd());		
+		if (!pwEncoder
+				.matches(changePwd.getCurrent_pwd(), user.getPassword())) {
+			return new ResponseEntity<Object>(
+					new Exception("Current Password does not match"),
+					HttpStatus.CONFLICT
+			);
+		}
+		userService.updatePwd(user.getId(), changePwd.getNew_pwd());
 		return ResponseEntity.ok().body(user);
 	}
 

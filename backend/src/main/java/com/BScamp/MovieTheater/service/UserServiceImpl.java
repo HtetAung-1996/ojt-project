@@ -59,8 +59,7 @@ public class UserServiceImpl implements UserService {
 		toUpdateUser.setName(user.getName());
 		toUpdateUser.setGmail(user.getGmail());
 		toUpdateUser.setUpdatedAt(LocalDateTime.now());
-		userRepo.save(toUpdateUser);
-		return toUpdateUser;
+		return userRepo.save(toUpdateUser);
 	}
 
 	@Override

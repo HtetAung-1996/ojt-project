@@ -91,13 +91,21 @@ public class StorageServiceImpl implements StorageService {
 	@Override
 	public boolean delete(String filePath) {
 
-		try {
-			Files.delete(this.storagePath.resolve(filePath));
-			return true;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
+		filePath = filePath.replace("/media/jpg/", "");
+		filePath = filePath.replace("/media/png/", "");
+		filePath = filePath.replace("/media/mp4/", "");
+
+		if (filePath != null && filePath != "") {
+			try {
+				Files.delete(this.storagePath.resolve(filePath));
+				return true;
+			} catch (IOException e) {
+				e.printStackTrace();
+				return false;
+			}
 		}
+
+		return false;
 
 	}
 
@@ -161,6 +169,24 @@ public class StorageServiceImpl implements StorageService {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+	}
+
+	@Override
+	public boolean check(String filePath) {
+
+		filePath = filePath.replace("/media/jpg/", "");
+		filePath = filePath.replace("/media/png/", "");
+		filePath = filePath.replace("/media/mp4/", "");
+
+		if (filePath != null && filePath != "") {
+			Path filePathPath = this.storagePath.resolve(filePath);
+			return Files.exists(filePathPath)
+					&& !Files.isDirectory(filePathPath)
+					&& Files.isReadable(filePathPath);
+		}
+
+		return false;
 
 	}
 
