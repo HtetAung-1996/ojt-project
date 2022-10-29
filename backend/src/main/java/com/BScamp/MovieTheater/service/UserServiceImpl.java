@@ -101,6 +101,18 @@ public class UserServiceImpl implements UserService {
 		userRepo.save(toUpdateUser);
 		return toUpdateUser;
 	}
+	
+	@Override
+	public void updatePwd(int id, String newPwd) {
+		
+		User toUpdateUserPwd = get(id);
+		if (toUpdateUserPwd != null) {
+			toUpdateUserPwd.setPassword(pwEncoder.encode(newPwd));			
+			userRepo.save(toUpdateUserPwd);
+			System.out.println("pwd updated");
+		}
+		
+	}
 
 	@Override
 	public List<String> getAllStatus() {
