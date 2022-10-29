@@ -11,7 +11,9 @@ public interface StorageService {
 	public boolean delete(String filePath);
 
 	public String update(MultipartFile file, String fileType, String filePath);
-	
+
 	public void clearAll();
+
+	public boolean check(String filePath);
 
 }

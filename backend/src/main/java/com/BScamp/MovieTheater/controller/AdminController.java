@@ -50,27 +50,39 @@ public class AdminController {
 	// ------------------- Movie
 
 	@PostMapping("/movie/create")
-	public Movie createMovie(@Valid @RequestBody Movie movie) {
-		return movieService.create(movie);
+	public ResponseEntity<?> createMovie(@Valid @RequestBody Movie movie) {
+		if (!storageService.check(movie.getPosterPath())) {
+			return ResponseEntity.badRequest().body("Poster is invalid");
+		}
+		if (!storageService.check(movie.getTrailerPath())) {
+			return ResponseEntity.badRequest().body("Trailer is invalid");
+		}
+		return ResponseEntity.ok(movieService.create(movie));
 	}
 
 	@PostMapping("/file/create")
-	public String createFile(
+	public ResponseEntity<String> createFile(
 			@RequestParam("file") MultipartFile file,
 			@RequestParam("fileType") String fileType
 	) {
-		String fileName = storageService.create(file, fileType);
-		return fileName;
+		String filePath = storageService.create(file, fileType);
+		if (filePath == null) {
+			return ResponseEntity.internalServerError().build();
+		}
+		return ResponseEntity.ok(filePath);
 	}
 
 	@PutMapping("/file/update")
-	public String updateFile(
+	public ResponseEntity<String> updateFile(
 			@RequestParam("file") MultipartFile file,
 			@RequestParam("fileType") String fileType,
 			@RequestParam("filePath") String filePath
 	) {
-		String fileName = storageService.update(file, fileType, filePath);
-		return fileName;
+		String newFilePath = storageService.update(file, fileType, filePath);
+		if (newFilePath == null) {
+			return ResponseEntity.internalServerError().build();
+		}
+		return ResponseEntity.ok(newFilePath);
 	}
 
 	@PutMapping("/movie/update/{id}")
@@ -90,12 +102,21 @@ public class AdminController {
 		if (movie == null) {
 			return ResponseEntity.notFound().build();
 		}
-		String posterPath = movie.getPosterPath();
+
+		// Delete Movie
 		boolean isDeleted = movieService.delete(id);
 		if (!isDeleted) {
 			return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
 		}
+
+		// Delete Poster
+		String posterPath = movie.getPosterPath();
 		storageService.delete(posterPath);
+
+		// Delete Trailer
+		String trailerPath = movie.getTrailerPath();
+		storageService.delete(trailerPath);
+
 		return ResponseEntity.ok().build();
 	}
 
@@ -123,7 +144,8 @@ public class AdminController {
 	) {
 		User user = userService.updateStatus(id, status);
 		if (user == null) {
-			return ResponseEntity.badRequest().body("User is invalid, Status is invalid");
+			return ResponseEntity.badRequest()
+					.body("User is invalid, Status is invalid");
 		}
 		return ResponseEntity.ok(user);
 	}

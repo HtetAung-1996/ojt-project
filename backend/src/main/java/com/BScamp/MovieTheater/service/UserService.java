@@ -21,5 +21,7 @@ public interface UserService {
 	public User updateStatus(int id, String status);
 	
 	public List<String> getAllStatus();
+	
+	public void updatePwd(int id,String newPwd);
 
 }

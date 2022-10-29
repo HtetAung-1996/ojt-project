@@ -59,8 +59,7 @@ public class UserServiceImpl implements UserService {
 		toUpdateUser.setName(user.getName());
 		toUpdateUser.setGmail(user.getGmail());
 		toUpdateUser.setUpdatedAt(LocalDateTime.now());
-		userRepo.save(toUpdateUser);
-		return toUpdateUser;
+		return userRepo.save(toUpdateUser);
 	}
 
 	@Override
@@ -100,6 +99,18 @@ public class UserServiceImpl implements UserService {
 		toUpdateUser.setUpdatedAt(LocalDateTime.now());
 		userRepo.save(toUpdateUser);
 		return toUpdateUser;
+	}
+	
+	@Override
+	public void updatePwd(int id, String newPwd) {
+		
+		User toUpdateUserPwd = get(id);
+		if (toUpdateUserPwd != null) {
+			toUpdateUserPwd.setPassword(pwEncoder.encode(newPwd));			
+			userRepo.save(toUpdateUserPwd);
+			System.out.println("pwd updated");
+		}
+		
 	}
 
 	@Override

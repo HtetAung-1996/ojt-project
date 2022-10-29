@@ -1,9 +1,13 @@
 package com.BScamp.MovieTheater.controller;
 
+import java.io.IOException;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -12,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.BScamp.MovieTheater.entity.ChangePassword;
 import com.BScamp.MovieTheater.entity.LoginRequest;
 import com.BScamp.MovieTheater.entity.User;
 import com.BScamp.MovieTheater.service.UserService;
@@ -22,6 +27,9 @@ public class UserController {
 
 	@Autowired
 	UserService userService;
+
+	@Autowired
+	PasswordEncoder pwEncoder;
 
 	@PostMapping("/login")
 	public ResponseEntity<User> login(
@@ -57,6 +65,33 @@ public class UserController {
 		if (user == null) {
 			return ResponseEntity.notFound().build();
 		}
+		return ResponseEntity.ok().body(user);
+	}
+
+	@PostMapping("/changePwd")
+	public ResponseEntity<Object> changePassword(
+			@Valid @RequestBody ChangePassword changePwd
+	) throws IOException {
+		User user = userService.get(changePwd.getOri_id());
+		if (user == null) {
+			return new ResponseEntity<Object>(
+					new Exception("Something wrong"), HttpStatus.CONFLICT
+			);
+		}
+		if (!changePwd.getCon_new_pwd().equals(changePwd.getNew_pwd())) {
+			return new ResponseEntity<Object>(
+					new Exception("Confirm Password does not match"),
+					HttpStatus.CONFLICT
+			);
+		}
+		if (!pwEncoder
+				.matches(changePwd.getCurrent_pwd(), user.getPassword())) {
+			return new ResponseEntity<Object>(
+					new Exception("Current Password does not match"),
+					HttpStatus.CONFLICT
+			);
+		}
+		userService.updatePwd(user.getId(), changePwd.getNew_pwd());
 		return ResponseEntity.ok().body(user);
 	}
 

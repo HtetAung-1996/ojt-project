@@ -34,10 +34,13 @@ public class MovieContoller {
 	}
 
 	@GetMapping("/movie/category/{category_id}")
-	public ResponseEntity<List<Movie>> getMoviesByCategory(
+	public ResponseEntity<?> getMoviesByCategory(
 			@PathVariable("category_id") int categoryID
 	) {
 		Category category = categoryServie.get(categoryID);
+		if (category == null) {
+			return ResponseEntity.badRequest().body("Category ID is invalid");
+		}
 		List<Movie> movieList = movieService.getAllByCategory(category);
 		return ResponseEntity.ok().body(movieList);
 	}
