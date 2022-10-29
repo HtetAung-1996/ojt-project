@@ -25,6 +25,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+// Default Constructor, All Args Constructor, Getters Setters, ToString
 public class Movie implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;

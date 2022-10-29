@@ -27,15 +27,18 @@ public class RecordServiceImpl implements RecordService {
 
 	@Override
 	public Record create(Record record) {
+		// Check User
 		User user = userRepo.findById(record.getUser().getId()).orElse(null);
 		if (user == null) {
 			return null;
 		}
+		// Check Movie
 		Movie movie = movieRepo.findById(record.getMovie().getId())
 				.orElse(null);
 		if (movie == null) {
 			return null;
 		}
+		// Create Record Only If user role is user
 		if (user.getRole() == UserRole.user) {
 			record.setCreatedAt(LocalDateTime.now());
 			return recordRepo.save(record);
@@ -55,18 +58,23 @@ public class RecordServiceImpl implements RecordService {
 
 	@Override
 	public Record update(int id, Record rec) {
-		Record record = get(id);
-		if (record != null) {
-			record.setUser(rec.getUser());
-			record.setMovie(rec.getMovie());
-			record.setUpdatedAt(LocalDateTime.now());
-			recordRepo.save(record);
+		Record record = this.get(id);
+		if (record == null) {
+			return null;
 		}
+		record.setUser(rec.getUser());
+		record.setMovie(rec.getMovie());
+		record.setUpdatedAt(LocalDateTime.now());
+		recordRepo.save(record);
 		return record;
 	}
 
 	@Override
 	public boolean delete(int id) {
+		Record record = this.get(id);
+		if (record == null) {
+			return false;
+		}
 		recordRepo.deleteById(id);
 		return true;
 	}

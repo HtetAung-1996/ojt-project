@@ -29,10 +29,10 @@ public class RecordController {
 	@PostMapping("/record/add")
 	public ResponseEntity<?> addRecord(@Valid @RequestBody Record record) {
 		if (record.getUser().getId() <= 0) {
-			return ResponseEntity.badRequest().build();
+			return ResponseEntity.badRequest().body("User is invalid");
 		}
 		if (record.getMovie().getId() <= 0) {
-			return ResponseEntity.badRequest().build();
+			return ResponseEntity.badRequest().body("Movie is invalid");
 		}
 		Record createdRecord = recordService.create(record);
 		if (createdRecord == null) {

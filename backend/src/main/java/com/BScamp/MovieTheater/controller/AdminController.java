@@ -59,7 +59,7 @@ public class AdminController {
 			@RequestParam("file") MultipartFile file,
 			@RequestParam("fileType") String fileType
 	) {
-		String fileName = storageService.save(file, fileType);
+		String fileName = storageService.create(file, fileType);
 		return fileName;
 	}
 
@@ -118,10 +118,14 @@ public class AdminController {
 	}
 
 	@PutMapping("/user/update_status")
-	public User updateUserStatus(
+	public ResponseEntity<?> updateUserStatus(
 			@RequestParam int id, @RequestParam String status
 	) {
-		return userService.updateStatus(id, status);
+		User user = userService.updateStatus(id, status);
+		if (user == null) {
+			return ResponseEntity.badRequest().body("User is invalid, Status is invalid");
+		}
+		return ResponseEntity.ok(user);
 	}
 
 	@GetMapping("/user_status")
