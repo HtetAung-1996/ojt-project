@@ -6,10 +6,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Random;
+import java.time.Instant;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -22,16 +21,11 @@ public class StorageServiceImpl implements StorageService {
 
 	private final Path storagePath;
 
-	private final Random random = new Random();
-
-	@Value("${custom.delete.files}")
-	private boolean customDeleteFiles;
-
 	@Autowired
 	public StorageServiceImpl() throws IOException {
 
 		Path storagePath = Paths.get("").resolve("src").resolve("main")
-				.resolve("resources").resolve("static").resolve("images");
+				.resolve("resources").resolve("static").resolve("media");
 		if (!Files.exists(storagePath)) {
 			Files.createDirectories(storagePath);
 		}
@@ -40,12 +34,12 @@ public class StorageServiceImpl implements StorageService {
 	}
 
 	@Override
-	public String save(MultipartFile file, String fileType) {
+	public String create(MultipartFile file, String fileType) {
 
 		String filePath = null;
 
 		try {
-			String fileName = random.nextInt(999999) + "_"
+			String fileName = Instant.now().getEpochSecond() + "_"
 					+ StringUtils.cleanPath(file.getOriginalFilename());
 			Files.copy(
 					file.getInputStream(), this.storagePath.resolve(fileName),
@@ -78,9 +72,9 @@ public class StorageServiceImpl implements StorageService {
 		byte[] retBytes = null;
 
 		try {
-			Path file = this.storagePath.resolve(fileName);
-			Resource resource = new UrlResource(file.toUri());
-			if (resource.exists() || resource.isReadable()) {
+			Path filePath = this.storagePath.resolve(fileName);
+			Resource resource = new UrlResource(filePath.toUri());
+			if (resource.exists() && resource.isReadable()) {
 				retBytes = StreamUtils
 						.copyToByteArray(resource.getInputStream());
 			}
@@ -97,13 +91,22 @@ public class StorageServiceImpl implements StorageService {
 	@Override
 	public boolean delete(String filePath) {
 
-		try {
-			Files.delete(this.storagePath.resolve(filePath));
-			return true;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
+		// /media/jpg/test.jpg
+		filePath = filePath.replace("/media/jpg/", "");
+		filePath = filePath.replace("/media/png/", "");
+		filePath = filePath.replace("/media/mp4/", "");
+
+		if (filePath != null && filePath != "") {
+			try {
+				Files.delete(this.storagePath.resolve(filePath));
+				return true;
+			} catch (IOException e) {
+				e.printStackTrace();
+				return false;
+			}
 		}
+
+		return false;
 
 	}
 
@@ -123,7 +126,8 @@ public class StorageServiceImpl implements StorageService {
 					e.printStackTrace();
 				}
 			}
-			String fileName = random.nextInt(999999) + "_"
+
+			String fileName = Instant.now().getEpochSecond() + "_"
 					+ StringUtils.cleanPath(file.getOriginalFilename());
 			Files.copy(
 					file.getInputStream(), this.storagePath.resolve(fileName),
@@ -154,20 +158,36 @@ public class StorageServiceImpl implements StorageService {
 	public void clearAll() {
 
 		try {
-			if (customDeleteFiles) {
-				Files.walk(storagePath).sorted().forEach(t -> {
-					try {
-						if (!Files.isDirectory(t)) {
-							Files.deleteIfExists(t);
-						}
-					} catch (IOException e) {
-						e.printStackTrace();
+			Files.walk(this.storagePath).sorted().forEach(file -> {
+				try {
+					if (!Files.isDirectory(file)) {
+						Files.deleteIfExists(file);
 					}
-				});
-			}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			});
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+	}
+
+	@Override
+	public boolean check(String filePath) {
+
+		filePath = filePath.replace("/media/jpg/", "");
+		filePath = filePath.replace("/media/png/", "");
+		filePath = filePath.replace("/media/mp4/", "");
+
+		if (filePath != null && filePath != "") {
+			Path filePathPath = this.storagePath.resolve(filePath);
+			return Files.exists(filePathPath)
+					&& !Files.isDirectory(filePathPath)
+					&& Files.isReadable(filePathPath);
+		}
+
+		return false;
 
 	}
 

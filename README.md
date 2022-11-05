@@ -1,19 +1,29 @@
 ## BS Camp OJT Project
 
+Movie Theater Project
+
+```
 Frontend Vuejs
 Backend Spring Boot
+```
 
 ### Frontend
 
+```
 cd .\frontend\
 npm install
 npm run serve
+
 npm run build
 npm run lint
+```
 
 ### Backend
 
-Eclipse
+```
+Inside Eclipse
+Spring Boot Application Run
+```
 
 ### ローカルでの実行方法
 
@@ -28,3 +38,7 @@ git@github.com:HtetAung-1996/ojt-project.git
 - DB 設定
 - プロジェクト実行
 - 以下の URL にアクセスする\*\*
+
+### プロジェクト設計
+- documentationの下のファイルにある
+- test

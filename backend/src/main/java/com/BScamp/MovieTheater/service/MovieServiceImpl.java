@@ -34,34 +34,40 @@ public class MovieServiceImpl implements MovieService {
 
 	@Override
 	public Movie update(int id, Movie movie) {
-		Movie toUpdateMovie = get(id);
-		if (toUpdateMovie != null) {
-			toUpdateMovie.setTitle(movie.getTitle());
-			toUpdateMovie.setBudget(movie.getBudget());
-			toUpdateMovie.setOverview(movie.getOverview());
-			toUpdateMovie.setCategory(movie.getCategory());
-			toUpdateMovie.setAdult(movie.getAdult());
-			toUpdateMovie.setPosterPath(movie.getPosterPath());
-			toUpdateMovie.setTrailerPath(movie.getTrailerPath());
-			toUpdateMovie.setUpdatedAt(LocalDateTime.now());
-			movieRepo.save(toUpdateMovie);
+		Movie toUpdateMovie = this.get(id);
+		if (toUpdateMovie == null) {
+			return null;
 		}
+		toUpdateMovie.setTitle(movie.getTitle());
+		toUpdateMovie.setBudget(movie.getBudget());
+		toUpdateMovie.setOverview(movie.getOverview());
+		toUpdateMovie.setCategory(movie.getCategory());
+		toUpdateMovie.setAdult(movie.getAdult());
+		toUpdateMovie.setPosterPath(movie.getPosterPath());
+		toUpdateMovie.setTrailerPath(movie.getTrailerPath());
+		toUpdateMovie.setUpdatedAt(LocalDateTime.now());
+		movieRepo.save(toUpdateMovie);
 		return toUpdateMovie;
 	}
 
 	@Override
 	public boolean delete(int id) {
-		Movie movie = get(id);
-		if (movie != null) {
-			movieRepo.deleteById(id);
-			return true;
+		Movie movie = this.get(id);
+		if (movie == null) {
+			return false;
 		}
-		return false;
+		movieRepo.deleteById(id);
+		return true;
 	}
 
 	@Override
 	public List<Movie> getAllByCategory(Category category) {
 		return movieRepo.findByCategory(category);
+	}
+
+	@Override
+	public Movie getByTitle(String title) {
+		return movieRepo.findByTitle(title);
 	}
 
 }

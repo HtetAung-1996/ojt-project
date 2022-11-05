@@ -378,7 +378,9 @@ export default {
             title: this.toUpdateMovie.title,
             overview: this.toUpdateMovie.overview,
             budget: this.toUpdateMovie.budget,
-            category: this.toUpdateMovie.category,
+            category: {
+              id: this.toUpdateMovie.category,
+            },
             adult: this.toUpdateMovie.adult,
             posterPath: posterPath,
             trailerPath: trailerPath,

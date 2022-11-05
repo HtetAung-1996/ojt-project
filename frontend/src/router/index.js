@@ -6,6 +6,7 @@ import home from "../views/home.vue";
 import login from "../views/login.vue";
 import register from "../views/register.vue";
 import profile from "../views/profile.vue";
+import changePwd from "../views/changePwd.vue";
 import movie_details from "../views/movie_details.vue";
 
 import admin from "../views/admin.vue";
@@ -35,6 +36,9 @@ const routes = [
     path: "/movie_details/:id",
     name: "movie_details",
     component: movie_details,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: "/profile",
@@ -42,6 +46,15 @@ const routes = [
     component: profile,
     meta: {
       requiresAuth: true,
+    },
+  },
+  {
+    path: "/changePwd",
+    name: "changePwd",
+    component: changePwd,
+    meta: {
+      requiresAuth: true,
+     
     },
   },
 

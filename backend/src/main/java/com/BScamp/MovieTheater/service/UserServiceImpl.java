@@ -1,5 +1,6 @@
 package com.BScamp.MovieTheater.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.BScamp.MovieTheater.entity.User;
+import com.BScamp.MovieTheater.entity.UserRole;
 import com.BScamp.MovieTheater.entity.UserStatus;
 import com.BScamp.MovieTheater.repository.UserRepo;
 
@@ -24,6 +26,14 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User create(User user) {
+		// Check IF user with same gmail exists
+		User tempGmailCheckUser = userRepo.findByGmail(user.getGmail());
+		if (tempGmailCheckUser != null) {
+			return null;
+		}
+		// Create User
+		user.setRole(UserRole.user);
+		user.setStartJoinDate(LocalDate.now());
 		user.setStatus(UserStatus.active);
 		user.setPassword(pwEncoder.encode(user.getPassword()));
 		user.setCreatedAt(LocalDateTime.now());
@@ -42,51 +52,72 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User update(int id, User user) {
-		User toUpdateUser = get(id);
-		if (toUpdateUser != null) {
-			toUpdateUser.setName(user.getName());
-			toUpdateUser.setGmail(user.getGmail());
-			toUpdateUser.setUpdatedAt(LocalDateTime.now());
-			userRepo.save(toUpdateUser);
+		User toUpdateUser = this.get(id);
+		if (toUpdateUser == null) {
+			return null;
 		}
-		return toUpdateUser;
+		toUpdateUser.setName(user.getName());
+		toUpdateUser.setUpdatedAt(LocalDateTime.now());
+		return userRepo.save(toUpdateUser);
 	}
 
 	@Override
 	public boolean delete(int id) {
-		User user = get(id);
-		if (user != null) {
-			userRepo.deleteById(id);
-			return true;
+		User user = this.get(id);
+		if (user == null) {
+			return false;
 		}
-		return false;
+		userRepo.deleteById(id);
+		return true;
 	}
 
 	@Override
 	public User checkLoginUser(String gmail, String password) {
 		User user = userRepo.findByGmail(gmail);
-		if (pwEncoder.matches(password, user.getPassword())) {
-			return user;
+		if (user == null) {
+			return null;
 		}
-		return null;
+		if (!pwEncoder.matches(password, user.getPassword())) {
+			return null;
+		}
+		user.setAccessCount(user.getAccessCount() + 1);
+		return userRepo.save(user);
 	}
 
 	@Override
 	public User updateStatus(int id, String status) {
-		User toUpdateUser = get(id);
-		if (toUpdateUser != null) {
-			toUpdateUser.setStatus(UserStatus.valueOf(status));
-			toUpdateUser.setUpdatedAt(LocalDateTime.now());
-			userRepo.save(toUpdateUser);
+		User toUpdateUser = this.get(id);
+		if (toUpdateUser == null) {
+			return null;
 		}
+		try {
+			toUpdateUser.setStatus(UserStatus.valueOf(status));
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+			return null;
+		}
+		toUpdateUser.setUpdatedAt(LocalDateTime.now());
+		userRepo.save(toUpdateUser);
 		return toUpdateUser;
+	}
+
+	@Override
+	public void updatePwd(int id, String newPwd) {
+
+		User toUpdateUserPwd = get(id);
+		if (toUpdateUserPwd != null) {
+			toUpdateUserPwd.setPassword(pwEncoder.encode(newPwd));
+			userRepo.save(toUpdateUserPwd);
+			System.out.println("pwd updated");
+		}
+
 	}
 
 	@Override
 	public List<String> getAllStatus() {
 		List<String> userStatusList = new ArrayList<>();
-		for (UserStatus role : Arrays.asList(UserStatus.values())) {
-			userStatusList.add(role.toString());
+		for (UserStatus status : Arrays.asList(UserStatus.values())) {
+			userStatusList.add(status.toString());
 		}
 		return userStatusList;
 	}
