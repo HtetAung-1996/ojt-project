@@ -12,25 +12,29 @@ import io.jsonwebtoken.*;
 
 @Component
 public class JwtUtils {
-	private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
+
+	private static final Logger logger = LoggerFactory
+			.getLogger(JwtUtils.class);
 
 	@Value("${jwt.secret}")
 	private String jwtSecret;
 
 	@Value("${jwt.expiration}")
-	private int jwtExpirationMs;
+	private int jwtExpireMilliSecond;
 
-	public String generateJwtToken(Authentication authentication) {
-
-		UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
-
-		return Jwts.builder().setSubject((userPrincipal.getUsername())).setIssuedAt(new Date())
-				.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
-				.signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
+	public String generateJwtToken(Authentication auth) {
+		UserDetailsImpl userPrincipal = (UserDetailsImpl) auth
+				.getPrincipal();
+		return Jwts.builder().setSubject((userPrincipal.getUsername()))
+				.setIssuedAt(new Date())
+				.setExpiration(
+						new Date((new Date()).getTime() + jwtExpireMilliSecond)
+				).signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
 	}
 
 	public String getUserNameFromJwtToken(String token) {
-		return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
+		return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token)
+				.getBody().getSubject();
 	}
 
 	public boolean validateJwtToken(String authToken) {
@@ -48,7 +52,7 @@ public class JwtUtils {
 		} catch (IllegalArgumentException e) {
 			logger.error("JWT claims string is empty: {}", e.getMessage());
 		}
-
 		return false;
 	}
+
 }

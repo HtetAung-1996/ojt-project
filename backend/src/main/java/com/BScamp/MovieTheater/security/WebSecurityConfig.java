@@ -28,22 +28,22 @@ public class WebSecurityConfig {
 	private AuthEntryPointJwt unauthorizedHandler;
 
 	@Bean
-	public AuthTokenFilter authenticationJwtTokenFilter() {
+	public AuthTokenFilter authTokenFilter() {
 		return new AuthTokenFilter();
 	}
 
 	@Bean
-	public DaoAuthenticationProvider authenticationProvider() {
+	public DaoAuthenticationProvider authProvider() {
 		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-
 		authProvider.setUserDetailsService(userDetailsService);
 		authProvider.setPasswordEncoder(passwordEncoder());
-
 		return authProvider;
 	}
 
 	@Bean
-	public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+	public AuthenticationManager authManager(
+			AuthenticationConfiguration authConfig
+	) throws Exception {
 		return authConfig.getAuthenticationManager();
 	}
 
@@ -52,33 +52,62 @@ public class WebSecurityConfig {
 		return new BCryptPasswordEncoder();
 	}
 
-//	@Override
-//	protected void configure(HttpSecurity http) throws Exception {
-//		http.csrf().disable().authorizeRequests().mvcMatchers("/**").permitAll()
-//
-//		// .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-//		// .mvcMatchers("/", "/user/register", "/user/login").permitAll()
-//		// .mvcMatchers("/logout", "/admin/**").hasRole("ADMIN")
-//		// .anyRequest().authenticated().and()
-//		// .formLogin().loginPage("/user/login").defaultSuccessUrl("/").and()
-//		// .logout().invalidateHttpSession(true).logoutSuccessUrl("/")
-//		;
-//	}
-//
-//	@Override
-//	public void configure(WebSecurity web) throws Exception {
-//		web.debug(false).ignoring().antMatchers("/images/**", "/js/**", "/css/**");
-//	}
+	// @Override
+	// protected void configure(HttpSecurity http) throws Exception {
+	// http.csrf().disable().authorizeRequests().mvcMatchers("/**").permitAll()
+	//
+	// //
+	// .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+	// // .mvcMatchers("/", "/user/register", "/user/login").permitAll()
+	// // .mvcMatchers("/logout", "/admin/**").hasRole("ADMIN")
+	// // .anyRequest().authenticated().and()
+	// // .formLogin().loginPage("/user/login").defaultSuccessUrl("/").and()
+	// // .logout().invalidateHttpSession(true).logoutSuccessUrl("/")
+	// ;
+	// }
+	//
+	// @Override
+	// public void configure(WebSecurity web) throws Exception {
+	// web.debug(false).ignoring().antMatchers("/images/**", "/js/**",
+	// "/css/**");
+	// }
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.cors().and().csrf().disable().exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
-				.antMatchers("/user/**").permitAll().antMatchers("/api/test/**").permitAll().anyRequest().authenticated();
 
-		http.authenticationProvider(authenticationProvider());
+		// Enable CORS and disable CSRF
+		http.cors().and().csrf().disable().exceptionHandling()
+				.authenticationEntryPoint(unauthorizedHandler).and();
 
-		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+		// Set session management to stateless
+		http.sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and();
+
+		// Set permissions on endpoints
+		http.authorizeRequests()
+				// Our public endpoints
+				// .antMatchers("/api/public/**").permitAll()
+				.antMatchers("/user/signin").permitAll()
+				// Our private endpoints
+				.anyRequest().authenticated().and();
+
+		// Add JWT token filter
+		http.authenticationProvider(authProvider());
+		http.addFilterBefore(
+				authTokenFilter(), UsernamePasswordAuthenticationFilter.class
+		);
+
+		// http.cors().and().csrf().disable().exceptionHandling()
+		// .authenticationEntryPoint(unauthorizedHandler).and()
+		// .sessionManagement()
+		// .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+		// .authorizeRequests().antMatchers("/user/signin").permitAll()
+		// .anyRequest().authenticated();
+		//
+		// http.authenticationProvider(authProvider());
+		// http.addFilterBefore(
+		// authTokenFilter(), UsernamePasswordAuthenticationFilter.class
+		// );
 
 		return http.build();
 	}

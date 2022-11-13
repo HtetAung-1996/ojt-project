@@ -1,7 +1,6 @@
 package com.BScamp.MovieTheater.controller;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -12,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,7 +33,7 @@ import com.BScamp.MovieTheater.service.UserService;
 public class UserController {
 
 	@Autowired
-	AuthenticationManager authenticationManager;
+	AuthenticationManager authManager;
 
 	@Autowired
 	JwtUtils jwtUtils;
@@ -123,26 +121,23 @@ public class UserController {
 	}
 
 	@PostMapping("/signin")
-	public ResponseEntity<?> signIn(@Valid @RequestBody LoginRequest lognReq)
+	public ResponseEntity<?> signIn(@Valid @RequestBody LoginRequest loginReq)
 			throws IOException {
-		Authentication authentication = authenticationManager.authenticate(
+		// Authenticate
+		Authentication auth = authManager.authenticate(
 				new UsernamePasswordAuthenticationToken(
-						lognReq.getGmail(), lognReq.getPassword()
+						loginReq.getGmail(), loginReq.getPassword()
 				)
 		);
-
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		String jwt = jwtUtils.generateJwtToken(authentication);
-
-		UserDetailsImpl userDetails = (UserDetailsImpl) authentication
-				.getPrincipal();
-		List<String> roles = userDetails.getAuthorities().stream()
-				.map(item -> item.getAuthority()).collect(Collectors.toList());
-
+		// Get User Details
+		UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
 		return ResponseEntity.ok(
 				new JwtResponse(
-						jwt, userDetails.getId(), userDetails.getUsername(),
-						userDetails.getEmail(), roles
+						jwtUtils.generateJwtToken(auth), userDetails.getId(),
+						userDetails.getUsername(), userDetails.getEmail(),
+						userDetails.getAuthorities().stream()
+								.map(item -> item.getAuthority())
+								.collect(Collectors.toList())
 				)
 		);
 	}
