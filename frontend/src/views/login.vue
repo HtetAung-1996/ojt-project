@@ -1,7 +1,9 @@
 <template>
   <div>
     <v-container>
+      <!-- Login Form -->
       <v-form ref="loginForm" v-model="loginForm">
+        <!-- Email -->
         <v-text-field
           v-model="email"
           :rules="[
@@ -12,6 +14,7 @@
           required
         ></v-text-field>
 
+        <!-- Password -->
         <v-text-field
           v-model="password"
           :counter="10"
@@ -25,11 +28,12 @@
           required
         ></v-text-field>
 
+        <!-- Login Btn -->
         <v-btn
           :disabled="!loginForm"
           color="success"
           class="mr-4"
-          @click="login"
+          @click="login()"
         >
           <span v-if="!loading">Login</span>
           <v-progress-circular
@@ -39,6 +43,7 @@
           ></v-progress-circular>
         </v-btn>
 
+        <!-- Error Msg -->
         <v-alert class="mt-3" v-show="errorAlert" dense type="error">
           Login Failed! <br />
           Email or Password is wrong!
@@ -59,8 +64,10 @@ export default {
   data() {
     return {
       loginForm: false,
-      email: "admin@gmail.com",
-      password: "1111",
+      email: "",
+      password: "",
+      // email: "admin@gmail.com",
+      // password: "1111",
       errorAlert: false,
       loading: false,
     };
@@ -72,25 +79,36 @@ export default {
     async login() {
       if (this.$refs.loginForm.validate()) {
         this.errorAlert = false;
-        this.loading = true;
-        const resp = await utils.http.post("/user/login", {
-          gmail: this.email,
-          password: this.password,
-        });
-        if (resp.status === 200) {
-          const data = await resp.json();
-          if (data) {
-            this.$store.commit("setLoginUser", data);
-            if (data.role == "admin") {
-              this.$router.push({ path: "/admin" });
-            } else {
-              this.$router.push({ path: "/" });
+
+        try {
+          this.loading = true;
+
+          // API Call
+          const resp = await utils.http.post("/user/login", {
+            gmail: this.email,
+            password: this.password,
+          });
+          if (resp && resp.status === 200) {
+            const data = await resp.json();
+            if (data) {
+              // Store Login Info in Vuex
+              this.$store.commit("setLoginUser", data);
+              // If Admin -> Go to Admin
+              // If User -> Go to Home
+              if (data.role == "admin") {
+                this.$router.push({ path: "/admin" });
+              } else {
+                this.$router.push({ path: "/" });
+              }
             }
+          } else {
+            this.errorAlert = true;
           }
-        } else {
-          this.errorAlert = true;
+        } catch (error) {
+          console.log(error);
+        } finally {
+          this.loading = false;
         }
-        this.loading = false;
       }
     },
   },

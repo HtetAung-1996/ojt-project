@@ -54,7 +54,6 @@ const routes = [
     component: changePwd,
     meta: {
       requiresAuth: true,
-     
     },
   },
 
@@ -106,15 +105,25 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   let loginUser = router.app.$store.getters.loginUser;
   let isLogin = router.app.$store.getters.isLogin;
+
+  // from - Home
+  // to - Profile
+  // Need to be login, But is not login
   if (to.meta.requiresAuth == true && !isLogin) {
     next({ path: "/" });
-  } else if (
+  }
+
+  // Need to be login, Need to be admin
+  else if (
     to.meta.requiresAuth == true &&
     to.meta.requiresAdmin == true &&
     loginUser.role != "admin"
   ) {
     next({ path: "/" });
-  } else {
+  }
+
+  // If All Okay
+  else {
     next();
   }
 });

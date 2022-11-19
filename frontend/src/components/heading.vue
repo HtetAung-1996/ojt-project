@@ -1,20 +1,31 @@
 <template>
   <v-app-bar app color="deep-purple lighten-1" dense dark>
     <a class="navtitle" href="/">ムービー</a>
+
     <v-spacer></v-spacer>
+
+    <!-- Home -->
     <router-link class="mx-2 navlink" to="/">ホーム</router-link>
+
+    <!-- Register -->
     <span v-if="!isLogin">|</span>
     <router-link v-if="!isLogin" class="mx-2 navlink" to="/register"
       >アカウント登録</router-link
     >
+
+    <!-- Login -->
     <span v-if="!isLogin">|</span>
     <router-link v-if="!isLogin" class="mx-2 navlink" to="/login"
       >ログイン</router-link
     >
+
+    <!-- Profile -->
     <span v-if="isLogin">|</span>
     <router-link v-if="isLogin" class="mx-2 navlink" to="/profile"
       >プロフィール</router-link
     >
+
+    <!-- Login out -->
     <span v-if="isLogin">|</span>
     <a v-if="isLogin" class="mx-2 navlink" @click="logout()">ログアウト</a>
   </v-app-bar>
@@ -30,6 +41,7 @@ export default {
   }),
 
   created() {
+    // Login User
     this.loginUser = this.$store.state.loginUser;
     this.$store.watch(
       () => {
@@ -42,6 +54,8 @@ export default {
         deep: true,
       }
     );
+
+    // IsLogin
     this.isLogin = this.$store.state.isLogin;
     this.$store.watch(
       () => {
@@ -59,6 +73,7 @@ export default {
   methods: {
     logout() {
       this.$store.commit("logout");
+      // If current path is not home page, Go to home page
       if (this.$route.path != "/") {
         this.$router.push({ path: "/" });
       }

@@ -1,6 +1,8 @@
 <template>
   <div class="my-5 container">
+    <!-- Poster, Movie Info -->
     <v-row class="ma-0">
+      <!-- Poster -->
       <v-col cols="3" class="ma-0 pa-0">
         <v-img
           class="ma-0"
@@ -8,6 +10,8 @@
           contain
         ></v-img>
       </v-col>
+
+      <!-- Movie Info -->
       <v-col cols="7">
         <div class="text-h3">{{ movie.title }}</div>
         <div class="text-caption ml-2 my-2">{{ movie.category.name }}</div>
@@ -17,6 +21,7 @@
       </v-col>
     </v-row>
 
+    <!-- Trailer -->
     <div class="mx-2 mt-5">
       <h3 class="mb-3">Trailer</h3>
       <video
@@ -41,12 +46,14 @@ export default {
 
       loginUser: {},
 
+      // Movie ID from Path
       movie_id: this.$route.params.id,
       movie: {},
     };
   },
 
   async created() {
+    // LoginUser from Vuex
     this.loginUser = this.$store.state.loginUser;
     this.$store.watch(
       () => {
@@ -59,6 +66,7 @@ export default {
         deep: true,
       }
     );
+
     await this.fetchMovie();
     await this.recordMovieHistory();
   },
@@ -66,7 +74,7 @@ export default {
   methods: {
     async fetchMovie() {
       const resp = await utils.http.get("/movie/" + this.movie_id);
-      if (resp.status === 200) {
+      if (resp && resp.status === 200) {
         const data = await resp.json();
         if (data) {
           this.movie = data;
@@ -82,7 +90,7 @@ export default {
           id: this.movie_id,
         },
       });
-      if (resp.status !== 200) {
+      if (resp && resp.status !== 200) {
         console.log("Record Movie History Failed!");
       }
     },
