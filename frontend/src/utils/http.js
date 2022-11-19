@@ -1,16 +1,35 @@
 import constant from "./constant";
 
+// path -> /admin
+// body -> {}
+// {
+//   name: "mgmg"
+// }
+// {
+//   "name": "mgmg"
+// }
 async function post(path, body) {
-  const resp = await fetch(constant.localDomain + path, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  });
-  return resp;
+  try {
+    const resp = await fetch(constant.localDomain + path, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+    return resp;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
 }
 
+// body = {
+//   file: {........}
+//   name: "mgmg"
+// }
+// body.file
+// body["file"]
 async function postFormData(path, body) {
   const formData = new FormData();
   for (let key in body) {
@@ -46,11 +65,19 @@ async function putMedia(path, file, fileType, filePath) {
   return resp;
 }
 
+// path -> /movie
+// path -> /movie/10
+// path -> /movie?test=name
 async function get(path, body) {
-  const resp = await fetch(constant.localDomain + path, {
-    method: "GET",
-  });
-  return resp;
+  try {
+    const resp = await fetch(constant.localDomain + path, {
+      method: "GET",
+    });
+    return resp;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
 }
 
 async function put(path, body) {

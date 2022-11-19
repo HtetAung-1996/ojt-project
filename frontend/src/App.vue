@@ -1,4 +1,5 @@
 <template>
+  <!-- SPA - Single Page Application -->
   <v-app>
     <v-main>
       <heading></heading>

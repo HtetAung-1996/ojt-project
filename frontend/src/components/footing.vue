@@ -13,6 +13,7 @@ export default {
   data: () => ({}),
 };
 </script>
+
 <style scoped>
 .text-white {
   color: white !important;

@@ -91,6 +91,7 @@ public class StorageServiceImpl implements StorageService {
 	@Override
 	public boolean delete(String filePath) {
 
+		// /media/jpg/test.jpg
 		filePath = filePath.replace("/media/jpg/", "");
 		filePath = filePath.replace("/media/png/", "");
 		filePath = filePath.replace("/media/mp4/", "");

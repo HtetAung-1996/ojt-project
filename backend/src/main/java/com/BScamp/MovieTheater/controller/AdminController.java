@@ -110,12 +110,10 @@ public class AdminController {
 		}
 
 		// Delete Poster
-		String posterPath = movie.getPosterPath();
-		storageService.delete(posterPath);
+		storageService.delete(movie.getPosterPath());
 
 		// Delete Trailer
-		String trailerPath = movie.getTrailerPath();
-		storageService.delete(trailerPath);
+		storageService.delete(movie.getTrailerPath());
 
 		return ResponseEntity.ok().build();
 	}
