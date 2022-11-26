@@ -1,9 +1,12 @@
 <template>
   <div>
     <v-row>
+      <!-- Sidebar -->
       <v-col cols="2">
         <sidebar_admin></sidebar_admin>
       </v-col>
+
+      <!-- Record Table -->
       <v-col cols="10">
         <v-data-table
           :headers="headers"
@@ -45,7 +48,7 @@ export default {
   methods: {
     async fetchRecords() {
       const resp = await utils.http.get("/admin/record");
-      if (resp.status === 200) {
+      if (resp && resp.status === 200) {
         const data = await resp.json();
         if (data) {
           this.recordList = data;

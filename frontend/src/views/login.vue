@@ -24,6 +24,9 @@
               (v && v.length <= 10) ||
               'Password must be less than 10 characters',
           ]"
+          :type="passwordShow ? 'text' : 'password'"
+          :append-icon="passwordShow ? 'mdi-eye' : 'mdi-eye-off'"
+          @click:append="passwordShow = !passwordShow"
           label="Password"
           required
         ></v-text-field>
@@ -66,6 +69,7 @@ export default {
       loginForm: false,
       email: "",
       password: "",
+      passwordShow: false,
       // email: "admin@gmail.com",
       // password: "1111",
       errorAlert: false,

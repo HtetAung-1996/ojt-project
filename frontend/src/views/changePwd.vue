@@ -1,9 +1,11 @@
 <template>
   <div>
     <v-container>
+      <!-- Form -->
       <form>
         <v-text-field v-show="false" v-model="ori_id" hidden></v-text-field>
 
+        <!-- Current Password -->
         <v-text-field
           v-model="current_pwd"
           :counter="10"
@@ -11,22 +13,27 @@
           required
         ></v-text-field>
 
+        <!-- New Password -->
         <v-text-field
           v-model="new_pwd"
           label="New Password"
           required
         ></v-text-field>
 
+        <!-- Confirm New Password -->
         <v-text-field
           v-model="con_new_pwd"
           label="Confirm New Password"
           required
         ></v-text-field>
 
+        <!-- Submit Btn -->
         <v-btn class="mr-4" @click="submit"> submit </v-btn>
 
+        <!-- Clear Btn -->
         <v-btn @click="clear"> clear </v-btn>
 
+        <!-- Error Alert -->
         <v-alert class="mt-3" v-show="errorAlert" dense type="error">
           {{ errMsg }} <br />
         </v-alert>
@@ -82,6 +89,7 @@ export default {
         this.errMsg = data.message;
       }
     },
+
     clear() {
       this.current_pwd = "";
       this.new_pwd = "";

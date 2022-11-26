@@ -57,7 +57,7 @@ public class Movie implements java.io.Serializable {
 	private String overview;
 
 	@ManyToOne
-	@JoinColumn(name = "category_id", referencedColumnName = "id")
+	@JoinColumn(name = "category_id", referencedColumnName = "id", nullable = false)
 	private Category category;
 
 	@Column(columnDefinition = "boolean", nullable = false)
