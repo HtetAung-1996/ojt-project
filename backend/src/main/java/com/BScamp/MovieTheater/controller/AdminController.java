@@ -173,4 +173,9 @@ public class AdminController {
 		return categoryService.getAll();
 	}
 
+	@PostMapping("/category")
+	public Category createCategory(@RequestBody Category category) {
+		return categoryService.create(category);
+	}
+
 }

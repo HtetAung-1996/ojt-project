@@ -56,7 +56,7 @@
       </v-col>
     </v-row>
 
-    <!-- Delete Movie Dialog -->
+    <!-- Delete Dialog -->
     <v-dialog v-model="deleteDialog" width="400">
       <v-card>
         <!-- Dialog Heading -->
@@ -85,7 +85,7 @@
       </v-card>
     </v-dialog>
 
-    <!-- Update Movie Dialog -->
+    <!-- Update Dialog -->
     <v-dialog v-model="updateDialog" width="500">
       <v-card>
         <!-- Dialog Heading -->
