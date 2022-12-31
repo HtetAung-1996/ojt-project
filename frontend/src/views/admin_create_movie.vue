@@ -1,12 +1,15 @@
 <template>
   <div>
     <v-row>
+      <!-- Sidebar -->
       <v-col cols="2">
         <sidebar_admin></sidebar_admin>
       </v-col>
 
+      <!-- Create Movie Form -->
       <v-col cols="10">
         <v-form class="px-10" ref="movieForm" v-model="movieForm">
+          <!-- Title -->
           <v-text-field
             v-model="title"
             :counter="50"
@@ -20,6 +23,7 @@
             required
           ></v-text-field>
 
+          <!-- Overview -->
           <v-text-field
             v-model="overview"
             :counter="1000"
@@ -33,6 +37,7 @@
             required
           ></v-text-field>
 
+          <!-- Budget -->
           <v-text-field
             v-model="budget"
             type="number"
@@ -49,6 +54,7 @@
             required
           ></v-text-field>
 
+          <!-- Category -->
           <v-select
             v-model="category"
             :items="movieCategoryList"
@@ -60,8 +66,10 @@
           >
           </v-select>
 
+          <!-- Adult -->
           <v-checkbox v-model="adult" label="Adult"></v-checkbox>
 
+          <!-- Poster -->
           <v-file-input
             v-model="poster"
             label="Poster"
@@ -79,6 +87,7 @@
             @change="onChangePoster"
           ></v-file-input>
 
+          <!-- Poster Preview -->
           <v-img
             v-if="posterPreviewPath != null"
             :src="posterPreviewPath"
@@ -88,11 +97,12 @@
           >
           </v-img>
 
+          <!-- Trailer -->
           <v-file-input
             v-model="trailer"
             label="Trailer"
             show-size
-            prepend-icon="mdi-camera"
+            prepend-icon="mdi-video"
             placeholder="Choose Trailer"
             accept="video/mp4"
             :rules="[
@@ -105,6 +115,7 @@
             @change="onChangeTrailer"
           ></v-file-input>
 
+          <!-- Trailer Preview -->
           <video
             v-if="trailerPreviewPath != null"
             class="mb-2"
@@ -113,13 +124,14 @@
             controls
           ></video>
 
+          <!-- Create Btn -->
           <v-btn
             :disabled="!movieForm"
             color="success"
             class="mt-4 mr-4"
-            @click="createMovie"
+            @click="createMovie()"
           >
-            <span v-if="!loading">Save</span>
+            <span v-if="!loading">Create Movie</span>
             <v-progress-circular
               v-else
               indeterminate
@@ -127,9 +139,11 @@
             ></v-progress-circular>
           </v-btn>
 
+          <!-- Error Alert For Movie -->
           <v-alert class="mt-3" v-show="errorAlert" dense type="error">
             Create Movie Failed!
           </v-alert>
+          <!-- Same Title Error Alert -->
           <v-alert class="mt-3" v-show="errorAlert2" dense type="error">
             Movie with same title exists!
           </v-alert>
@@ -150,14 +164,21 @@ export default {
   data() {
     return {
       movieForm: false,
-      title: "Test",
-      overview: "Overview",
-      budget: 1000,
+
+      title: "",
+      overview: "",
+      budget: 0,
+      // title: "Test",
+      // overview: "Overview",
+      // budget: 1000,
       category: 1,
       adult: false,
+
       errorAlert: false,
       errorAlert2: false,
+
       loading: false,
+
       poster: null,
       posterPreviewPath: null,
       trailer: null,
@@ -174,7 +195,7 @@ export default {
   methods: {
     async fetchMovieCategories() {
       const resp = await utils.http.get("/admin/category");
-      if (resp.status === 200) {
+      if (resp && resp.status === 200) {
         const data = await resp.json();
         if (data) {
           this.movieCategoryList = data;
@@ -183,17 +204,23 @@ export default {
     },
 
     async createMovie() {
+      // Form Validation
       if (this.$refs.movieForm.validate()) {
         this.errorAlert = false;
+        this.errorAlert2 = false;
+
         this.loading = true;
+
+        // Step 1 -> Title Check
 
         let titleCheckOK = false;
         const respTitleCheck = await utils.http.get(
           "/admin/movie/title/" + this.title
         );
-        if (respTitleCheck.status === 200) {
+        if (respTitleCheck && respTitleCheck.status === 200) {
           const data = await respTitleCheck.json();
-          if (data) {
+          // Undefined, Null, True
+          if (data && data === true) {
             this.errorAlert2 = true;
           } else {
             this.errorAlert2 = false;
@@ -205,6 +232,10 @@ export default {
 
         if (titleCheckOK) {
           let respPosterData = null;
+          let respTrailerData = null;
+
+          // Step 2 -> Poster
+
           const respPoster = await utils.http.postMedia(
             "/admin/file/create",
             this.poster,
@@ -216,7 +247,8 @@ export default {
             this.errorAlert = true;
           }
 
-          let respTrailerData = null;
+          // Step 2 -> Trailer
+
           const respTrailer = await utils.http.postMedia(
             "/admin/file/create",
             this.trailer,
@@ -228,7 +260,10 @@ export default {
             this.errorAlert = true;
           }
 
+          // Step 4 -> Create Movie
+
           if (respPosterData && respTrailerData) {
+            // Create Movie API
             const respMovie = await utils.http.post("/admin/movie/create", {
               title: this.title,
               overview: this.overview,
@@ -238,7 +273,7 @@ export default {
               posterPath: respPosterData,
               trailerPath: respTrailerData,
             });
-            if (respMovie.status === 200) {
+            if (respMovie && respMovie.status === 200) {
               this.$router.push({ path: "/admin" });
             } else {
               this.errorAlert = true;

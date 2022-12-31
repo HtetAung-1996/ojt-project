@@ -1,9 +1,12 @@
 <template>
   <div>
     <v-row>
+      <!-- Sidebar -->
       <v-col cols="2">
         <sidebar_admin></sidebar_admin>
       </v-col>
+
+      <!-- User Table -->
       <v-col cols="10">
         <v-data-table
           :headers="headers"
@@ -12,6 +15,7 @@
           class="elevation-1"
         >
           <template v-slot:item.actions="{ item }">
+            <!-- Update User Status Btn -->
             <v-btn
               class="mr-2"
               color="primary"
@@ -27,8 +31,10 @@
       </v-col>
     </v-row>
 
+    <!-- Update User Status Dialog -->
     <v-dialog v-model="updateDialog" width="400">
       <v-card>
+        <!-- Dialog Heading -->
         <v-toolbar color="primary" dark>
           <div>Change User Status</div>
           <v-spacer></v-spacer>
@@ -36,56 +42,59 @@
             <v-icon>mdi-close</v-icon>
           </v-btn>
         </v-toolbar>
+
         <v-card-text class="pa-4">
           <v-form ref="updateForm" v-model="updateForm">
+            <!-- User ID -->
             <v-text-field
               v-model="toUpdateUser.id"
               label="User ID"
               disabled
             ></v-text-field>
 
+            <!-- User Name -->
             <v-text-field
               v-model="toUpdateUser.name"
               label="User Name"
               disabled
             ></v-text-field>
 
+            <!-- User Gmail -->
             <v-text-field
               v-model="toUpdateUser.gmail"
               label="User Gmail"
               disabled
             ></v-text-field>
 
-            <v-text-field
-              v-model="toUpdateUser.status"
-              label="User Status"
-              disabled
-            ></v-text-field>
-
+            <!-- User Role -->
             <v-text-field
               v-model="toUpdateUser.role"
               label="User Role"
               disabled
             ></v-text-field>
 
+            <!-- User Start Join Date -->
             <v-text-field
               v-model="toUpdateUser.startJoinDate"
               label="User Start Join Date"
               disabled
             ></v-text-field>
 
+            <!-- User Last Join Date -->
             <v-text-field
               v-model="toUpdateUser.lastJoinDate"
               label="User Last Join Date"
               disabled
             ></v-text-field>
 
+            <!-- User Access Count -->
             <v-text-field
               v-model="toUpdateUser.accessCount"
               label="User Access Count"
               disabled
             ></v-text-field>
 
+            <!-- User Status -->
             <v-select
               v-model="userStatus"
               :items="userStatusList"
@@ -95,11 +104,14 @@
             >
             </v-select>
 
+            <!-- Error Alert -->
             <v-alert class="mt-3" v-show="errorAlert" dense type="error">
               Change User Status Failed!
             </v-alert>
           </v-form>
         </v-card-text>
+
+        <!-- Update User Status Btn -->
         <v-card-actions class="justify-end">
           <v-btn
             :disabled="!updateForm"
@@ -159,14 +171,14 @@ export default {
   },
 
   async created() {
-    await this.fetchUserRole();
+    await this.fetchUserStatus();
     await this.fetchUsers();
   },
 
   methods: {
     async fetchUsers() {
       const resp = await utils.http.get("/admin/user");
-      if (resp.status === 200) {
+      if (resp && resp.status === 200) {
         const data = await resp.json();
         if (data) {
           this.userList = data;
@@ -174,9 +186,9 @@ export default {
       }
     },
 
-    async fetchUserRole() {
+    async fetchUserStatus() {
       const resp = await utils.http.get("/admin/user_status");
-      if (resp.status === 200) {
+      if (resp && resp.status === 200) {
         const data = await resp.json();
         if (data) {
           this.userStatusList = data;
@@ -187,7 +199,6 @@ export default {
     onClickUpdateUserStatus(item) {
       this.updateDialog = true;
       this.toUpdateUser = Object.assign({}, item);
-      console.log(this.toUpdateUser);
       this.userStatus = this.toUpdateUser.status;
     },
 
@@ -200,7 +211,8 @@ export default {
           id: this.toUpdateUser.id,
           status: this.userStatus,
         });
-        if (resp.status === 200) {
+        if (resp && resp.status === 200) {
+          // Refresh User List
           await this.fetchUsers();
           this.updateDialog = false;
         } else {

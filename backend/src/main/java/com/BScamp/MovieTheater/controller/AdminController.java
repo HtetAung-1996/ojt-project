@@ -51,6 +51,12 @@ public class AdminController {
 
 	@PostMapping("/movie/create")
 	public ResponseEntity<?> createMovie(@Valid @RequestBody Movie movie) {
+		if (movie.getCategory() == null) {
+			return ResponseEntity.badRequest().body("Category is empty");
+		}
+		if (movie.getCategory().getId() == 0) {
+			return ResponseEntity.badRequest().body("Category ID is invalid");
+		}
 		if (!storageService.check(movie.getPosterPath())) {
 			return ResponseEntity.badRequest().body("Poster is invalid");
 		}
@@ -110,12 +116,10 @@ public class AdminController {
 		}
 
 		// Delete Poster
-		String posterPath = movie.getPosterPath();
-		storageService.delete(posterPath);
+		storageService.delete(movie.getPosterPath());
 
 		// Delete Trailer
-		String trailerPath = movie.getTrailerPath();
-		storageService.delete(trailerPath);
+		storageService.delete(movie.getTrailerPath());
 
 		return ResponseEntity.ok().build();
 	}

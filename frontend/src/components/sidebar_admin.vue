@@ -8,10 +8,12 @@
           link
           @click="goToRoute(item.path)"
         >
+          <!-- Icon -->
           <v-list-item-icon>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-icon>
 
+          <!-- Title -->
           <v-list-item-content>
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item-content>
@@ -54,6 +56,7 @@ export default {
 
   methods: {
     goToRoute(path) {
+      // If Current Path is same with Clicked Path, No Go to Route
       if (this.$route.path != path) {
         this.$router.push({ path: path });
       }

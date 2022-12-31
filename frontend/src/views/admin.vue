@@ -1,9 +1,12 @@
 <template>
   <div>
     <v-row>
+      <!-- Sidebar -->
       <v-col cols="2">
         <sidebar_admin></sidebar_admin>
       </v-col>
+
+      <!-- Movie table -->
       <v-col cols="10">
         <v-data-table
           :headers="headers"
@@ -11,6 +14,7 @@
           :items-per-page="5"
           class="elevation-1"
         >
+          <!-- Poster Img -->
           <template v-slot:item.posterPath="{ item }">
             <v-img
               :src="localDomain + item.posterPath"
@@ -19,7 +23,10 @@
               contain
             ></v-img>
           </template>
+
+          <!-- Buttons -->
           <template v-slot:item.actions="{ item }">
+            <!-- Update Movie -->
             <v-btn
               class="mr-2"
               color="primary"
@@ -30,6 +37,7 @@
             >
               <v-icon>mdi-pencil</v-icon>
             </v-btn>
+            <!-- Delete Movie Btn -->
             <v-btn
               color="red"
               fab
@@ -37,8 +45,8 @@
               x-small
               elevation="2"
               @click="
-                deleteDialog = true;
                 toDeleteMovie = item;
+                deleteDialog = true;
               "
             >
               <v-icon>mdi-delete</v-icon>
@@ -51,6 +59,7 @@
     <!-- Delete Dialog -->
     <v-dialog v-model="deleteDialog" width="400">
       <v-card>
+        <!-- Dialog Heading -->
         <v-toolbar color="primary" dark>
           <div>Delete This Movie?</div>
           <v-spacer></v-spacer>
@@ -58,6 +67,8 @@
             <v-icon>mdi-close</v-icon>
           </v-btn>
         </v-toolbar>
+
+        <!-- Delete Movie Info -->
         <v-card-text class="pa-4">
           <v-row dense>
             <v-col cols="3" class="font-weight-bold">ID</v-col>
@@ -66,6 +77,8 @@
             <v-col cols="7">{{ toDeleteMovie.title }}</v-col>
           </v-row>
         </v-card-text>
+
+        <!-- Delete Movie Btn -->
         <v-card-actions class="justify-end">
           <v-btn color="red" dark @click="deleteMovie()">Delete</v-btn>
         </v-card-actions>
@@ -75,21 +88,19 @@
     <!-- Update Dialog -->
     <v-dialog v-model="updateDialog" width="500">
       <v-card>
+        <!-- Dialog Heading -->
         <v-toolbar color="primary" dark>
           <div>Update This Movie?</div>
           <v-spacer></v-spacer>
-          <v-btn
-            icon
-            @click="
-              updateDialog = false;
-              toUpdateMovie.poster = null;
-            "
-          >
+          <v-btn icon @click="updateDialog = false">
             <v-icon>mdi-close</v-icon>
           </v-btn>
         </v-toolbar>
+
+        <!-- Update Form -->
         <v-card-text class="pa-4">
           <v-form ref="movieForm" v-model="movieForm">
+            <!-- Update Movie Title -->
             <v-text-field
               v-model="toUpdateMovie.title"
               :counter="50"
@@ -103,19 +114,21 @@
               required
             ></v-text-field>
 
+            <!-- Update Movie Overview -->
             <v-text-field
               v-model="toUpdateMovie.overview"
               :counter="1000"
               :rules="[
                 (v) => !!v || 'Required',
                 (v) =>
-                  (v && v.length <= 200) ||
-                  'Overview must be less than 200 characters',
+                  (v && v.length <= 1000) ||
+                  'Overview must be less than 1000 characters',
               ]"
               label="Overview"
               required
             ></v-text-field>
 
+            <!-- Update Movie Budget -->
             <v-text-field
               v-model="toUpdateMovie.budget"
               type="number"
@@ -132,6 +145,7 @@
               required
             ></v-text-field>
 
+            <!-- Update Movie Category -->
             <v-select
               v-model="toUpdateMovie.category"
               :items="movieCategoryList"
@@ -143,11 +157,13 @@
             >
             </v-select>
 
+            <!-- Update Movie Category -->
             <v-checkbox
               v-model="toUpdateMovie.adult"
               label="Adult"
             ></v-checkbox>
 
+            <!-- Update Movie Poster -->
             <v-file-input
               v-model="toUpdateMovie.poster"
               label="Poster"
@@ -164,6 +180,8 @@
               @change="onChangePoster"
             ></v-file-input>
 
+            <!-- Poster Preview -->
+            <!-- Poster is not selected (null) -->
             <v-img
               v-if="posterPreviewPath == null"
               :src="localDomain + toUpdateMovie.posterPath"
@@ -172,7 +190,7 @@
               contain
             >
             </v-img>
-
+            <!-- Poster is selected (not null) -->
             <v-img
               v-if="posterPreviewPath != null"
               :src="posterPreviewPath"
@@ -182,22 +200,25 @@
             >
             </v-img>
 
+            <!-- Update Movie Trailer -->
             <v-file-input
               v-model="toUpdateMovie.trailer"
               label="Trailer"
               show-size
-              prepend-icon="mdi-camera"
+              prepend-icon="mdi-video"
               placeholder="Choose Trailer"
               accept="video/mp4"
               :rules="[
                 (v) =>
                   !v ||
                   v.size < 100000000 ||
-                  'Image size should be less than 100 MB!',
+                  'Trailer size should be less than 100 MB!',
               ]"
               @change="onChangeTrailer"
             ></v-file-input>
 
+            <!-- Trailer Preview -->
+            <!-- Trailer is not selected (null) -->
             <video
               v-if="trailerPreviewPath == null"
               class="mb-2"
@@ -205,7 +226,7 @@
               :src="localDomain + toUpdateMovie.trailerPath"
               controls
             ></video>
-
+            <!-- Trailer is selected (not null) -->
             <video
               v-if="trailerPreviewPath != null"
               class="mb-2"
@@ -214,6 +235,7 @@
               controls
             ></video>
 
+            <!-- Update Btn -->
             <v-btn
               :disabled="!movieForm"
               color="success"
@@ -228,6 +250,7 @@
               ></v-progress-circular>
             </v-btn>
 
+            <!-- Error Alert -->
             <v-alert class="mt-3" v-show="errorAlert" dense type="error">
               Update Movie Failed!
             </v-alert>
@@ -299,7 +322,7 @@ export default {
   methods: {
     async fetchMovies() {
       const resp = await utils.http.get("/movie");
-      if (resp.status === 200) {
+      if (resp && resp.status === 200) {
         const data = await resp.json();
         if (data) {
           this.movieList = data;
@@ -309,7 +332,7 @@ export default {
 
     async fetchMovieCategories() {
       const resp = await utils.http.get("/admin/category");
-      if (resp.status === 200) {
+      if (resp && resp.status === 200) {
         const data = await resp.json();
         if (data) {
           this.movieCategoryList = data;
@@ -321,8 +344,9 @@ export default {
       const resp = await utils.http.del(
         "/admin/movie/delete/" + this.toDeleteMovie.id
       );
-      if (resp.status === 200) {
+      if (resp && resp.status === 200) {
         this.deleteDialog = false;
+        // Refresh Movies
         await this.fetchMovies();
       } else {
         this.errorAlert = true;
@@ -331,6 +355,7 @@ export default {
 
     onClickUpdateMovie(item) {
       this.updateDialog = true;
+      // Copy Object
       this.toUpdateMovie = Object.assign({}, item);
       this.toUpdateMovie.poster = null;
       this.toUpdateMovie.trailer = null;
@@ -339,26 +364,34 @@ export default {
     },
 
     async updateMovie() {
+      // Form Validation
       if (this.$refs.movieForm.validate()) {
         this.errorAlert = false;
+
         this.loading = true;
 
         let posterPath = this.toUpdateMovie.posterPath;
         let trailerPath = this.toUpdateMovie.trailerPath;
 
+        // Step 1 -> Update Poster
+
+        // Null -> Poster is not selected
         if (this.toUpdateMovie.poster != null) {
+          // Update Poster API
           const respPoster = await utils.http.putMedia(
             "/admin/file/update",
             this.toUpdateMovie.poster,
             this.toUpdateMovie.poster.type,
             this.toUpdateMovie.posterPath
           );
-          if (respPoster.status === 200) {
+          if (respPoster && respPoster.status === 200) {
             posterPath = await respPoster.text();
           } else {
             console.debug("Poster Update Failed");
           }
         }
+
+        // Step 2 -> Update Trailer
 
         if (this.toUpdateMovie.trailer != null) {
           const respTrailer = await utils.http.putMedia(
@@ -367,12 +400,14 @@ export default {
             this.toUpdateMovie.trailer.type,
             this.toUpdateMovie.trailerPath
           );
-          if (respTrailer.status === 200) {
+          if (respTrailer && respTrailer.status === 200) {
             trailerPath = await respTrailer.text();
           } else {
             console.debug("Trailer Update Failed");
           }
         }
+
+        // Step 3 -> Update Movie
 
         const respMovie = await utils.http.put(
           "/admin/movie/update/" + this.toUpdateMovie.id,
@@ -388,9 +423,11 @@ export default {
             trailerPath: trailerPath,
           }
         );
-        if (respMovie.status === 200) {
+        if (respMovie && respMovie.status === 200) {
           this.toUpdateMovie.poster = null;
+          this.toUpdateMovie.trailer = null;
           this.updateDialog = false;
+          // Refresh Movies
           await this.fetchMovies();
         } else {
           this.errorAlert = true;
@@ -405,7 +442,6 @@ export default {
     },
 
     onChangeTrailer(trailer) {
-      console.log(trailer);
       this.trailerPreviewPath = URL.createObjectURL(trailer);
     },
   },

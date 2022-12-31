@@ -5,10 +5,12 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   modules: {},
+
   state: {
     loginUser: {},
     isLogin: false,
   },
+
   getters: {
     loginUser: (state) => {
       let loginUser = sessionStorage.getItem("loginUser");
@@ -29,6 +31,7 @@ export default new Vuex.Store({
       }
     },
   },
+
   mutations: {
     setLoginUser(state, user) {
       sessionStorage.setItem("loginUser", JSON.stringify(user));
@@ -43,5 +46,6 @@ export default new Vuex.Store({
       state.isLogin = false;
     },
   },
+
   actions: {},
 });

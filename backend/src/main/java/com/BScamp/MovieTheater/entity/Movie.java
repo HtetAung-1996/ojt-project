@@ -52,12 +52,12 @@ public class Movie implements java.io.Serializable {
 	@NotBlank(message = "Required")
 	private String trailerPath;
 
-	@Column(length = 200)
+	@Column(length = 1000)
 	@NotBlank(message = "Required")
 	private String overview;
 
 	@ManyToOne
-	@JoinColumn(name = "category_id", referencedColumnName = "id")
+	@JoinColumn(name = "category_id", referencedColumnName = "id", nullable = false)
 	private Category category;
 
 	@Column(columnDefinition = "boolean", nullable = false)
