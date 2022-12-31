@@ -48,6 +48,7 @@
       </v-col>
     </v-row>
 
+    <!-- Delete Dialog -->
     <v-dialog v-model="deleteDialog" width="400">
       <v-card>
         <v-toolbar color="primary" dark>
@@ -71,6 +72,7 @@
       </v-card>
     </v-dialog>
 
+    <!-- Update Dialog -->
     <v-dialog v-model="updateDialog" width="500">
       <v-card>
         <v-toolbar color="primary" dark>
