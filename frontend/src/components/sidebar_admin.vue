@@ -30,22 +30,22 @@ export default {
   data: () => ({
     menuItemList: [
       {
-        title: "Admin",
+        title: "ムービー一覧",
         icon: "mdi-table",
         path: "/admin",
       },
       {
-        title: "Create Movie",
+        title: "ムービー作成",
         icon: "mdi-movie",
         path: "/admin/create_movie",
       },
       {
-        title: "User List",
+        title: "ユーザー一覧",
         icon: "mdi-account-supervisor ",
         path: "/admin/user_list",
       },
       {
-        title: "Record List",
+        title: "ムービー履歴",
         icon: "mdi-account-supervisor ",
         path: "/admin/record_list",
       },

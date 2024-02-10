@@ -104,13 +104,13 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   let loginUser = router.app.$store.getters.loginUser;
-  let isLogin = router.app.$store.getters.isLogin;
+  let isLogin = router.app.$store.state.isLogin;
 
   // from - Home
   // to - Profile
   // Need to be login, But is not login
   if (to.meta.requiresAuth == true && !isLogin) {
-    next({ path: "/" });
+    if (router.currentRoute.path !== "/") router.push({ path: "/" });
   }
 
   // Need to be login, Need to be admin
@@ -119,7 +119,7 @@ router.beforeEach((to, from, next) => {
     to.meta.requiresAdmin == true &&
     loginUser.role != "admin"
   ) {
-    next({ path: "/" });
+    if (router.currentRoute.path !== "/") router.push({ path: "/" });
   }
 
   // If All Okay

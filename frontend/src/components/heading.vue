@@ -20,9 +20,21 @@
     >
 
     <!-- Profile -->
-    <span v-if="isLogin">|</span>
-    <router-link v-if="isLogin" class="mx-2 navlink" to="/profile"
+    <span v-if="isLogin && loginUser.role !== 'admin'">|</span>
+    <router-link
+      v-if="isLogin && loginUser.role !== 'admin'"
+      class="mx-2 navlink"
+      to="/profile"
       >プロフィール</router-link
+    >
+
+    <!-- Admin -->
+    <span v-if="isLogin && loginUser.role === 'admin'">|</span>
+    <router-link
+      v-if="isLogin && loginUser.role === 'admin'"
+      class="mx-2 navlink"
+      to="/admin"
+      >管理画面</router-link
     >
 
     <!-- Login out -->
